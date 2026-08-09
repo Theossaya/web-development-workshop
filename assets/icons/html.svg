@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Angle brackets representing HTML">
+  <title>HTML</title>
+  <path d="M17 12 6 24l11 12" fill="none" stroke="#ff9d5c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M31 12l11 12-11 12" fill="none" stroke="#ff9d5c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M27 9 21 39" fill="none" stroke="#ff9d5c" stroke-width="4" stroke-linecap="round"/>
+</svg>

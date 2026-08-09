@@ -1,0 +1,1760 @@
+/* ==========================================================================
+   Web Development From Zero — presentation styles
+   --------------------------------------------------------------------------
+   1.  Design tokens (dark = default classroom mode, light = bright rooms)
+   2.  Base elements and accessibility
+   3.  Deck and slide frame (16:9)
+   4.  Typographic scale (scales with the slide, not the viewport)
+   5.  Layout helpers
+   6.  Content components: code panels, browser mocks, cards, diagrams
+   7.  Activity components: challenge cards, quizzes, checklists
+   8.  Interactive labs: playground, box model, flexbox, viewport tester
+   9.  Presenter notes
+   10. Deck chrome: toolbar, progress, overview, timer, scoreboard
+   11. Motion, print, narrow screens
+   ========================================================================== */
+
+/* ---------- 1. Design tokens ---------- */
+
+:root {
+  color-scheme: dark;
+
+  --bg: #080c14;
+  --bg-2: #0d1422;
+  --surface: #131c2c;
+  --surface-2: #1a2437;
+  --surface-3: #212d43;
+  --line: #2b3a55;
+  --line-soft: #223049;
+
+  --text: #f1f5fc;
+  --text-2: #c3cee1;
+  --muted: #94a3bd;
+
+  --html: #ffab6a;
+  --html-ink: #ffd9bd;
+  --html-soft: rgba(255, 171, 106, 0.13);
+
+  --css: #64d3ff;
+  --css-ink: #c4ecff;
+  --css-soft: rgba(100, 211, 255, 0.13);
+
+  --challenge: #cdf75c;
+  --challenge-ink: #e9ffb0;
+  --challenge-soft: rgba(205, 247, 92, 0.13);
+
+  --devtools: #e58cff;
+  --devtools-ink: #f4cfff;
+  --devtools-soft: rgba(229, 140, 255, 0.13);
+
+  --debug: #ffd45c;
+  --debug-ink: #ffe9ac;
+  --debug-soft: rgba(255, 212, 92, 0.13);
+
+  --ok: #6df0bb;
+  --bad: #ff7b7b;
+
+  --focus: #ffffff;
+  --radius: 18px;
+  --radius-sm: 10px;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 8px 22px rgba(0, 0, 0, 0.35);
+
+  --grid-line: rgba(255, 255, 255, 0.035);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #eef1f8;
+  --bg-2: #e4e9f4;
+  --surface: #ffffff;
+  --surface-2: #f4f6fc;
+  --surface-3: #e9edf7;
+  --line: #cbd5ea;
+  --line-soft: #dde3f0;
+
+  --text: #101827;
+  --text-2: #2f3b52;
+  --muted: #55627c;
+
+  --html: #b3480d;
+  --html-ink: #7a3208;
+  --html-soft: rgba(179, 72, 13, 0.1);
+
+  --css: #0b6a92;
+  --css-ink: #084b68;
+  --css-soft: rgba(11, 106, 146, 0.1);
+
+  --challenge: #4c6b00;
+  --challenge-ink: #3a5200;
+  --challenge-soft: rgba(76, 107, 0, 0.1);
+
+  --devtools: #8f22b8;
+  --devtools-ink: #6a1789;
+  --devtools-soft: rgba(143, 34, 184, 0.1);
+
+  --debug: #8a5c00;
+  --debug-ink: #6b4700;
+  --debug-soft: rgba(138, 92, 0, 0.1);
+
+  --ok: #0a7a56;
+  --bad: #b41f1f;
+
+  --focus: #101827;
+  --shadow: 0 24px 60px rgba(16, 24, 39, 0.16);
+  --shadow-sm: 0 8px 22px rgba(16, 24, 39, 0.1);
+
+  --grid-line: rgba(16, 24, 39, 0.05);
+}
+
+/* ---------- 2. Base ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 700px at 82% -10%, var(--html-soft), transparent 60%),
+    radial-gradient(900px 600px at 8% 110%, var(--css-soft), transparent 60%),
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 48px 48px,
+    var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI Variable Display", "Segoe UI", Inter, Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+body.is-scrollmode {
+  overflow: auto;
+}
+
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------- 3. Deck and slide frame ---------- */
+
+.deck {
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 0.75rem 0.75rem 5.25rem;
+}
+
+.slide {
+  /* Width is limited by the viewport AND by the height available, so the
+     slide always keeps a 16:9 shape without ever overflowing sideways. */
+  width: min(100vw - 1.5rem, (100dvh - 6.5rem) * 16 / 9);
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  background: linear-gradient(180deg, var(--bg-2), var(--surface));
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: none;
+  position: relative;
+}
+
+.slide.is-active {
+  display: block;
+  animation: slide-in 0.32s ease both;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+  }
+}
+
+.slide-inner {
+  height: 100%;
+  padding: 2.8cqi 3.5cqi 2.4cqi;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2cqi;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+/* Blocks keep their natural height. Without this a flex item can shrink
+   below its content and spill over whatever sits beneath it. */
+.slide-inner > * {
+  flex: 0 0 auto;
+}
+
+/* Accent skins per slide type — set with data-accent on the slide. */
+.slide[data-accent="html"] { --accent: var(--html); --accent-ink: var(--html-ink); --accent-soft: var(--html-soft); }
+.slide[data-accent="css"] { --accent: var(--css); --accent-ink: var(--css-ink); --accent-soft: var(--css-soft); }
+.slide[data-accent="challenge"] { --accent: var(--challenge); --accent-ink: var(--challenge-ink); --accent-soft: var(--challenge-soft); }
+.slide[data-accent="devtools"] { --accent: var(--devtools); --accent-ink: var(--devtools-ink); --accent-soft: var(--devtools-soft); }
+.slide[data-accent="debug"] { --accent: var(--debug); --accent-ink: var(--debug-ink); --accent-soft: var(--debug-soft); }
+.slide:not([data-accent]) { --accent: var(--css); --accent-ink: var(--css-ink); --accent-soft: var(--css-soft); }
+
+.slide::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--accent), transparent 70%);
+}
+
+/* ---------- 4. Typographic scale ---------- */
+
+.slide {
+  --fs-h1: clamp(30px, 5.4cqi, 78px);
+  --fs-h2: clamp(23px, 3.7cqi, 54px);
+  --fs-h3: clamp(17px, 2.1cqi, 30px);
+  --fs-lead: clamp(15px, 2cqi, 29px);
+  --fs-body: clamp(13px, 1.6cqi, 23px);
+  --fs-code: clamp(12px, 1.52cqi, 21px);
+  --fs-small: clamp(11px, 1.24cqi, 17px);
+  --fs-micro: clamp(10px, 1.05cqi, 15px);
+}
+
+.slide h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  margin: 0;
+  font-weight: 800;
+}
+
+.slide h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  margin: 0;
+  font-weight: 800;
+}
+
+.slide h3 {
+  font-size: var(--fs-h3);
+  margin: 0 0 0.4em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.slide p,
+.slide li,
+.slide dd,
+.slide dt,
+.slide td,
+.slide th {
+  font-size: var(--fs-body);
+}
+
+.slide p {
+  margin: 0 0 0.6em;
+  max-width: 62ch;
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  line-height: 1.35;
+  max-width: 44ch;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: var(--fs-small);
+}
+
+.accent-text {
+  color: var(--accent);
+}
+
+mark {
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 0 0.25em;
+  border-radius: 4px;
+}
+
+/* ---------- 5. Layout helpers ---------- */
+
+.slide-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2cqi;
+  flex-wrap: wrap;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.8cqi;
+  font-size: var(--fs-small);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 0.7cqi;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  padding: 0.35em 0.8em;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  white-space: nowrap;
+}
+
+.chip--html { background: var(--html-soft); color: var(--html); border-color: color-mix(in srgb, var(--html) 35%, transparent); }
+.chip--css { background: var(--css-soft); color: var(--css); border-color: color-mix(in srgb, var(--css) 35%, transparent); }
+.chip--challenge { background: var(--challenge-soft); color: var(--challenge); border-color: color-mix(in srgb, var(--challenge) 35%, transparent); }
+.chip--devtools { background: var(--devtools-soft); color: var(--devtools); border-color: color-mix(in srgb, var(--devtools) 35%, transparent); }
+.chip--debug { background: var(--debug-soft); color: var(--debug); border-color: color-mix(in srgb, var(--debug) 35%, transparent); }
+.chip--plain { background: var(--surface-3); color: var(--text-2); border-color: var(--line); }
+
+.body-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4cqi;
+  min-height: 0;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.8cqi;
+  align-items: start;
+  min-height: 0;
+}
+
+.split--wide-left { grid-template-columns: 1.35fr 1fr; }
+.split--wide-right { grid-template-columns: 1fr 1.35fr; }
+.split--sidebar { grid-template-columns: 1fr 0.62fr; }
+
+.cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6cqi;
+  align-items: start;
+}
+
+.cols-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.3cqi;
+  align-items: start;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2cqi;
+  min-width: 0;
+}
+
+/* Grid and flex children default to min-width:auto, which lets a wide code
+   block widen its column instead of scrolling inside it. */
+.split > *,
+.cols-3 > *,
+.cols-4 > *,
+.stack > * {
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  gap: 1cqi;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.center {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- 6. Content components ---------- */
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.6cqi 1.8cqi;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.panel--flush { padding: 0; overflow: hidden; }
+.panel--accent { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1cqi;
+  font-size: var(--fs-small);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.9cqi;
+}
+
+/* Code editor panel ----------------------------------------------------- */
+
+.editor {
+  background: #0a0f1b;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+[data-theme="light"] .editor {
+  background: #0e1626;
+}
+
+.editor-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.8cqi;
+  padding: 0.7cqi 1.2cqi;
+  background: rgba(255, 255, 255, 0.045);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dots {
+  display: flex;
+  gap: 0.45cqi;
+}
+
+.dots i {
+  width: 0.95cqi;
+  height: 0.95cqi;
+  min-width: 7px;
+  min-height: 7px;
+  border-radius: 50%;
+  background: #ff6b6b;
+  display: block;
+}
+
+.dots i:nth-child(2) { background: #ffd25c; }
+.dots i:nth-child(3) { background: #6df0bb; }
+
+.file-tab {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-small);
+  color: #cbd6ea;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 0.25em 0.8em;
+  border-radius: 6px;
+}
+
+.file-tab--html { color: var(--html); }
+.file-tab--css { color: var(--css); }
+
+.code {
+  margin: 0;
+  padding: 1.4cqi 1.6cqi;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-code);
+  line-height: 1.5;
+  color: #dbe6f8;
+  overflow: auto;
+  tab-size: 2;
+  white-space: pre;
+}
+
+/* Long listings scroll inside their own panel so the slide itself always
+   fits the 16:9 frame — no code is ever cut off, and nothing pushes the
+   instructor notes off the bottom. */
+.slide .code {
+  max-height: 54dvh;
+  overscroll-behavior: contain;
+}
+
+.code--wrap { white-space: pre-wrap; }
+
+.code--big { font-size: clamp(14px, 1.95cqi, 28px); }
+
+/* Syntax colours (applied by slides.js) */
+.t-tag { color: #ff9d6a; }
+.t-attr { color: #ffd88f; }
+.t-str { color: #9de08a; }
+.t-punct { color: #7d90ad; }
+.t-comment { color: #6b7c99; font-style: italic; }
+.t-sel { color: #7fd7ff; }
+.t-prop { color: #b3a6ff; }
+.t-val { color: #9de08a; }
+.t-num { color: #ffc46a; }
+.t-at { color: #ff9d6a; }
+
+/* Diff lines */
+.dline { display: block; }
+.dline.add {
+  background: rgba(109, 240, 187, 0.13);
+  box-shadow: inset 3px 0 0 var(--ok);
+  border-radius: 2px;
+}
+.dline.del {
+  background: rgba(255, 123, 123, 0.12);
+  box-shadow: inset 3px 0 0 var(--bad);
+  opacity: 0.75;
+  text-decoration: line-through;
+}
+
+/* Browser window mock ---------------------------------------------------- */
+
+.win {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.win-bar {
+  display: flex;
+  align-items: center;
+  gap: 1cqi;
+  padding: 0.7cqi 1.2cqi;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.win-url {
+  flex: 1;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-micro);
+  color: var(--muted);
+  background: var(--bg-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 0.3em 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.win-view {
+  background: #f4f6fb;
+  color: #172033;
+  padding: 1.2cqi;
+}
+
+[data-theme="dark"] .win-view,
+:root:not([data-theme="light"]) .win-view {
+  background: #f4f6fb;
+  color: #172033;
+}
+
+.win-view * {
+  max-width: 100%;
+}
+
+/* Demo page pieces rendered inside .win-view (light on purpose) */
+.demo-h1 { font-size: clamp(18px, 2.6cqi, 38px); margin: 0 0 0.3em; color: #101827; line-height: 1.1; }
+.demo-p { font-size: clamp(11px, 1.45cqi, 20px); margin: 0 0 0.6em; color: #33405c; }
+.demo-btn {
+  display: inline-block;
+  background: #d95a1f;
+  color: #fff;
+  font-weight: 700;
+  font-size: clamp(11px, 1.35cqi, 19px);
+  padding: 0.55em 1.3em;
+  border-radius: 999px;
+  text-decoration: none;
+}
+.demo-nav { display: flex; gap: 1.2em; font-size: clamp(10px, 1.3cqi, 18px); color: #33405c; }
+.demo-card {
+  background: #fff;
+  border: 1px solid #dfe5f2;
+  border-radius: 14px;
+  padding: 1.2cqi;
+  box-shadow: 0 8px 20px rgba(23, 32, 51, 0.08);
+}
+.demo-card h4 { margin: 0 0 0.3em; font-size: clamp(12px, 1.6cqi, 22px); color: #101827; }
+.demo-card p { margin: 0; font-size: clamp(10px, 1.3cqi, 18px); color: #4b5772; }
+.demo-cards { display: flex; gap: 1.2cqi; flex-wrap: wrap; }
+.demo-cards > * { flex: 1 1 30%; }
+
+/* Step lists ------------------------------------------------------------- */
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9cqi;
+}
+
+.steps li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.1cqi;
+  align-items: baseline;
+}
+
+.steps li::before {
+  content: counter(step);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: var(--fs-small);
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 8px;
+  width: 2.2em;
+  height: 2.2em;
+  display: grid;
+  place-items: center;
+}
+
+.steps--compact li { gap: 0.8cqi; }
+
+/* Tiles / feature cards -------------------------------------------------- */
+
+.tile {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.4cqi 1.5cqi;
+  min-width: 0;
+}
+
+.tile-icon {
+  width: 3.2cqi;
+  height: 3.2cqi;
+  min-width: 26px;
+  min-height: 26px;
+  margin-bottom: 0.7cqi;
+  display: block;
+}
+
+.tile h3 { color: var(--text); }
+.tile p { margin: 0; color: var(--text-2); }
+
+.tile--html { border-color: color-mix(in srgb, var(--html) 40%, var(--line)); background: var(--html-soft); }
+.tile--css { border-color: color-mix(in srgb, var(--css) 40%, var(--line)); background: var(--css-soft); }
+.tile--browser { border-color: color-mix(in srgb, var(--devtools) 40%, var(--line)); background: var(--devtools-soft); }
+
+/* Callouts --------------------------------------------------------------- */
+
+.callout {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.9cqi 1.3cqi;
+}
+
+.callout p:last-child { margin-bottom: 0; }
+.callout strong { color: var(--accent); }
+
+.callout--warn { border-color: var(--debug); background: var(--debug-soft); }
+.callout--warn strong { color: var(--debug); }
+.callout--ok { border-color: var(--ok); background: rgba(109, 240, 187, 0.12); }
+.callout--ok strong { color: var(--ok); }
+
+/* Key / value definition rows ------------------------------------------- */
+
+.deflist {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5cqi 1.2cqi;
+}
+
+.deflist dt {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.deflist dd { margin: 0; color: var(--text-2); }
+
+kbd, .kbd {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: 0.9em;
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  padding: 0.12em 0.5em;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+code:not(.code) {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  background: var(--surface-3);
+  border-radius: 5px;
+  padding: 0.08em 0.38em;
+  font-size: 0.92em;
+  color: var(--accent-ink);
+}
+
+/* Arrow flow diagram ----------------------------------------------------- */
+
+.flow {
+  display: flex;
+  align-items: stretch;
+  gap: 1.2cqi;
+  flex-wrap: wrap;
+}
+
+.flow-node {
+  flex: 1 1 0;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.4cqi;
+  text-align: center;
+  min-width: 0;
+}
+
+.flow-node b {
+  display: block;
+  font-size: var(--fs-h3);
+  margin-bottom: 0.3em;
+}
+
+.flow-arrow {
+  align-self: center;
+  font-size: var(--fs-h3);
+  color: var(--muted);
+}
+
+.ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55cqi;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: rung;
+}
+
+.ladder li {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 0.7cqi 1.2cqi;
+  display: flex;
+  justify-content: space-between;
+  gap: 1cqi;
+  align-items: baseline;
+}
+
+.ladder li b { font-size: var(--fs-body); }
+.ladder li span { color: var(--muted); font-size: var(--fs-small); }
+.ladder li.is-now { border-left-color: var(--challenge); background: var(--challenge-soft); }
+
+/* Nesting doll visual ---------------------------------------------------- */
+
+.nest {
+  border: 2px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 1.1cqi;
+  position: relative;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-small);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.nest > .nest {
+  margin-top: 0.7cqi;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.nest > span { font-weight: 700; }
+
+.nest--html { --accent: var(--html); --accent-soft: var(--html-soft); }
+
+/* ---------- 7. Activity components ---------- */
+
+.challenge {
+  border: 1px solid color-mix(in srgb, var(--challenge) 45%, var(--line));
+  background:
+    linear-gradient(180deg, var(--challenge-soft), transparent 60%),
+    var(--surface);
+  border-radius: var(--radius);
+  padding: 1.2cqi 1.5cqi;
+}
+
+.challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5cqi 1.6cqi;
+  margin: 0;
+}
+
+/* Full-width challenge cards use three columns, and sit their hint and
+   solution panels side by side, so the card stays short. */
+.challenge--wide .challenge-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.challenge--wide > .reveal {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0.5cqi 0.6cqi 0 0;
+  min-width: 14cqi;
+}
+
+.challenge-grid dt {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--challenge);
+}
+
+.challenge-grid dd {
+  margin: 0 0 0.45cqi;
+  color: var(--text-2);
+  font-size: var(--fs-small);
+}
+
+.reveal {
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 0.4cqi 1cqi;
+}
+
+.reveal > summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: var(--fs-small);
+  color: var(--accent);
+  padding: 0.5cqi 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.reveal > summary::-webkit-details-marker { display: none; }
+
+.reveal > summary::before {
+  content: "▸";
+  transition: transform 0.15s ease;
+  display: inline-block;
+}
+
+.reveal[open] > summary::before { transform: rotate(90deg); }
+
+.reveal[data-kind="solution"] > summary { color: var(--ok); }
+.reveal[data-kind="hint"] > summary { color: var(--debug); }
+
+.reveal-body { padding: 0.4cqi 0 1cqi; }
+.reveal-body > :last-child { margin-bottom: 0; }
+
+/* Quiz / sorting buttons ------------------------------------------------- */
+
+.quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6cqi;
+}
+
+.quiz-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.8cqi;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.55cqi 1.1cqi;
+}
+
+.quiz-row.is-right { border-color: var(--ok); background: rgba(109, 240, 187, 0.1); }
+.quiz-row.is-wrong { border-color: var(--bad); background: rgba(255, 123, 123, 0.1); }
+
+.quiz-q { font-size: var(--fs-body); }
+
+.opt-row { display: flex; gap: 0.5cqi; flex-wrap: wrap; }
+
+.opt {
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35em 0.95em;
+  cursor: pointer;
+}
+
+.opt:hover { border-color: var(--accent); color: var(--text); }
+.opt[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.opt.is-right { background: rgba(109, 240, 187, 0.18); border-color: var(--ok); color: var(--ok); }
+.opt.is-wrong { background: rgba(255, 123, 123, 0.15); border-color: var(--bad); color: var(--bad); }
+
+.quiz-feedback {
+  grid-column: 1 / -1;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+/* Checklists ------------------------------------------------------------- */
+
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45cqi;
+}
+
+.checklist li {
+  display: flex;
+  gap: 0.8cqi;
+  align-items: baseline;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+
+.checklist li::before {
+  content: "";
+  width: 0.9em;
+  height: 0.9em;
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  flex: none;
+  transform: translateY(0.1em);
+}
+
+.checklist--done li::before {
+  background: var(--accent);
+}
+
+.pointlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4cqi;
+}
+
+.pointlist li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1cqi;
+  font-size: var(--fs-small);
+  border-bottom: 1px dashed var(--line-soft);
+  padding-bottom: 0.35cqi;
+}
+
+.pointlist b { color: var(--challenge); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Reference tables ------------------------------------------------------- */
+
+.ref-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+}
+
+.ref-table th,
+.ref-table td {
+  text-align: left;
+  padding: 0.26cqi 0.8cqi;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: var(--fs-small);
+  vertical-align: top;
+}
+
+.ref-table th { color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--fs-micro); }
+.ref-table code { white-space: nowrap; }
+
+/* ---------- 8. Interactive labs ---------- */
+
+.playground {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2cqi;
+  min-height: 0;
+}
+
+.playground--stacked { grid-template-columns: 1fr; }
+
+/* A stacked playground puts its editors above the preview, so both halves
+   have to stay compact or the slide runs off the bottom. */
+.playground--stacked .pg-editor textarea { max-height: 15dvh; }
+.playground--stacked .pg-preview { min-height: 11cqi; }
+
+.pg-editors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9cqi;
+  min-width: 0;
+}
+
+.pg-editor {
+  background: #0a0f1b;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pg-editor > .editor-bar { padding: 0.5cqi 1cqi; }
+
+.pg-editor textarea {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-code);
+  line-height: 1.45;
+  color: #dbe6f8;
+  background: transparent;
+  border: 0;
+  resize: vertical;
+  padding: 1cqi 1.2cqi;
+  width: 100%;
+  min-height: 8cqi;
+  max-height: 20dvh;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+
+.pg-editor textarea:focus-visible { outline-offset: -3px; }
+
+.pg-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9cqi;
+  min-width: 0;
+}
+
+.pg-preview {
+  width: 100%;
+  min-height: 16cqi;
+  flex: 1;
+  border: 0;
+  background: #ffffff;
+  display: block;
+}
+
+.pg-actions {
+  display: flex;
+  gap: 0.6cqi;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn {
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.42em 1.05em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  white-space: nowrap;
+}
+
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn--primary { background: var(--accent); color: #08111f; border-color: var(--accent); }
+.btn--primary:hover { color: #08111f; filter: brightness(1.08); }
+[data-theme="light"] .btn--primary { color: #ffffff; }
+.btn--ghost { background: transparent; }
+.btn--sm { font-size: var(--fs-micro); padding: 0.35em 0.85em; }
+
+.pg-note {
+  font-size: var(--fs-micro);
+  color: var(--muted);
+}
+
+/* Box model lab ---------------------------------------------------------- */
+
+.boxlab {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 1.6cqi;
+  align-items: center;
+}
+
+.boxlab-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7cqi;
+}
+
+.slider-row {
+  display: grid;
+  grid-template-columns: 7.5em 1fr 3.6em;
+  gap: 0.8cqi;
+  align-items: center;
+  font-size: var(--fs-small);
+}
+
+.slider-row label {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  color: var(--accent);
+  font-size: var(--fs-small);
+}
+
+.slider-row output {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+  text-align: right;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.boxmodel {
+  background: rgba(255, 171, 106, 0.14);
+  border: 1px dashed color-mix(in srgb, var(--html) 60%, transparent);
+  border-radius: 8px;
+  padding: var(--m, 16px);
+  position: relative;
+  text-align: center;
+}
+
+.boxmodel-border {
+  background: rgba(100, 211, 255, 0.16);
+  border: var(--b, 4px) solid var(--css);
+  border-radius: 6px;
+  padding: var(--p, 16px);
+  width: var(--w, 260px);
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: var(--bs, content-box);
+}
+
+.boxmodel-content {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.6cqi;
+  font-size: var(--fs-small);
+  color: var(--text);
+}
+
+.box-legend {
+  display: flex;
+  gap: 1cqi;
+  flex-wrap: wrap;
+  font-size: var(--fs-micro);
+  color: var(--muted);
+  margin-top: 0.8cqi;
+  justify-content: center;
+}
+
+.box-legend i {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 3px;
+  display: inline-block;
+  margin-right: 0.35em;
+}
+
+.readout {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.7cqi 1cqi;
+  text-align: center;
+}
+
+/* Flexbox lab ------------------------------------------------------------ */
+
+.flexlab {
+  display: grid;
+  grid-template-columns: 0.9fr 1.3fr;
+  gap: 1.6cqi;
+  align-items: start;
+}
+
+.flex-stage {
+  background: repeating-linear-gradient(45deg, var(--surface-2), var(--surface-2) 12px, var(--surface-3) 12px, var(--surface-3) 24px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.2cqi;
+  min-height: 17.5cqi;
+  display: flex;
+  transition: all 0.25s ease;
+}
+
+.flex-item {
+  background: var(--css);
+  color: #06121c;
+  font-weight: 800;
+  font-size: var(--fs-small);
+  border-radius: 10px;
+  padding: 1cqi 1.4cqi;
+  display: grid;
+  place-items: center;
+  transition: all 0.25s ease;
+}
+
+.flex-item:nth-child(2) { background: var(--html); min-height: 6cqi; }
+.flex-item:nth-child(3) { background: var(--challenge); }
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35cqi;
+  margin-bottom: 0.8cqi;
+}
+
+.control-group > span {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-small);
+  color: var(--accent);
+}
+
+/* Viewport tester -------------------------------------------------------- */
+
+.viewport-tester {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9cqi;
+  align-items: center;
+}
+
+.viewport-frame {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #fff;
+  transition: width 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+}
+
+.viewport-frame iframe {
+  width: 100%;
+  height: 24cqi;
+  min-height: 150px;
+  border: 0;
+  display: block;
+}
+
+/* Celebration confetti --------------------------------------------------- */
+
+.confetti-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  overflow: hidden;
+}
+
+.confetti-bit {
+  position: absolute;
+  width: 10px;
+  height: 16px;
+  border-radius: 2px;
+  animation: confetti-fall 1.7s cubic-bezier(0.2, 0.6, 0.4, 1) forwards;
+}
+
+@keyframes confetti-fall {
+  from { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  to { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+}
+
+/* ---------- 9. Presenter notes ---------- */
+
+.notes {
+  display: none;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 1.1cqi 1.4cqi;
+  margin-top: auto;
+}
+
+body.notes-on .slide.is-active .notes { display: block; }
+
+.notes h4 {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.6cqi;
+  font-weight: 800;
+}
+
+.notes dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25cqi 1cqi;
+}
+
+.notes dt {
+  font-size: var(--fs-micro);
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.notes dd {
+  margin: 0;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+
+.notes dd code { font-size: 0.9em; }
+
+/* ---------- 10. Deck chrome ---------- */
+
+.toolbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.9rem;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.toolbar-meta {
+  min-width: 0;
+  flex: 1 1 12rem;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.toolbar-section {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.toolbar-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toolbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.counter {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 0.9rem;
+  min-width: 4.5rem;
+  text-align: center;
+  color: var(--text);
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex: 1 1 auto;
+}
+
+.icon-btn {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.34rem 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.icon-btn:hover { color: var(--text); border-color: var(--css); }
+.icon-btn[aria-pressed="true"] { background: var(--css-soft); color: var(--css); border-color: var(--css); }
+
+.progress {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--line-soft);
+  z-index: 41;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--html), var(--css), var(--challenge));
+  transition: width 0.25s ease;
+}
+
+.section-marks {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  height: 8px;
+  z-index: 42;
+  pointer-events: none;
+}
+
+.section-mark {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: 8px;
+  background: var(--muted);
+  opacity: 0.6;
+}
+
+/* Panels: overview, timer, scoreboard, help ------------------------------ */
+
+.panel-float {
+  position: fixed;
+  z-index: 45;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+.panel-float[hidden] { display: none; }
+
+.panel-float h2 {
+  font-size: 0.95rem;
+  margin: 0 0 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.overview {
+  inset: 4vh 4vw 8vh;
+  overflow: auto;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.6rem;
+}
+
+.overview-item {
+  font: inherit;
+  text-align: left;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  color: var(--text-2);
+  font-size: 0.8rem;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.overview-item:hover { border-color: var(--css); color: var(--text); }
+.overview-item.is-current { border-color: var(--challenge); background: var(--challenge-soft); color: var(--text); }
+.overview-item b { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.68rem; letter-spacing: 0.08em; }
+.overview-item .ov-sec { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+.overview-close { position: sticky; top: 0; float: right; }
+
+/* Timer */
+
+.timer {
+  right: 0.9rem;
+  bottom: 4.6rem;
+  width: 15rem;
+}
+
+.timer-display {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: 2.6rem;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.timer.is-final .timer-display { color: var(--debug); }
+.timer.is-done .timer-display { color: var(--bad); }
+
+.timer.is-final { border-color: var(--debug); box-shadow: 0 0 0 3px var(--debug-soft), var(--shadow); }
+.timer.is-done { border-color: var(--bad); }
+
+.timer-presets, .timer-controls {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.45rem;
+}
+
+.timer-presets .icon-btn, .timer-controls .icon-btn { font-size: 0.72rem; padding: 0.28rem 0.6rem; }
+
+/* Scoreboard */
+
+.scoreboard {
+  left: 0.9rem;
+  bottom: 4.6rem;
+  width: 17rem;
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.team-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 0.3rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.team-row input[type="text"] {
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 0.28rem 0.5rem;
+  min-width: 0;
+}
+
+.team-score {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 0.95rem;
+  min-width: 2.2rem;
+  text-align: center;
+  color: var(--challenge);
+}
+
+.score-btn {
+  font: inherit;
+  font-weight: 800;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 8px;
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  color: var(--text);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.score-btn:hover { border-color: var(--challenge); color: var(--challenge); }
+
+.scoreboard-foot {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.team-count {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+.team-count select {
+  font: inherit;
+  font-size: 0.78rem;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.2rem 0.4rem;
+}
+
+/* Help */
+
+.help {
+  inset: 10vh 20vw auto;
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.help table { width: 100%; border-collapse: collapse; }
+.help td { padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--line-soft); font-size: 0.85rem; }
+
+/* ---------- 11. Motion, print, narrow screens ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .slide.is-active { animation: none; }
+}
+
+/* Narrow screens: stop pretending to be a projector, become a document. */
+@media (max-width: 900px) {
+  .slide {
+    width: 100%;
+    aspect-ratio: auto;
+    min-height: calc(100dvh - 7rem);
+  }
+
+  .slide-inner { padding: 1.5rem 1.1rem 2rem; gap: 1rem; }
+
+  .split,
+  .cols-3,
+  .cols-4,
+  .playground,
+  .boxlab,
+  .flexlab,
+  .deflist,
+  .notes dl,
+  .challenge-grid,
+  .challenge--wide .challenge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .deflist dt,
+  .notes dt {
+    margin-top: 0.5rem;
+  }
+
+  /* Long class names and property names must not push the slide sideways. */
+  code,
+  .checklist li,
+  .ref-table td {
+    overflow-wrap: anywhere;
+  }
+
+  .slide {
+    --fs-h1: 2rem;
+    --fs-h2: 1.5rem;
+    --fs-h3: 1.1rem;
+    --fs-lead: 1rem;
+    --fs-body: 0.95rem;
+    --fs-code: 0.85rem;
+    --fs-small: 0.82rem;
+    --fs-micro: 0.72rem;
+  }
+
+  .scoreboard, .timer { left: 0.5rem; right: 0.5rem; width: auto; }
+  .help { inset: 6vh 4vw auto; }
+}
+
+@media print {
+  body { overflow: visible; background: #fff; color: #000; }
+  .toolbar, .progress, .section-marks, .panel-float, .skip-link, .confetti-layer { display: none !important; }
+  .deck { display: block; height: auto; padding: 0; }
+  .slide {
+    display: block !important;
+    width: 100%;
+    aspect-ratio: auto;
+    break-after: page;
+    box-shadow: none;
+    border: 1px solid #999;
+    background: #fff;
+    color: #000;
+  }
+  .slide-inner { overflow: visible; }
+  .notes { display: block !important; }
+  .reveal[open] .reveal-body { display: block; }
+}

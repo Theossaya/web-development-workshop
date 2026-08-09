@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="A magnifying glass representing developer tools">
+  <title>DevTools</title>
+  <circle cx="21" cy="21" r="13" fill="none" stroke="#e07bff" stroke-width="4"/>
+  <path d="M31 31l10 10" stroke="#e07bff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M15 21h12M21 15v12" stroke="#e07bff" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+</svg>

@@ -1,0 +1,167 @@
+/* ==========================================================
+   Starter stylesheet
+
+   Enough to get you going, not enough to be finished.
+   Change the colours. Change the fonts. Make it yours.
+   ========================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f4f6fb;
+  color: #172033;
+  margin: 0;
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid #dfe5f2;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #172033;
+  text-decoration: none;
+}
+
+.navigation {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.navigation a {
+  color: #33405c;
+  text-decoration: none;
+}
+
+.navigation a:hover {
+  color: #d95a1f;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.hero-text {
+  flex: 1 1 340px;
+}
+
+.hero-image {
+  flex: 1 1 320px;
+  border-radius: 18px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  line-height: 1.1;
+  margin: 0 0 1rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #8a4a17;
+  margin: 0 0 0.5rem;
+}
+
+.lead {
+  font-size: 1.1rem;
+  max-width: 46ch;
+}
+
+/* ---------- Button ---------- */
+
+.button {
+  display: inline-block;
+  background: #d95a1f;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  border: 2px solid #d95a1f;
+}
+
+/* TODO: give the button something to do on :hover */
+
+/* ---------- Sections ---------- */
+
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.section h2 {
+  font-size: 2rem;
+  margin: 0 0 0.75rem;
+}
+
+/* ---------- Cards ---------- */
+
+.cards {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+card {
+  flex: 1 1 280px;
+  max-width: 360px;
+  background: #ffffff;
+  border: 1px solid #dfe5f2;
+  border-radius: 18px;
+  padding: 1.25rem;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  background: #ffffff;
+  border-top: 1px solid #dfe5f2;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: #4b5772;
+}
+
+/* ---------- Narrow screens ----------
+
+   TODO: write one media query.
+   Somewhere around 700px, the header should stack, the big
+   heading should get smaller, and the cards should sit in
+   one column.
+
+   @media (max-width: 700px) {
+     ...your rules here...
+   }
+*/

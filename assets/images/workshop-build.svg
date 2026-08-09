@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Three students working together around a laptop, drawn as simple shapes">
+  <title>Students building together</title>
+  <rect width="600" height="400" rx="20" fill="#12203a"/>
+  <circle cx="120" cy="140" r="46" fill="#ff9d5c"/>
+  <circle cx="300" cy="120" r="46" fill="#5ad1ff"/>
+  <circle cx="480" cy="140" r="46" fill="#c6f24e"/>
+  <path d="M60 260q60-70 120-70t120 70" fill="#ff9d5c" opacity=".55"/>
+  <path d="M240 250q60-80 120-80t120 80" fill="#5ad1ff" opacity=".55"/>
+  <rect x="150" y="270" width="300" height="70" rx="12" fill="#0e1626" stroke="#2c3a55" stroke-width="3"/>
+  <rect x="170" y="292" width="150" height="10" rx="5" fill="#5ad1ff"/>
+  <rect x="170" y="312" width="220" height="10" rx="5" fill="#3a4a68"/>
+</svg>

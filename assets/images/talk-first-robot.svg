@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="A friendly robot built from rectangles and circles">
+  <title>Robotics workshop</title>
+  <rect width="480" height="320" rx="18" fill="#0f2a2a"/>
+  <rect x="170" y="90" width="140" height="120" rx="18" fill="#5be8b0"/>
+  <circle cx="210" cy="140" r="14" fill="#0f2a2a"/>
+  <circle cx="270" cy="140" r="14" fill="#0f2a2a"/>
+  <rect x="205" y="172" width="70" height="12" rx="6" fill="#0f2a2a"/>
+  <rect x="230" y="52" width="20" height="40" rx="10" fill="#c6f24e"/>
+  <circle cx="240" cy="46" r="14" fill="#c6f24e"/>
+  <rect x="120" y="120" width="44" height="16" rx="8" fill="#5ad1ff"/>
+  <rect x="316" y="120" width="44" height="16" rx="8" fill="#5ad1ff"/>
+  <rect x="186" y="224" width="36" height="52" rx="12" fill="#5ad1ff"/>
+  <rect x="258" y="224" width="36" height="52" rx="12" fill="#5ad1ff"/>
+</svg>

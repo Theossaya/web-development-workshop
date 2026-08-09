@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="Overlapping colour swatches and a paint brush shape">
+  <title>Design jam session</title>
+  <rect width="480" height="320" rx="18" fill="#2a1a14"/>
+  <circle cx="180" cy="150" r="80" fill="#ff9d5c" opacity=".85"/>
+  <circle cx="260" cy="180" r="80" fill="#ffd25c" opacity=".75"/>
+  <circle cx="300" cy="110" r="60" fill="#e07bff" opacity=".7"/>
+  <rect x="60" y="240" width="360" height="18" rx="9" fill="#f6e7d8" opacity=".8"/>
+</svg>

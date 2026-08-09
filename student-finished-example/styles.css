@@ -1,0 +1,315 @@
+/* ==========================================================
+   Nova Student Tech Day — finished reference stylesheet
+
+   Everything in this file uses only what the workshop teaches:
+   element selectors, class selectors, one id, a descendant
+   selector, :hover / :focus-visible, the box model, Flexbox
+   and one media query. No Grid, no frameworks, no build step.
+   ========================================================== */
+
+/* ---------- 1. Page basics ---------- */
+
+body {
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f4f6fb;
+  color: #172033;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Border-box makes width mean "the whole box", padding included. */
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: #1b4dd8;
+}
+
+/* Anyone navigating by keyboard must be able to see where they are. */
+a:focus-visible,
+.button:focus-visible {
+  outline: 3px solid #172033;
+  outline-offset: 3px;
+}
+
+/* ---------- 2. Header and navigation ---------- */
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid #dfe5f2;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #172033;
+  text-decoration: none;
+}
+
+.logo span {
+  color: #d95a1f;
+}
+
+.navigation {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.navigation a {
+  color: #33405c;
+  text-decoration: none;
+  padding: 0.35rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.navigation a:hover {
+  color: #172033;
+  border-bottom-color: #d95a1f;
+}
+
+/* ---------- 3. Hero ---------- */
+
+.hero {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem;
+}
+
+.hero-text {
+  flex: 1 1 340px;
+}
+
+.hero-image {
+  flex: 1 1 320px;
+  border-radius: 18px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #8a4a17;
+  margin: 0 0 0.5rem;
+}
+
+/* A descendant selector: only the h1 inside .hero gets this size. */
+.hero h1 {
+  font-size: 3rem;
+  line-height: 1.1;
+  margin: 0 0 1rem;
+}
+
+.lead {
+  font-size: 1.15rem;
+  max-width: 46ch;
+}
+
+.hero-note {
+  font-size: 0.9rem;
+  color: #4b5772;
+}
+
+/* ---------- 4. The reusable button ---------- */
+
+.button {
+  display: inline-block;
+  background: #d95a1f;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  border: 2px solid #d95a1f;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.button:hover {
+  background: #b84712;
+  transform: translateY(-2px);
+}
+
+.button-large {
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+}
+
+/* ---------- 5. Sections ---------- */
+
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.section h2 {
+  font-size: 2rem;
+  margin: 0 0 0.75rem;
+}
+
+.section-intro {
+  max-width: 58ch;
+  color: #33405c;
+}
+
+.tick-list {
+  padding-left: 1.2rem;
+  max-width: 58ch;
+}
+
+.tick-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* ---------- 6. Schedule ---------- */
+
+.schedule {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  max-width: 640px;
+}
+
+.schedule li {
+  display: flex;
+  gap: 1.25rem;
+  align-items: baseline;
+  padding: 0.9rem 1rem;
+  background: #ffffff;
+  border: 1px solid #dfe5f2;
+  border-radius: 12px;
+  margin-bottom: 0.6rem;
+}
+
+.time {
+  font-weight: 700;
+  color: #d95a1f;
+  min-width: 4.5rem;
+}
+
+/* ---------- 7. Cards ---------- */
+
+.cards {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.card {
+  flex: 1 1 280px;
+  max-width: 360px;
+  background: #ffffff;
+  border: 1px solid #dfe5f2;
+  border-radius: 18px;
+  padding: 1.25rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(23, 32, 51, 0.12);
+}
+
+.card img {
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.card p {
+  margin: 0 0 0.75rem;
+}
+
+.card-meta {
+  font-size: 0.9rem;
+  color: #4b5772;
+  font-weight: 600;
+}
+
+/* ---------- 8. Register block ---------- */
+
+.register {
+  background: #172033;
+  color: #eef3fb;
+  border-radius: 24px;
+  max-width: 1100px;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.register p {
+  max-width: 52ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------- 9. Footer ---------- */
+
+.site-footer {
+  background: #ffffff;
+  border-top: 1px solid #dfe5f2;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: #4b5772;
+}
+
+/* ---------- 10. Narrow screens ---------- */
+
+@media (max-width: 700px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navigation {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .hero {
+    padding-top: 2rem;
+  }
+
+  .hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .card {
+    max-width: none;
+  }
+}
+
+/* People who ask their computer for less movement should get less. */
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .card {
+    transition: none;
+  }
+
+  .button:hover,
+  .card:hover {
+    transform: none;
+  }
+}

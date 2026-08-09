@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-label="Abstract illustration of code lines forming a wave">
+  <title>Code and creativity session</title>
+  <rect width="480" height="320" rx="18" fill="#1a1430"/>
+  <g fill="#e07bff" opacity=".9">
+    <rect x="40" y="60" width="180" height="14" rx="7"/>
+    <rect x="40" y="94" width="120" height="14" rx="7"/>
+    <rect x="40" y="128" width="220" height="14" rx="7"/>
+    <rect x="40" y="162" width="90" height="14" rx="7"/>
+  </g>
+  <path d="M0 250q120-70 240 0t240 0v70H0z" fill="#ff9d5c" opacity=".7"/>
+  <circle cx="380" cy="100" r="54" fill="#5ad1ff" opacity=".65"/>
+</svg>

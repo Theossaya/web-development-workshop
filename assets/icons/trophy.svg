@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="A trophy representing the team challenge">
+  <title>Challenge</title>
+  <path d="M14 8h20v12a10 10 0 0 1-20 0z" fill="#c6f24e"/>
+  <path d="M14 10H8v4a8 8 0 0 0 8 8M34 10h6v4a8 8 0 0 1-8 8" fill="none" stroke="#c6f24e" stroke-width="3"/>
+  <path d="M24 30v6M17 40h14" stroke="#c6f24e" stroke-width="4" stroke-linecap="round"/>
+</svg>
