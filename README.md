@@ -14,12 +14,20 @@ repaired and personalised themselves.
 
 ## 1. Quick start
 
-There are two builds of the same deck. Use whichever suits how you are handing
-it out.
+Three builds of the same source. Use whichever suits where the class has got to.
 
-### The single file — `workshop.html`
+### For students right now — `session-1.html`
 
-One 378 KB file with **everything** inside it: all 79 slides, the styling, the
+**183 KB, 32 slides: everything through semantic HTML (slide 28), plus
+Assignment 1.** This is the link to hand out after session one. It stops exactly
+where the teaching stopped — no CSS, no DevTools, no spoilers — and ends with
+the take-home assignment.
+
+Live link: `https://theossaya.github.io/web-development-workshop/session-1.html`
+
+### For you — `workshop.html`
+
+One 394 KB file with **everything** inside it: all 83 slides, the styling, the
 behaviour, every illustration as a data URI, and both student projects embedded.
 No folder, no assets directory, nothing to go missing.
 
@@ -38,7 +46,7 @@ timings. Copy the whole folder, double-click `index.html`.
 Either way: press <kbd>F</kbd> for full screen, <kbd>→</kbd> to advance,
 <kbd>N</kbd> for instructor notes. Nothing to install, nothing to serve.
 
-**After editing the folder version, regenerate the single file:**
+**After editing the folder version, regenerate both single files:**
 
 ```bash
 node build-standalone.js
@@ -46,6 +54,36 @@ node build-standalone.js
 
 That is the only step that needs Node, and only you need it — never the
 students.
+
+### Growing the student link as the course goes on
+
+`session-1.html` stops at a slide you choose. To extend it after session two,
+open `build-standalone.js`, find the `BUILDS` list near the bottom, and change
+one line:
+
+```js
+{
+  out: "session-2.html",
+  through: "s-checkpoint-7",       // the last slide students should see
+  title: "Web Development From Zero — Session 2: CSS and Layout",
+  note: "session two — students",
+},
+```
+
+Add it to the list, run the build, push. The slide counter, progress bar,
+section markers and navigator all rebuild themselves from whatever slides
+survive the cut. The build refuses to write a file that links to a slide it has
+just removed, so a bad cut point fails loudly instead of shipping a dead link.
+
+Useful cut points:
+
+| Ends after | `through:` | Covers |
+| --- | --- | --- |
+| Semantic HTML + assignment | `s-assignment-submit` | Sections 0–5 (current session-1) |
+| DevTools | `s-devtools-rebuild` | + inspecting real sites |
+| Styled cards | `s-checkpoint-5` | + CSS, selectors and classes |
+| Responsive page | `s-checkpoint-7` | + box model, Flexbox, media queries |
+| Everything | `null` | the full deck |
 
 ### Putting it online
 
@@ -78,12 +116,14 @@ has loaded.
 ```text
 web-development-workshop/
 │
-├── workshop.html                  ★ THE SINGLE FILE — hand this out
+├── session-1.html                 ★ HAND THIS OUT — slides 1–28 + Assignment 1
+├── workshop.html                  the full deck as one file — for you
 │
-├── index.html                     the presentation source (79 slides)
+├── index.html                     the presentation source (83 slides)
 ├── styles.css                     presentation styling only
 ├── slides.js                      presentation behaviour only
-├── build-standalone.js            rebuilds workshop.html from the above
+├── build-standalone.js            rebuilds both single files from the above
+├── assignment-1.md                printable assignment sheet for the LMS
 ├── README.md                      this instructor guide
 │
 ├── student-starter/               hand this to students for the final build
@@ -482,12 +522,23 @@ the break. Take the ten-minute break exactly on time.
 
 ### Route 3 — two sessions
 
-**Session one (2 hours) — structure and reading**
+**Session one (2 hours) — structure**
 Opening hook → workspace → first HTML document → content → semantic HTML →
-break → DevTools (all six slides) → the eight-step debugging routine.
-End with: “Next time we make it look like something.”
+**Assignment 1** (four slides, ends at slide 32).
+End with: “Next time we make it look like something. Bring your folder.”
 
-Homework: add three more sections to your page, structure only, no styling.
+This is exactly what `session-1.html` contains, so the link you hand out and the
+deck you present are the same thing.
+
+Homework: **Assignment 1 — Structure Something Real.** A two-page HTML-only site
+on a subject of their choosing. Full brief on the last four slides and in
+`assignment-1.md` for printing or uploading to the LMS. Marked out of 20 on
+structure, semantics, nesting, working links and content — never on looks, since
+there is no CSS in it.
+
+If you have time to spare in session one, DevTools (`s-devtools-why` through
+`s-devtools-rebuild`) fits neatly at the end and needs no CSS. Set the build's
+`through:` to `s-devtools-rebuild` if you do.
 
 **Session two (2 hours) — appearance and layout**
 Quick recap of checkpoint 3 → connect CSS → selectors and classes → box model →
@@ -691,7 +742,7 @@ Run through this once on the machine you will present from.
 
 **Deck**
 - [ ] `index.html` opens by double-clicking, with no server
-- [ ] Every one of the 79 slides is reachable from the navigator (<kbd>O</kbd>)
+- [ ] Every one of the 83 slides is reachable from the navigator (<kbd>O</kbd>)
 - [ ] Previous and next buttons work
 - [ ] <kbd>→</kbd> <kbd>←</kbd> <kbd>Space</kbd> <kbd>Home</kbd> <kbd>End</kbd> all work
 - [ ] Full screen works
@@ -712,6 +763,12 @@ Run through this once on the machine you will present from.
 - [ ] The box-model sliders and readout update live
 - [ ] The Flexbox dropdowns move the boxes and update the generated CSS
 - [ ] The viewport tester resizes the miniature page and its media query fires
+
+**Session build (`session-1.html`)**
+- [ ] Ends on “Assignment 1 — check, mark, submit”, 32 slides
+- [ ] Contains no CSS, DevTools or Flexbox material
+- [ ] Counter reads “x / 32” and the navigator lists 32 slides
+- [ ] No link points at a slide that was cut
 
 **Single file (`workshop.html`)**
 - [ ] Opens from a folder containing nothing else

@@ -1726,6 +1726,293 @@
   </div>
 </section>
 
+<!-- ======================================================================
+     ASSIGNMENT 1 — set at the end of session one (after slide 28)
+     In a single-day delivery, skip these four slides.
+     ====================================================================== -->
+
+<section class="slide" id="s-assignment-brief" data-section="Assignment 1" data-title="Assignment 1 — the brief" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Assignment 1 · Take-home <span class="chip chip--challenge">Due next session</span></p>
+        <h2>Structure something real. Two pages. No CSS.</h2>
+      </div>
+    </header>
+
+    <div class="split split--wide-left">
+      <div class="stack">
+        <p class="lead">Build a small two-page website about something you actually care about, using only the HTML you have written today.</p>
+        <div class="callout">
+          <p><strong>Pick your own subject.</strong> A club you are in · a game you play · a band · a sport · a place you know well · a person you admire · a thing you collect · a cause you care about. If you would not read it, do not write it.</p>
+        </div>
+        <div class="callout callout--warn">
+          <p><strong>The one hard rule: no CSS.</strong> No <code>style</code> attributes, no <code>&lt;style&gt;</code> block, no stylesheet. Your page will look plain — black text, blue links, Times New Roman. <em>That is correct.</em> We style it next session, and styling is far easier on top of good structure.</p>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="panel">
+          <p class="panel-title">Your folder</p>
+          <pre class="code">my-project/
+├── index.html
+└── about.html</pre>
+          <p class="small muted">Two files, one folder. No <code>styles.css</code> this time — you would only be tempted.</p>
+        </div>
+        <div class="panel">
+          <p class="panel-title">Roughly how long</p>
+          <ul class="checklist">
+            <li>Page one — 40 minutes</li>
+            <li>Page two — 25 minutes</li>
+            <li>Checking and fixing — 15 minutes</li>
+          </ul>
+          <p class="small muted">If it is taking three hours, you are writing too much text. The structure is the assignment, not the essay.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Everything on the next slide is something you built today. There is nothing new to learn before you start — only one or two optional extras.”</dd>
+        <dt>Expect</dt><dd>“Can I use CSS? I found a tutorial.” Hold the line, and say why: structure gets skipped forever once styling starts being fun.</dd>
+        <dt>Misconception</dt><dd>That a plain page means an unfinished page. Show them Checkpoint 2 again — unstyled, valid, complete.</dd>
+        <dt>Hint first</dt><dd>“Write your headings first, all of them, before a single paragraph. The shape comes before the words.”</dd>
+        <dt>Timing</dt><dd>3 minutes to brief. Say the actual due date out loud and write it on the board.</dd>
+        <dt>Short session</dt><dd>Set page one only and drop the second page.</dd>
+        <dt>Solution</dt><dd>Any subject. The marker is structure, not topic.</dd>
+        <dt>Next</dt><dd>“Here is exactly what has to be in it.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-assignment-required" data-section="Assignment 1" data-title="Assignment 1 — what must be in it" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Assignment 1 · Checklist <span class="chip chip--html">All of this you have done</span></p>
+        <h2>Tick every box.</h2>
+      </div>
+    </header>
+
+    <div class="cols-3">
+      <div class="panel panel--accent">
+        <p class="panel-title">Both pages</p>
+        <ul class="checklist">
+          <li><code>&lt;!doctype html&gt;</code> on line one</li>
+          <li><code>&lt;html lang="en"&gt;</code></li>
+          <li>charset and viewport <code>meta</code> tags</li>
+          <li>A <code>title</code> that names the page, not “Document”</li>
+          <li>A <code>header</code> containing a <code>nav</code></li>
+          <li>One <code>main</code></li>
+          <li>Exactly one <code>h1</code></li>
+          <li>A <code>footer</code> with your name</li>
+          <li>Tidy indentation</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <p class="panel-title">Page one — index.html</p>
+        <ul class="checklist">
+          <li>At least <strong>three</strong> <code>section</code> elements</li>
+          <li>Each section has an <code>id</code> and an <code>h2</code></li>
+          <li>A nav link that jumps to each section</li>
+          <li>At least <strong>two</strong> <code>article</code> elements inside one section</li>
+          <li>A list of at least three items</li>
+          <li>One <code>img</code> with real <code>alt</code> text</li>
+          <li>One <code>strong</code> where the emphasis is genuine</li>
+          <li>A link to page two</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <p class="panel-title">Page two — about.html</p>
+        <ul class="checklist">
+          <li>At least <strong>two</strong> <code>section</code> elements</li>
+          <li>A nav link back to page one</li>
+          <li>At least one thing from the next slide</li>
+          <li>Something that could not just live on page one — give it a reason to exist</li>
+        </ul>
+        <div class="callout callout--ok" style="margin-top:1cqi;">
+          <p><strong>Page two ideas:</strong> a timeline, a set of rules, a list of people, a how-to, a set of answers to questions people ask.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Photograph this slide, or take the printed checklist. Tick boxes as you go — do not leave the checking to the end.”</dd>
+        <dt>Expect</dt><dd>The “two articles inside one section” item is the one people skip. It is also the one that proves they understood nesting.</dd>
+        <dt>Misconception</dt><dd>That <code>section</code> and <code>article</code> are interchangeable. Repeat the test: could you lift it out and have it still make sense?</dd>
+        <dt>Hint first</dt><dd>“Build page one completely, check it, then copy the whole file to about.html and gut the middle.”</dd>
+        <dt>Timing</dt><dd>3 minutes.</dd>
+        <dt>Short session</dt><dd>Drop the article requirement and the second page.</dd>
+        <dt>Solution</dt><dd>Checkpoint 3 on slide 28 is the shape they are aiming for.</dd>
+        <dt>Next</dt><dd>“And here is the little bit extra — five things you have not used yet.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-assignment-stretch" data-section="Assignment 1" data-title="Assignment 1 — a little more" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Assignment 1 · Stretch <span class="chip chip--html">Use at least one</span></p>
+        <h2>Five new elements. Same rules as everything else.</h2>
+      </div>
+      <button class="btn" data-timer-start="300" data-timer-label="Try the new elements">Try them — 5 min</button>
+    </header>
+
+    <div class="split split--sidebar">
+      <div class="playground" data-playground>
+        <div class="pg-editors">
+          <div class="pg-editor">
+            <div class="editor-bar"><span class="file-tab file-tab--html">try them here</span></div>
+            <textarea data-pg-html rows="16" spellcheck="false" aria-label="Try the five new elements">&lt;h2&gt;How a match works&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Toss for ends&lt;/li&gt;
+  &lt;li&gt;Two halves of forty minutes&lt;/li&gt;
+  &lt;li&gt;Handshakes, then chips&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;figure&gt;
+  &lt;img src="team.jpg" alt="Our team lined up before kickoff"&gt;
+  &lt;figcaption&gt;The squad, twenty minutes before the whistle.&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;We lost every game and learned every rule.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Equipment
+    &lt;ul&gt;
+      &lt;li&gt;Boots&lt;/li&gt;
+      &lt;li&gt;Shin pads&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Snacks&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;a href="about.html"&gt;Read about the club&lt;/a&gt;</textarea>
+          </div>
+        </div>
+        <div class="pg-side">
+          <iframe data-pg-preview class="pg-preview" sandbox title="Preview of the new elements"></iframe>
+          <div class="pg-actions">
+            <button type="button" class="btn btn--primary" data-pg-action="run">Run ▸</button>
+            <button type="button" class="btn" data-pg-action="reset">Reset</button>
+            <button type="button" class="btn" data-pg-action="copy">Copy</button>
+          </div>
+          <p class="pg-note">The image will not load here — there is no <code>team.jpg</code> in this deck. Notice what the <code>alt</code> text does when a picture is missing.</p>
+        </div>
+      </div>
+
+      <div class="stack">
+        <dl class="deflist">
+          <dt>ol</dt><dd>An <strong>ordered</strong> list. Use it when the order carries meaning: steps, rankings, a timetable. The numbers come free.</dd>
+          <dt>figure<br>figcaption</dt><dd>An image plus a caption, tied together so a browser knows the caption belongs to that picture. <code>alt</code> describes it; the caption comments on it.</dd>
+          <dt>blockquote</dt><dd>A quotation from somewhere else. Put a <code>p</code> inside it. Say who said it.</dd>
+          <dt>nested ul</dt><dd>A list inside a list item — not inside the <code>ul</code>. Look carefully at where the inner <code>&lt;ul&gt;</code> opens.</dd>
+          <dt>a link to a file</dt><dd>Write <code>href="about.html"</code> to reach another <em>file</em> rather than an <code>id</code>. No <code>#</code>. Same folder, exact spelling, exact capitals.</dd>
+        </dl>
+        <div class="callout callout--warn">
+          <p><strong>Use at least one of these,</strong> and be ready to say why that element and not a different one.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Five minutes. Change the words to yours and run it. The nested list is the one worth staring at.”</dd>
+        <dt>Expect</dt><dd>The nested list gets opened as a sibling of the outer <code>li</code> rather than inside it. It still renders, roughly — which is exactly why it is worth pointing out.</dd>
+        <dt>Misconception</dt><dd>That <code>figcaption</code> replaces <code>alt</code>. It does not: the caption is read by everyone, the alt text stands in for the image itself.</dd>
+        <dt>Hint first</dt><dd>“Where does the inner <code>&lt;ul&gt;</code> open — before or after the closing <code>&lt;/li&gt;</code>?”</dd>
+        <dt>Timing</dt><dd>6 minutes with the playground.</dd>
+        <dt>Short session</dt><dd>Show <code>ol</code> and the page-to-page link only.</dd>
+        <dt>Solution</dt><dd>The starting code in the playground is already correct — have them break it and fix it.</dd>
+        <dt>Next</dt><dd>“Before you hand it in, run these checks yourself.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-assignment-submit" data-section="Assignment 1" data-title="Assignment 1 — check, mark, submit" data-accent="debug" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Assignment 1 · Before you hand it in <span class="chip chip--debug">Self-check</span></p>
+        <h2>Ten checks, then submit.</h2>
+      </div>
+    </header>
+
+    <div class="cols-3">
+      <div class="panel">
+        <p class="panel-title">Check it yourself first</p>
+        <ul class="checklist">
+          <li>Both pages open in a browser</li>
+          <li>Every nav link goes somewhere real</li>
+          <li>Page one links to page two, and back again</li>
+          <li>Every jump link lands on a section</li>
+          <li>The image loads — or you know why it does not</li>
+          <li>The <code>alt</code> text describes the picture</li>
+          <li>No link says “click here”</li>
+          <li>One <code>h1</code> per page, no skipped levels</li>
+          <li>Every tag you opened, you closed</li>
+          <li>Nothing visible sits outside <code>body</code></li>
+        </ul>
+      </div>
+
+      <div class="panel panel--accent">
+        <p class="panel-title">How it is marked — 20 points</p>
+        <ul class="pointlist">
+          <li><span>Valid document structure, both pages</span><b>4</b></li>
+          <li><span>Semantic regions used honestly</span><b>4</b></li>
+          <li><span>Headings and nesting</span><b>4</b></li>
+          <li><span>Links and images that work</span><b>4</b></li>
+          <li><span>Real content, plus one stretch element</span><b>4</b></li>
+        </ul>
+        <div class="callout callout--ok" style="margin-top:1cqi;">
+          <p><strong>No marks for looks.</strong> There is no CSS, so there is nothing to judge. Marks are for structure, working links and words worth reading.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="panel-title">The five most likely faults</p>
+        <ol class="steps steps--compact">
+          <li><span>Link to page two spelled differently from the file — <code>About.html</code> is not <code>about.html</code>.</span></li>
+          <li><span>Jump link with no matching <code>id</code>.</span></li>
+          <li><span>Image path pointing somewhere that does not exist.</span></li>
+          <li><span>A missing closing tag, so half the page goes strange.</span></li>
+          <li><span><code>alt=""</code> left on a photograph that actually matters.</span></li>
+        </ol>
+        <div class="callout callout--warn" style="margin-top:1cqi;">
+          <p><strong>Submit:</strong> put both files in one folder, zip the folder, upload it. Be ready to explain any line I point at.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“The ten checks are the assignment as much as the building is. Run them before you upload, not after I mark it.”</dd>
+        <dt>Expect</dt><dd>Filename-case mismatches are the single biggest cause of broken submissions — it works on their machine and breaks on yours. Warn twice.</dd>
+        <dt>Misconception</dt><dd>“It opened for me, so it works.” Local file systems forgive capitalisation; almost nothing else does.</dd>
+        <dt>Hint first</dt><dd>“Close your editor, open both files fresh from the folder, and click every single link.”</dd>
+        <dt>Timing</dt><dd>3 minutes. Confirm the submission route and the due date out loud.</dd>
+        <dt>Short session</dt><dd>Read the ten checks aloud and hand out the printed version.</dd>
+        <dt>Solution</dt><dd>Rubric and printable checklist are both in README §15.</dd>
+        <dt>Next</dt><dd>“Next session: we make it look like something. Bring this file — we build straight on top of it.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
 <section class="slide" id="s-break" data-section="Break" data-title="Break — ten minutes" data-accent="css" aria-hidden="true">
   <div class="slide-inner">
     <header class="slide-head">

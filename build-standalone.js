@@ -138,46 +138,128 @@ function rewriteLinks(html) {
   return out;
 }
 
+/* ---------- cutting the deck down to one session ---------- */
+
+/* Keep every slide from the first up to and including `lastSlideId`, and drop
+   the rest. Used to hand students only the material that has been taught. */
+function sliceThrough(html, lastSlideId) {
+  if (!lastSlideId) return html;
+
+  const idAt = html.indexOf('id="' + lastSlideId + '"');
+  if (idAt === -1) throw new Error("slice target not found: " + lastSlideId);
+
+  const closer = "\n</section>";
+  const closeAt = html.indexOf(closer, idAt);
+  if (closeAt === -1) throw new Error("could not close the slice at " + lastSlideId);
+
+  const endOfSlide = closeAt + closer.length;
+  const mainEnd = html.indexOf("\n</main>", endOfSlide);
+  if (mainEnd === -1) throw new Error("no </main> after " + lastSlideId);
+
+  return html.slice(0, endOfSlide) + html.slice(mainEnd);
+}
+
+/* A cut deck must not link to a slide that is no longer in it. */
+function checkInternalLinks(html, label) {
+  const targets = (html.match(/href="#(s-[\w-]+)"/g) || []).map((h) =>
+    h.slice('href="#'.length, -1)
+  );
+  const dangling = [...new Set(targets)].filter(
+    (id) => html.indexOf('id="' + id + '"') === -1
+  );
+  if (dangling.length) {
+    throw new Error(label + ": links to missing slides — " + dangling.join(", "));
+  }
+}
+
+/* ---------- what to build ---------- */
+
+const BUILDS = [
+  {
+    out: "workshop.html",
+    through: null,
+    title: "Web Development From Zero: Build, Inspect and Remix the Web in 2026",
+    note: "full deck — instructor",
+  },
+  {
+    out: "session-1.html",
+    through: "s-assignment-submit",
+    title: "Web Development From Zero — Session 1: HTML and Structure",
+    note: "session one + assignment — students",
+  },
+];
+
 /* ---------- assemble ---------- */
 
-let html = read("index.html");
+const sourceTitle =
+  "Web Development From Zero: Build, Inspect and Remix the Web in 2026";
 
-html = splice(
-  html,
-  '<link rel="stylesheet" href="styles.css">',
-  "<style>\n" + read("styles.css") + "\n  </style>"
-);
+function buildDeck(config) {
+  let html = read("index.html");
 
-html = splice(
-  html,
-  '<script src="slides.js"></script>',
-  "<script>\n" + read("slides.js").replace(/<\/script/gi, "<\\/script") + "\n</script>"
-);
+  html = sliceThrough(html, config.through);
 
-html = rewriteLinks(html);
-html = inlineAssets(html, "");
+  if (config.title !== sourceTitle) {
+    html = splice(html, "<title>" + sourceTitle + "</title>", "<title>" + config.title + "</title>");
+  }
 
-html = splice(
-  html,
-  '<div class="confetti-layer" id="confetti" aria-hidden="true"></div>',
-  '<div class="confetti-layer" id="confetti" aria-hidden="true"></div>\n\n' +
-    "<!-- The student starter and finished example travel inside this file. -->\n" +
-    '<script id="student-files" type="application/json">' + studentJson + "</script>"
-);
+  html = splice(
+    html,
+    '<link rel="stylesheet" href="styles.css">',
+    "<style>\n" + read("styles.css") + "\n  </style>"
+  );
 
-const outputPath = path.join(here, "workshop.html");
-fs.writeFileSync(outputPath, html, "utf8");
+  html = splice(
+    html,
+    '<script src="slides.js"></script>',
+    "<script>\n" + read("slides.js").replace(/<\/script/gi, "<\\/script") + "\n</script>"
+  );
 
-/* Report only references the browser would actually try to fetch. Paths shown
-   inside code samples and the embedded student files are content, not links. */
-const kb = (fs.statSync(outputPath).size / 1024).toFixed(0);
-const scannable = html
-  .replace(/<pre\b[\s\S]*?<\/pre>/gi, "")
-  .replace(/<textarea\b[\s\S]*?<\/textarea>/gi, "")
-  .replace(/<code\b[\s\S]*?<\/code>/gi, "")
-  .replace(/<script id="student-files"[\s\S]*?<\/script>/i, "");
-const leftovers = scannable.match(/(?:src|href)="(?!data:|#|https?:)[^"]+"/g) || [];
+  html = rewriteLinks(html);
+  html = inlineAssets(html, "");
 
-console.log("Wrote workshop.html — " + kb + " KB");
-console.log("Slides: " + (html.match(/<section class="slide"/g) || []).length);
-console.log("Fetchable external references: " + (leftovers.length ? leftovers.join(", ") : "none"));
+  // Only carry the student projects if a slide still offers them. Session one
+  // asks students to build from an empty folder, so it needs neither.
+  const needsStudentFiles = /data-action="(open-example|download-)/.test(html);
+  if (needsStudentFiles) {
+    html = splice(
+      html,
+      '<div class="confetti-layer" id="confetti" aria-hidden="true"></div>',
+      '<div class="confetti-layer" id="confetti" aria-hidden="true"></div>\n\n' +
+        "<!-- The student starter and finished example travel inside this file. -->\n" +
+        '<script id="student-files" type="application/json">' + studentJson + "</script>"
+    );
+  }
+
+  checkInternalLinks(html, config.out);
+
+  const outputPath = path.join(here, config.out);
+  fs.writeFileSync(outputPath, html, "utf8");
+
+  /* Report only references the browser would actually try to fetch. Paths shown
+     inside code samples and the embedded student files are content, not links. */
+  const scannable = html
+    .replace(/<pre\b[\s\S]*?<\/pre>/gi, "")
+    .replace(/<textarea\b[\s\S]*?<\/textarea>/gi, "")
+    .replace(/<code\b[\s\S]*?<\/code>/gi, "")
+    .replace(/<script id="student-files"[\s\S]*?<\/script>/i, "");
+  const leftovers = scannable.match(/(?:src|href)="(?!data:|#|https?:)[^"]+"/g) || [];
+
+  const kb = (fs.statSync(outputPath).size / 1024).toFixed(0);
+  const slides = (html.match(/<section class="slide"/g) || []).length;
+  const last = [...html.matchAll(/data-title="([^"]+)"/g)].pop();
+
+  console.log(
+    config.out.padEnd(17) +
+      String(slides).padStart(3) + " slides" +
+      kb.padStart(6) + " KB   " +
+      config.note
+  );
+  console.log(
+    "".padEnd(17) + "ends on: " + (last ? last[1] : "?") +
+      "   student files: " + (needsStudentFiles ? "embedded" : "not needed") +
+      "   external refs: " + (leftovers.length ? leftovers.join(", ") : "none")
+  );
+}
+
+BUILDS.forEach(buildDeck);

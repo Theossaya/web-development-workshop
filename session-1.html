@@ -1,0 +1,4763 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Development From Zero — Session 1: HTML and Structure</title>
+  <meta name="description" content="A three-hour, hands-on HTML and CSS workshop deck with live playgrounds, timers, team points and a full instructor script.">
+  <style>
+/* ==========================================================================
+   Web Development From Zero — presentation styles
+   --------------------------------------------------------------------------
+   1.  Design tokens (dark = default classroom mode, light = bright rooms)
+   2.  Base elements and accessibility
+   3.  Deck and slide frame (16:9)
+   4.  Typographic scale (scales with the slide, not the viewport)
+   5.  Layout helpers
+   6.  Content components: code panels, browser mocks, cards, diagrams
+   7.  Activity components: challenge cards, quizzes, checklists
+   8.  Interactive labs: playground, box model, flexbox, viewport tester
+   9.  Presenter notes
+   10. Deck chrome: toolbar, progress, overview, timer, scoreboard
+   11. Motion, print, narrow screens
+   ========================================================================== */
+
+/* ---------- 1. Design tokens ---------- */
+
+:root {
+  color-scheme: dark;
+
+  --bg: #080c14;
+  --bg-2: #0d1422;
+  --surface: #131c2c;
+  --surface-2: #1a2437;
+  --surface-3: #212d43;
+  --line: #2b3a55;
+  --line-soft: #223049;
+
+  --text: #f1f5fc;
+  --text-2: #c3cee1;
+  --muted: #94a3bd;
+
+  --html: #ffab6a;
+  --html-ink: #ffd9bd;
+  --html-soft: rgba(255, 171, 106, 0.13);
+
+  --css: #64d3ff;
+  --css-ink: #c4ecff;
+  --css-soft: rgba(100, 211, 255, 0.13);
+
+  --challenge: #cdf75c;
+  --challenge-ink: #e9ffb0;
+  --challenge-soft: rgba(205, 247, 92, 0.13);
+
+  --devtools: #e58cff;
+  --devtools-ink: #f4cfff;
+  --devtools-soft: rgba(229, 140, 255, 0.13);
+
+  --debug: #ffd45c;
+  --debug-ink: #ffe9ac;
+  --debug-soft: rgba(255, 212, 92, 0.13);
+
+  --ok: #6df0bb;
+  --bad: #ff7b7b;
+
+  --focus: #ffffff;
+  --radius: 18px;
+  --radius-sm: 10px;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 8px 22px rgba(0, 0, 0, 0.35);
+
+  --grid-line: rgba(255, 255, 255, 0.035);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #eef1f8;
+  --bg-2: #e4e9f4;
+  --surface: #ffffff;
+  --surface-2: #f4f6fc;
+  --surface-3: #e9edf7;
+  --line: #cbd5ea;
+  --line-soft: #dde3f0;
+
+  --text: #101827;
+  --text-2: #2f3b52;
+  --muted: #55627c;
+
+  --html: #b3480d;
+  --html-ink: #7a3208;
+  --html-soft: rgba(179, 72, 13, 0.1);
+
+  --css: #0b6a92;
+  --css-ink: #084b68;
+  --css-soft: rgba(11, 106, 146, 0.1);
+
+  --challenge: #4c6b00;
+  --challenge-ink: #3a5200;
+  --challenge-soft: rgba(76, 107, 0, 0.1);
+
+  --devtools: #8f22b8;
+  --devtools-ink: #6a1789;
+  --devtools-soft: rgba(143, 34, 184, 0.1);
+
+  --debug: #8a5c00;
+  --debug-ink: #6b4700;
+  --debug-soft: rgba(138, 92, 0, 0.1);
+
+  --ok: #0a7a56;
+  --bad: #b41f1f;
+
+  --focus: #101827;
+  --shadow: 0 24px 60px rgba(16, 24, 39, 0.16);
+  --shadow-sm: 0 8px 22px rgba(16, 24, 39, 0.1);
+
+  --grid-line: rgba(16, 24, 39, 0.05);
+}
+
+/* ---------- 2. Base ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 700px at 82% -10%, var(--html-soft), transparent 60%),
+    radial-gradient(900px 600px at 8% 110%, var(--css-soft), transparent 60%),
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 48px 48px,
+    var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI Variable Display", "Segoe UI", Inter, Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+body.is-scrollmode {
+  overflow: auto;
+}
+
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------- 3. Deck and slide frame ---------- */
+
+.deck {
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 0.75rem 0.75rem 5.25rem;
+}
+
+.slide {
+  /* Width is limited by the viewport AND by the height available, so the
+     slide always keeps a 16:9 shape without ever overflowing sideways. */
+  width: min(100vw - 1.5rem, (100dvh - 6.5rem) * 16 / 9);
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  background: linear-gradient(180deg, var(--bg-2), var(--surface));
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: none;
+  position: relative;
+}
+
+.slide.is-active {
+  display: block;
+  animation: slide-in 0.32s ease both;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+  }
+}
+
+.slide-inner {
+  height: 100%;
+  padding: 2.8cqi 3.5cqi 2.4cqi;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2cqi;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+/* Blocks keep their natural height. Without this a flex item can shrink
+   below its content and spill over whatever sits beneath it. */
+.slide-inner > * {
+  flex: 0 0 auto;
+}
+
+/* Accent skins per slide type — set with data-accent on the slide. */
+.slide[data-accent="html"] { --accent: var(--html); --accent-ink: var(--html-ink); --accent-soft: var(--html-soft); }
+.slide[data-accent="css"] { --accent: var(--css); --accent-ink: var(--css-ink); --accent-soft: var(--css-soft); }
+.slide[data-accent="challenge"] { --accent: var(--challenge); --accent-ink: var(--challenge-ink); --accent-soft: var(--challenge-soft); }
+.slide[data-accent="devtools"] { --accent: var(--devtools); --accent-ink: var(--devtools-ink); --accent-soft: var(--devtools-soft); }
+.slide[data-accent="debug"] { --accent: var(--debug); --accent-ink: var(--debug-ink); --accent-soft: var(--debug-soft); }
+.slide:not([data-accent]) { --accent: var(--css); --accent-ink: var(--css-ink); --accent-soft: var(--css-soft); }
+
+.slide::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--accent), transparent 70%);
+}
+
+/* ---------- 4. Typographic scale ---------- */
+
+.slide {
+  --fs-h1: clamp(30px, 5.4cqi, 78px);
+  --fs-h2: clamp(23px, 3.7cqi, 54px);
+  --fs-h3: clamp(17px, 2.1cqi, 30px);
+  --fs-lead: clamp(15px, 2cqi, 29px);
+  --fs-body: clamp(13px, 1.6cqi, 23px);
+  --fs-code: clamp(12px, 1.52cqi, 21px);
+  --fs-small: clamp(11px, 1.24cqi, 17px);
+  --fs-micro: clamp(10px, 1.05cqi, 15px);
+}
+
+.slide h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  margin: 0;
+  font-weight: 800;
+}
+
+.slide h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  margin: 0;
+  font-weight: 800;
+}
+
+.slide h3 {
+  font-size: var(--fs-h3);
+  margin: 0 0 0.4em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.slide p,
+.slide li,
+.slide dd,
+.slide dt,
+.slide td,
+.slide th {
+  font-size: var(--fs-body);
+}
+
+.slide p {
+  margin: 0 0 0.6em;
+  max-width: 62ch;
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  line-height: 1.35;
+  max-width: 44ch;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: var(--fs-small);
+}
+
+.accent-text {
+  color: var(--accent);
+}
+
+mark {
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 0 0.25em;
+  border-radius: 4px;
+}
+
+/* ---------- 5. Layout helpers ---------- */
+
+.slide-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2cqi;
+  flex-wrap: wrap;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.8cqi;
+  font-size: var(--fs-small);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 0.7cqi;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  padding: 0.35em 0.8em;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  white-space: nowrap;
+}
+
+.chip--html { background: var(--html-soft); color: var(--html); border-color: color-mix(in srgb, var(--html) 35%, transparent); }
+.chip--css { background: var(--css-soft); color: var(--css); border-color: color-mix(in srgb, var(--css) 35%, transparent); }
+.chip--challenge { background: var(--challenge-soft); color: var(--challenge); border-color: color-mix(in srgb, var(--challenge) 35%, transparent); }
+.chip--devtools { background: var(--devtools-soft); color: var(--devtools); border-color: color-mix(in srgb, var(--devtools) 35%, transparent); }
+.chip--debug { background: var(--debug-soft); color: var(--debug); border-color: color-mix(in srgb, var(--debug) 35%, transparent); }
+.chip--plain { background: var(--surface-3); color: var(--text-2); border-color: var(--line); }
+
+.body-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4cqi;
+  min-height: 0;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.8cqi;
+  align-items: start;
+  min-height: 0;
+}
+
+.split--wide-left { grid-template-columns: 1.35fr 1fr; }
+.split--wide-right { grid-template-columns: 1fr 1.35fr; }
+.split--sidebar { grid-template-columns: 1fr 0.62fr; }
+
+.cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6cqi;
+  align-items: start;
+}
+
+.cols-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.3cqi;
+  align-items: start;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2cqi;
+  min-width: 0;
+}
+
+/* Grid and flex children default to min-width:auto, which lets a wide code
+   block widen its column instead of scrolling inside it. */
+.split > *,
+.cols-3 > *,
+.cols-4 > *,
+.stack > * {
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  gap: 1cqi;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.center {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- 6. Content components ---------- */
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.6cqi 1.8cqi;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.panel--flush { padding: 0; overflow: hidden; }
+.panel--accent { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1cqi;
+  font-size: var(--fs-small);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.9cqi;
+}
+
+/* Code editor panel ----------------------------------------------------- */
+
+.editor {
+  background: #0a0f1b;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+[data-theme="light"] .editor {
+  background: #0e1626;
+}
+
+.editor-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.8cqi;
+  padding: 0.7cqi 1.2cqi;
+  background: rgba(255, 255, 255, 0.045);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dots {
+  display: flex;
+  gap: 0.45cqi;
+}
+
+.dots i {
+  width: 0.95cqi;
+  height: 0.95cqi;
+  min-width: 7px;
+  min-height: 7px;
+  border-radius: 50%;
+  background: #ff6b6b;
+  display: block;
+}
+
+.dots i:nth-child(2) { background: #ffd25c; }
+.dots i:nth-child(3) { background: #6df0bb; }
+
+.file-tab {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-small);
+  color: #cbd6ea;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 0.25em 0.8em;
+  border-radius: 6px;
+}
+
+.file-tab--html { color: var(--html); }
+.file-tab--css { color: var(--css); }
+
+.code {
+  margin: 0;
+  padding: 1.4cqi 1.6cqi;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-code);
+  line-height: 1.5;
+  color: #dbe6f8;
+  overflow: auto;
+  tab-size: 2;
+  white-space: pre;
+}
+
+/* Long listings scroll inside their own panel so the slide itself always
+   fits the 16:9 frame — no code is ever cut off, and nothing pushes the
+   instructor notes off the bottom. */
+.slide .code {
+  max-height: 54dvh;
+  overscroll-behavior: contain;
+}
+
+.code--wrap { white-space: pre-wrap; }
+
+.code--big { font-size: clamp(14px, 1.95cqi, 28px); }
+
+/* Syntax colours (applied by slides.js) */
+.t-tag { color: #ff9d6a; }
+.t-attr { color: #ffd88f; }
+.t-str { color: #9de08a; }
+.t-punct { color: #7d90ad; }
+.t-comment { color: #6b7c99; font-style: italic; }
+.t-sel { color: #7fd7ff; }
+.t-prop { color: #b3a6ff; }
+.t-val { color: #9de08a; }
+.t-num { color: #ffc46a; }
+.t-at { color: #ff9d6a; }
+
+/* Diff lines */
+.dline { display: block; }
+.dline.add {
+  background: rgba(109, 240, 187, 0.13);
+  box-shadow: inset 3px 0 0 var(--ok);
+  border-radius: 2px;
+}
+.dline.del {
+  background: rgba(255, 123, 123, 0.12);
+  box-shadow: inset 3px 0 0 var(--bad);
+  opacity: 0.75;
+  text-decoration: line-through;
+}
+
+/* Browser window mock ---------------------------------------------------- */
+
+.win {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.win-bar {
+  display: flex;
+  align-items: center;
+  gap: 1cqi;
+  padding: 0.7cqi 1.2cqi;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.win-url {
+  flex: 1;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-micro);
+  color: var(--muted);
+  background: var(--bg-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 0.3em 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.win-view {
+  background: #f4f6fb;
+  color: #172033;
+  padding: 1.2cqi;
+}
+
+[data-theme="dark"] .win-view,
+:root:not([data-theme="light"]) .win-view {
+  background: #f4f6fb;
+  color: #172033;
+}
+
+.win-view * {
+  max-width: 100%;
+}
+
+/* Demo page pieces rendered inside .win-view (light on purpose) */
+.demo-h1 { font-size: clamp(18px, 2.6cqi, 38px); margin: 0 0 0.3em; color: #101827; line-height: 1.1; }
+.demo-p { font-size: clamp(11px, 1.45cqi, 20px); margin: 0 0 0.6em; color: #33405c; }
+.demo-btn {
+  display: inline-block;
+  background: #d95a1f;
+  color: #fff;
+  font-weight: 700;
+  font-size: clamp(11px, 1.35cqi, 19px);
+  padding: 0.55em 1.3em;
+  border-radius: 999px;
+  text-decoration: none;
+}
+.demo-nav { display: flex; gap: 1.2em; font-size: clamp(10px, 1.3cqi, 18px); color: #33405c; }
+.demo-card {
+  background: #fff;
+  border: 1px solid #dfe5f2;
+  border-radius: 14px;
+  padding: 1.2cqi;
+  box-shadow: 0 8px 20px rgba(23, 32, 51, 0.08);
+}
+.demo-card h4 { margin: 0 0 0.3em; font-size: clamp(12px, 1.6cqi, 22px); color: #101827; }
+.demo-card p { margin: 0; font-size: clamp(10px, 1.3cqi, 18px); color: #4b5772; }
+.demo-cards { display: flex; gap: 1.2cqi; flex-wrap: wrap; }
+.demo-cards > * { flex: 1 1 30%; }
+
+/* Step lists ------------------------------------------------------------- */
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9cqi;
+}
+
+.steps li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.1cqi;
+  align-items: baseline;
+}
+
+.steps li::before {
+  content: counter(step);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: var(--fs-small);
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 8px;
+  width: 2.2em;
+  height: 2.2em;
+  display: grid;
+  place-items: center;
+}
+
+.steps--compact li { gap: 0.8cqi; }
+
+/* Tiles / feature cards -------------------------------------------------- */
+
+.tile {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.4cqi 1.5cqi;
+  min-width: 0;
+}
+
+.tile-icon {
+  width: 3.2cqi;
+  height: 3.2cqi;
+  min-width: 26px;
+  min-height: 26px;
+  margin-bottom: 0.7cqi;
+  display: block;
+}
+
+.tile h3 { color: var(--text); }
+.tile p { margin: 0; color: var(--text-2); }
+
+.tile--html { border-color: color-mix(in srgb, var(--html) 40%, var(--line)); background: var(--html-soft); }
+.tile--css { border-color: color-mix(in srgb, var(--css) 40%, var(--line)); background: var(--css-soft); }
+.tile--browser { border-color: color-mix(in srgb, var(--devtools) 40%, var(--line)); background: var(--devtools-soft); }
+
+/* Callouts --------------------------------------------------------------- */
+
+.callout {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.9cqi 1.3cqi;
+}
+
+.callout p:last-child { margin-bottom: 0; }
+.callout strong { color: var(--accent); }
+
+.callout--warn { border-color: var(--debug); background: var(--debug-soft); }
+.callout--warn strong { color: var(--debug); }
+.callout--ok { border-color: var(--ok); background: rgba(109, 240, 187, 0.12); }
+.callout--ok strong { color: var(--ok); }
+
+/* Key / value definition rows ------------------------------------------- */
+
+.deflist {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5cqi 1.2cqi;
+}
+
+.deflist dt {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.deflist dd { margin: 0; color: var(--text-2); }
+
+kbd, .kbd {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: 0.9em;
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  padding: 0.12em 0.5em;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+code:not(.code) {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  background: var(--surface-3);
+  border-radius: 5px;
+  padding: 0.08em 0.38em;
+  font-size: 0.92em;
+  color: var(--accent-ink);
+}
+
+/* Arrow flow diagram ----------------------------------------------------- */
+
+.flow {
+  display: flex;
+  align-items: stretch;
+  gap: 1.2cqi;
+  flex-wrap: wrap;
+}
+
+.flow-node {
+  flex: 1 1 0;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.4cqi;
+  text-align: center;
+  min-width: 0;
+}
+
+.flow-node b {
+  display: block;
+  font-size: var(--fs-h3);
+  margin-bottom: 0.3em;
+}
+
+.flow-arrow {
+  align-self: center;
+  font-size: var(--fs-h3);
+  color: var(--muted);
+}
+
+.ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55cqi;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: rung;
+}
+
+.ladder li {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 0.7cqi 1.2cqi;
+  display: flex;
+  justify-content: space-between;
+  gap: 1cqi;
+  align-items: baseline;
+}
+
+.ladder li b { font-size: var(--fs-body); }
+.ladder li span { color: var(--muted); font-size: var(--fs-small); }
+.ladder li.is-now { border-left-color: var(--challenge); background: var(--challenge-soft); }
+
+/* Nesting doll visual ---------------------------------------------------- */
+
+.nest {
+  border: 2px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 1.1cqi;
+  position: relative;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-small);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.nest > .nest {
+  margin-top: 0.7cqi;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.nest > span { font-weight: 700; }
+
+.nest--html { --accent: var(--html); --accent-soft: var(--html-soft); }
+
+/* ---------- 7. Activity components ---------- */
+
+.challenge {
+  border: 1px solid color-mix(in srgb, var(--challenge) 45%, var(--line));
+  background:
+    linear-gradient(180deg, var(--challenge-soft), transparent 60%),
+    var(--surface);
+  border-radius: var(--radius);
+  padding: 1.2cqi 1.5cqi;
+}
+
+.challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5cqi 1.6cqi;
+  margin: 0;
+}
+
+/* Full-width challenge cards use three columns, and sit their hint and
+   solution panels side by side, so the card stays short. */
+.challenge--wide .challenge-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.challenge--wide > .reveal {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0.5cqi 0.6cqi 0 0;
+  min-width: 14cqi;
+}
+
+.challenge-grid dt {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--challenge);
+}
+
+.challenge-grid dd {
+  margin: 0 0 0.45cqi;
+  color: var(--text-2);
+  font-size: var(--fs-small);
+}
+
+.reveal {
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 0.4cqi 1cqi;
+}
+
+.reveal > summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: var(--fs-small);
+  color: var(--accent);
+  padding: 0.5cqi 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.reveal > summary::-webkit-details-marker { display: none; }
+
+.reveal > summary::before {
+  content: "▸";
+  transition: transform 0.15s ease;
+  display: inline-block;
+}
+
+.reveal[open] > summary::before { transform: rotate(90deg); }
+
+.reveal[data-kind="solution"] > summary { color: var(--ok); }
+.reveal[data-kind="hint"] > summary { color: var(--debug); }
+
+.reveal-body { padding: 0.4cqi 0 1cqi; }
+.reveal-body > :last-child { margin-bottom: 0; }
+
+/* Quiz / sorting buttons ------------------------------------------------- */
+
+.quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6cqi;
+}
+
+.quiz-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.8cqi;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.55cqi 1.1cqi;
+}
+
+.quiz-row.is-right { border-color: var(--ok); background: rgba(109, 240, 187, 0.1); }
+.quiz-row.is-wrong { border-color: var(--bad); background: rgba(255, 123, 123, 0.1); }
+
+.quiz-q { font-size: var(--fs-body); }
+
+.opt-row { display: flex; gap: 0.5cqi; flex-wrap: wrap; }
+
+.opt {
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35em 0.95em;
+  cursor: pointer;
+}
+
+.opt:hover { border-color: var(--accent); color: var(--text); }
+.opt[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.opt.is-right { background: rgba(109, 240, 187, 0.18); border-color: var(--ok); color: var(--ok); }
+.opt.is-wrong { background: rgba(255, 123, 123, 0.15); border-color: var(--bad); color: var(--bad); }
+
+.quiz-feedback {
+  grid-column: 1 / -1;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+/* Checklists ------------------------------------------------------------- */
+
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45cqi;
+}
+
+.checklist li {
+  display: flex;
+  gap: 0.8cqi;
+  align-items: baseline;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+
+.checklist li::before {
+  content: "";
+  width: 0.9em;
+  height: 0.9em;
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  flex: none;
+  transform: translateY(0.1em);
+}
+
+.checklist--done li::before {
+  background: var(--accent);
+}
+
+.pointlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4cqi;
+}
+
+.pointlist li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1cqi;
+  font-size: var(--fs-small);
+  border-bottom: 1px dashed var(--line-soft);
+  padding-bottom: 0.35cqi;
+}
+
+.pointlist b { color: var(--challenge); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Reference tables ------------------------------------------------------- */
+
+.ref-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+}
+
+.ref-table th,
+.ref-table td {
+  text-align: left;
+  padding: 0.26cqi 0.8cqi;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: var(--fs-small);
+  vertical-align: top;
+}
+
+.ref-table th { color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--fs-micro); }
+.ref-table code { white-space: nowrap; }
+
+/* ---------- 8. Interactive labs ---------- */
+
+.playground {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2cqi;
+  min-height: 0;
+}
+
+.playground--stacked { grid-template-columns: 1fr; }
+
+/* A stacked playground puts its editors above the preview, so both halves
+   have to stay compact or the slide runs off the bottom. */
+.playground--stacked .pg-editor textarea { max-height: 15dvh; }
+.playground--stacked .pg-preview { min-height: 11cqi; }
+
+.pg-editors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9cqi;
+  min-width: 0;
+}
+
+.pg-editor {
+  background: #0a0f1b;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pg-editor > .editor-bar { padding: 0.5cqi 1cqi; }
+
+.pg-editor textarea {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-code);
+  line-height: 1.45;
+  color: #dbe6f8;
+  background: transparent;
+  border: 0;
+  resize: vertical;
+  padding: 1cqi 1.2cqi;
+  width: 100%;
+  min-height: 8cqi;
+  max-height: 20dvh;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+
+.pg-editor textarea:focus-visible { outline-offset: -3px; }
+
+.pg-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9cqi;
+  min-width: 0;
+}
+
+.pg-preview {
+  width: 100%;
+  min-height: 16cqi;
+  flex: 1;
+  border: 0;
+  background: #ffffff;
+  display: block;
+}
+
+.pg-actions {
+  display: flex;
+  gap: 0.6cqi;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn {
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.42em 1.05em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  white-space: nowrap;
+}
+
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn--primary { background: var(--accent); color: #08111f; border-color: var(--accent); }
+.btn--primary:hover { color: #08111f; filter: brightness(1.08); }
+[data-theme="light"] .btn--primary { color: #ffffff; }
+.btn--ghost { background: transparent; }
+.btn--sm { font-size: var(--fs-micro); padding: 0.35em 0.85em; }
+
+.pg-note {
+  font-size: var(--fs-micro);
+  color: var(--muted);
+}
+
+/* Box model lab ---------------------------------------------------------- */
+
+.boxlab {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 1.6cqi;
+  align-items: center;
+}
+
+.boxlab-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7cqi;
+}
+
+.slider-row {
+  display: grid;
+  grid-template-columns: 7.5em 1fr 3.6em;
+  gap: 0.8cqi;
+  align-items: center;
+  font-size: var(--fs-small);
+}
+
+.slider-row label {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  color: var(--accent);
+  font-size: var(--fs-small);
+}
+
+.slider-row output {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+  text-align: right;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.boxmodel {
+  background: rgba(255, 171, 106, 0.14);
+  border: 1px dashed color-mix(in srgb, var(--html) 60%, transparent);
+  border-radius: 8px;
+  padding: var(--m, 16px);
+  position: relative;
+  text-align: center;
+}
+
+.boxmodel-border {
+  background: rgba(100, 211, 255, 0.16);
+  border: var(--b, 4px) solid var(--css);
+  border-radius: 6px;
+  padding: var(--p, 16px);
+  width: var(--w, 260px);
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: var(--bs, content-box);
+}
+
+.boxmodel-content {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.6cqi;
+  font-size: var(--fs-small);
+  color: var(--text);
+}
+
+.box-legend {
+  display: flex;
+  gap: 1cqi;
+  flex-wrap: wrap;
+  font-size: var(--fs-micro);
+  color: var(--muted);
+  margin-top: 0.8cqi;
+  justify-content: center;
+}
+
+.box-legend i {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 3px;
+  display: inline-block;
+  margin-right: 0.35em;
+}
+
+.readout {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.7cqi 1cqi;
+  text-align: center;
+}
+
+/* Flexbox lab ------------------------------------------------------------ */
+
+.flexlab {
+  display: grid;
+  grid-template-columns: 0.9fr 1.3fr;
+  gap: 1.6cqi;
+  align-items: start;
+}
+
+.flex-stage {
+  background: repeating-linear-gradient(45deg, var(--surface-2), var(--surface-2) 12px, var(--surface-3) 12px, var(--surface-3) 24px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.2cqi;
+  min-height: 17.5cqi;
+  display: flex;
+  transition: all 0.25s ease;
+}
+
+.flex-item {
+  background: var(--css);
+  color: #06121c;
+  font-weight: 800;
+  font-size: var(--fs-small);
+  border-radius: 10px;
+  padding: 1cqi 1.4cqi;
+  display: grid;
+  place-items: center;
+  transition: all 0.25s ease;
+}
+
+.flex-item:nth-child(2) { background: var(--html); min-height: 6cqi; }
+.flex-item:nth-child(3) { background: var(--challenge); }
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35cqi;
+  margin-bottom: 0.8cqi;
+}
+
+.control-group > span {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: var(--fs-small);
+  color: var(--accent);
+}
+
+/* Viewport tester -------------------------------------------------------- */
+
+.viewport-tester {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9cqi;
+  align-items: center;
+}
+
+.viewport-frame {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #fff;
+  transition: width 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+}
+
+.viewport-frame iframe {
+  width: 100%;
+  height: 24cqi;
+  min-height: 150px;
+  border: 0;
+  display: block;
+}
+
+/* Celebration confetti --------------------------------------------------- */
+
+.confetti-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  overflow: hidden;
+}
+
+.confetti-bit {
+  position: absolute;
+  width: 10px;
+  height: 16px;
+  border-radius: 2px;
+  animation: confetti-fall 1.7s cubic-bezier(0.2, 0.6, 0.4, 1) forwards;
+}
+
+@keyframes confetti-fall {
+  from { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  to { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+}
+
+/* ---------- 9. Presenter notes ---------- */
+
+.notes {
+  display: none;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 1.1cqi 1.4cqi;
+  margin-top: auto;
+}
+
+body.notes-on .slide.is-active .notes { display: block; }
+
+.notes h4 {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.6cqi;
+  font-weight: 800;
+}
+
+.notes dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25cqi 1cqi;
+}
+
+.notes dt {
+  font-size: var(--fs-micro);
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.notes dd {
+  margin: 0;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+
+.notes dd code { font-size: 0.9em; }
+
+/* ---------- 10. Deck chrome ---------- */
+
+.toolbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.9rem;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.toolbar-meta {
+  min-width: 0;
+  flex: 1 1 12rem;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.toolbar-section {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.toolbar-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toolbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.counter {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 0.9rem;
+  min-width: 4.5rem;
+  text-align: center;
+  color: var(--text);
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex: 1 1 auto;
+}
+
+.icon-btn {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.34rem 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.icon-btn:hover { color: var(--text); border-color: var(--css); }
+.icon-btn[aria-pressed="true"] { background: var(--css-soft); color: var(--css); border-color: var(--css); }
+
+.progress {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--line-soft);
+  z-index: 41;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--html), var(--css), var(--challenge));
+  transition: width 0.25s ease;
+}
+
+.section-marks {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  height: 8px;
+  z-index: 42;
+  pointer-events: none;
+}
+
+.section-mark {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: 8px;
+  background: var(--muted);
+  opacity: 0.6;
+}
+
+/* Panels: overview, timer, scoreboard, help ------------------------------ */
+
+.panel-float {
+  position: fixed;
+  z-index: 45;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+.panel-float[hidden] { display: none; }
+
+.panel-float h2 {
+  font-size: 0.95rem;
+  margin: 0 0 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.overview {
+  inset: 4vh 4vw 8vh;
+  overflow: auto;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.6rem;
+}
+
+.overview-item {
+  font: inherit;
+  text-align: left;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  color: var(--text-2);
+  font-size: 0.8rem;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.overview-item:hover { border-color: var(--css); color: var(--text); }
+.overview-item.is-current { border-color: var(--challenge); background: var(--challenge-soft); color: var(--text); }
+.overview-item b { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.68rem; letter-spacing: 0.08em; }
+.overview-item .ov-sec { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+.overview-close { position: sticky; top: 0; float: right; }
+
+/* Timer */
+
+.timer {
+  right: 0.9rem;
+  bottom: 4.6rem;
+  width: 15rem;
+}
+
+.timer-display {
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: 2.6rem;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.timer.is-final .timer-display { color: var(--debug); }
+.timer.is-done .timer-display { color: var(--bad); }
+
+.timer.is-final { border-color: var(--debug); box-shadow: 0 0 0 3px var(--debug-soft), var(--shadow); }
+.timer.is-done { border-color: var(--bad); }
+
+.timer-presets, .timer-controls {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.45rem;
+}
+
+.timer-presets .icon-btn, .timer-controls .icon-btn { font-size: 0.72rem; padding: 0.28rem 0.6rem; }
+
+/* Scoreboard */
+
+.scoreboard {
+  left: 0.9rem;
+  bottom: 4.6rem;
+  width: 17rem;
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.team-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 0.3rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.team-row input[type="text"] {
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 0.28rem 0.5rem;
+  min-width: 0;
+}
+
+.team-score {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 0.95rem;
+  min-width: 2.2rem;
+  text-align: center;
+  color: var(--challenge);
+}
+
+.score-btn {
+  font: inherit;
+  font-weight: 800;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 8px;
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  color: var(--text);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.score-btn:hover { border-color: var(--challenge); color: var(--challenge); }
+
+.scoreboard-foot {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.team-count {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+.team-count select {
+  font: inherit;
+  font-size: 0.78rem;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.2rem 0.4rem;
+}
+
+/* Help */
+
+.help {
+  inset: 10vh 20vw auto;
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.help table { width: 100%; border-collapse: collapse; }
+.help td { padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--line-soft); font-size: 0.85rem; }
+
+/* ---------- 11. Motion, print, narrow screens ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .slide.is-active { animation: none; }
+}
+
+/* Narrow screens: stop pretending to be a projector, become a document. */
+@media (max-width: 900px) {
+  .slide {
+    width: 100%;
+    aspect-ratio: auto;
+    min-height: calc(100dvh - 7rem);
+  }
+
+  .slide-inner { padding: 1.5rem 1.1rem 2rem; gap: 1rem; }
+
+  .split,
+  .cols-3,
+  .cols-4,
+  .playground,
+  .boxlab,
+  .flexlab,
+  .deflist,
+  .notes dl,
+  .challenge-grid,
+  .challenge--wide .challenge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .deflist dt,
+  .notes dt {
+    margin-top: 0.5rem;
+  }
+
+  /* Long class names and property names must not push the slide sideways. */
+  code,
+  .checklist li,
+  .ref-table td {
+    overflow-wrap: anywhere;
+  }
+
+  .slide {
+    --fs-h1: 2rem;
+    --fs-h2: 1.5rem;
+    --fs-h3: 1.1rem;
+    --fs-lead: 1rem;
+    --fs-body: 0.95rem;
+    --fs-code: 0.85rem;
+    --fs-small: 0.82rem;
+    --fs-micro: 0.72rem;
+  }
+
+  .scoreboard, .timer { left: 0.5rem; right: 0.5rem; width: auto; }
+  .help { inset: 6vh 4vw auto; }
+}
+
+@media print {
+  body { overflow: visible; background: #fff; color: #000; }
+  .toolbar, .progress, .section-marks, .panel-float, .skip-link, .confetti-layer { display: none !important; }
+  .deck { display: block; height: auto; padding: 0; }
+  .slide {
+    display: block !important;
+    width: 100%;
+    aspect-ratio: auto;
+    break-after: page;
+    box-shadow: none;
+    border: 1px solid #999;
+    background: #fff;
+    color: #000;
+  }
+  .slide-inner { overflow: visible; }
+  .notes { display: block !important; }
+  .reveal[open] .reveal-body { display: block; }
+}
+
+  </style>
+  <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%20role%3D%22img%22%20aria-label%3D%22Angle%20brackets%20representing%20HTML%22%3E%20%3Ctitle%3EHTML%3C%2Ftitle%3E%20%3Cpath%20d%3D%22M17%2012%206%2024l11%2012%22%20fill%3D%22none%22%20stroke%3D%22%23ff9d5c%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M31%2012l11%2012-11%2012%22%20fill%3D%22none%22%20stroke%3D%22%23ff9d5c%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M27%209%2021%2039%22%20fill%3D%22none%22%20stroke%3D%22%23ff9d5c%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%20%3C%2Fsvg%3E" type="image/svg+xml">
+</head>
+<body>
+
+<a class="skip-link" href="#deck">Skip to the slides</a>
+
+<main class="deck" id="deck">
+
+<!-- ======================================================================
+     SECTION 0 — OPENING HOOK (0–10 min)
+     ====================================================================== -->
+
+<section class="slide" id="s-title" data-section="Opening" data-title="Title — Web Development From Zero" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <div class="split split--wide-left" style="flex:1; align-items:center;">
+      <div class="stack">
+        <p class="kicker">A hands-on workshop <span class="chip chip--html">HTML</span> <span class="chip chip--css">CSS</span> <span class="chip chip--devtools">DevTools</span></p>
+        <h1>Web Development<br>From Zero</h1>
+        <p class="lead">Build, inspect and remix the web in 2026.<br>
+          Three hours. One real page. Written by you.</p>
+        <div class="row">
+          <span class="chip chip--plain">No installs required</span>
+          <span class="chip chip--plain">No experience required</span>
+          <span class="chip chip--challenge">Team points on</span>
+        </div>
+      </div>
+      <div class="win">
+        <div class="win-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="win-url">file:///nova-tech-day/index.html</span>
+        </div>
+        <div class="win-view">
+          <div class="demo-nav"><span>About</span><span>Schedule</span><span>Sessions</span><span>Register</span></div>
+          <h3 class="demo-h1" style="margin-top:.6em;">Nova Student Tech Day</h3>
+          <p class="demo-p">A day for building, sharing and experimenting.</p>
+          <a class="demo-btn" href="#s-title">Save your place</a>
+        </div>
+      </div>
+    </div>
+    <p class="small muted" style="text-align:center;">
+      Navigate with <kbd>→</kbd> <kbd>←</kbd> <kbd>Space</kbd> · <kbd>O</kbd> all slides · <kbd>N</kbd> instructor notes · <kbd>?</kbd> every shortcut
+    </p>
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“By the end of today you will have a web page that you wrote, broke, fixed and made your own. You will not memorise anything.”</dd>
+        <dt>Expect</dt><dd>Nervous laughter and at least one “I have never coded before.” Good — say that out loud is exactly the right starting point.</dd>
+        <dt>Misconception</dt><dd>That web development starts with installing tools. It starts with two text files.</dd>
+        <dt>Hint first</dt><dd>Do not open the code yet. Sell the outcome, not the syntax.</dd>
+        <dt>Timing</dt><dd>2 minutes. Do not introduce yourself for longer than 60 seconds.</dd>
+        <dt>Short session</dt><dd>Keep — this slide always stays.</dd>
+        <dt>Solution</dt><dd>n/a</dd>
+        <dt>Next</dt><dd>“Before I explain anything, look at this card and tell me what you think it is made from.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-hook-card" data-section="Opening" data-title="What is this made from?" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 0 · Opening hook <span class="chip chip--challenge">Predict</span></p>
+        <h2>What do you think this is made from?</h2>
+      </div>
+      <button class="btn btn--primary" data-timer-start="30" data-timer-label="30s prediction">Start 30s prediction</button>
+    </header>
+
+    <div class="split" style="align-items:center;">
+      <div class="win">
+        <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span><span class="win-url">nova-tech-day.example/sessions</span></div>
+        <div class="win-view">
+          <div class="demo-card" style="max-width:26em;">
+            <p style="margin:0 0 .4em; font-size:clamp(9px,1.1cqi,15px); letter-spacing:.12em; text-transform:uppercase; color:#8a4a17; font-weight:800;">14 November · Room B2</p>
+            <h4>Your first robot dashboard</h4>
+            <p>Build the control panel for a robot that does not exist yet. Buttons, cards and a very optimistic status light.</p>
+            <p style="margin-top:.9em;"><a class="demo-btn" href="#s-hook-card">Join this session</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="stack">
+        <p class="lead">No guessing rules. Say anything.</p>
+        <div class="quiz">
+          <div class="quiz-row" data-answer="text" data-because="it is text files. Two of them. That is the whole trick.">
+            <span class="quiz-q">This card was made with…</span>
+            <span class="opt-row">
+              <button type="button" class="opt" data-value="photo">a photo</button>
+              <button type="button" class="opt" data-value="app">a design app</button>
+              <button type="button" class="opt" data-value="text">text files</button>
+            </span>
+            <span class="quiz-feedback"></span>
+          </div>
+        </div>
+        <div class="callout">
+          <p><strong>Teaching rule for the next five minutes:</strong> nobody explains every symbol. We are looking for cause and effect, not vocabulary.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Thirty seconds. Turn to the person next to you: what do you think this card is actually made of?”</dd>
+        <dt>Expect</dt><dd>“A picture”, “Photoshop”, “an app”, occasionally “code”. All answers earn a point if the team can say why.</dd>
+        <dt>Misconception</dt><dd>That a polished interface must come from an expensive tool. It comes from two plain text files.</dd>
+        <dt>Hint first</dt><dd>“If I could select the words with my mouse, what does that tell you?”</dd>
+        <dt>Timing</dt><dd>2 minutes including the discussion.</dd>
+        <dt>Short session</dt><dd>Keep. This is the hook — never cut it.</dd>
+        <dt>Solution</dt><dd>Text files: one HTML file for the words and structure, one CSS file for the look.</dd>
+        <dt>Next</dt><dd>“Here is the whole thing. It is shorter than you expect.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-hook-reveal" data-section="Opening" data-title="The reveal — the card and its code" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 0 · Opening hook <span class="chip chip--html">HTML</span> <span class="chip chip--css">CSS</span></p>
+        <h2>That is all of it.</h2>
+      </div>
+    </header>
+
+    <div class="split">
+      <div class="editor">
+        <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--html">index.html</span></div>
+        <pre class="code" data-lang="html">
+&lt;article class="card"&gt;
+  &lt;p class="tag"&gt;14 November · Room B2&lt;/p&gt;
+  &lt;h3&gt;Your first robot dashboard&lt;/h3&gt;
+  &lt;p&gt;Build the control panel for a robot
+     that does not exist yet.&lt;/p&gt;
+  &lt;a class="button" href="#join"&gt;Join this session&lt;/a&gt;
+&lt;/article&gt;</pre>
+      </div>
+      <div class="editor">
+        <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--css">styles.css</span></div>
+        <pre class="code" data-lang="css">
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.button {
+  background: #d95a1f;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 999px;
+}</pre>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Two jobs, two files.</strong> The left file says <em>what things are</em>. The right file says <em>how they look</em>. You do not need to understand every line to start changing it.</p>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Left: the words and the pieces. Right: the paint. Nobody memorise this — just notice that the orange in the code is the orange on the screen.”</dd>
+        <dt>Expect</dt><dd>Someone spots <code>#d95a1f</code> and asks what it means. Answer in one sentence: “a colour code — we will play with those later.”</dd>
+        <dt>Misconception</dt><dd>That every symbol must be understood before anything can be changed. Refuse to explain quotes, angle brackets and semicolons here.</dd>
+        <dt>Hint first</dt><dd>Point at one word in the code and the same word on the previous slide's card.</dd>
+        <dt>Timing</dt><dd>2 minutes. Hard stop.</dd>
+        <dt>Short session</dt><dd>Keep, but show only the HTML panel.</dd>
+        <dt>Solution</dt><dd>n/a</dd>
+        <dt>Next</dt><dd>“Your turn. Sixty seconds. Change three things.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-hook-remix" data-section="Opening" data-title="Challenge — One-Minute Remix" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Challenge 1 · One-Minute Remix <span class="chip chip--challenge">Everyone types</span></p>
+        <h2>Sixty seconds. Make it yours.</h2>
+      </div>
+      <button class="btn btn--primary" data-timer-start="60" data-timer-label="One-Minute Remix">Start 60s</button>
+    </header>
+
+    <div class="split split--sidebar">
+      <div class="playground" data-playground>
+        <div class="pg-editors">
+          <div class="pg-editor">
+            <div class="editor-bar"><span class="file-tab file-tab--html">index.html</span></div>
+            <textarea data-pg-html rows="8" spellcheck="false" aria-label="HTML for the event card">&lt;article class="card"&gt;
+  &lt;p class="tag"&gt;14 November · Room B2&lt;/p&gt;
+  &lt;h3&gt;Your first robot dashboard&lt;/h3&gt;
+  &lt;p&gt;Build the control panel for a robot that does not exist yet.&lt;/p&gt;
+  &lt;a class="button" href="#join"&gt;Join this session&lt;/a&gt;
+&lt;/article&gt;</textarea>
+          </div>
+          <div class="pg-editor">
+            <div class="editor-bar"><span class="file-tab file-tab--css">styles.css</span></div>
+            <textarea data-pg-css rows="8" spellcheck="false" aria-label="CSS for the event card">.card {
+  background: white;
+  border: 1px solid #dfe5f2;
+  border-radius: 14px;
+  padding: 20px;
+  max-width: 340px;
+  font-family: Segoe UI, Arial, sans-serif;
+}
+.tag { color: #8a4a17; font-weight: 700; font-size: 13px; }
+.button {
+  display: inline-block;
+  background: #d95a1f;
+  color: white;
+  text-decoration: none;
+  padding: 10px 24px;
+  border-radius: 999px;
+}</textarea>
+          </div>
+        </div>
+        <div class="pg-side">
+          <iframe data-pg-preview class="pg-preview" sandbox title="Live preview of your card"></iframe>
+          <div class="pg-actions">
+            <button type="button" class="btn btn--primary" data-pg-action="run">Run ▸</button>
+            <button type="button" class="btn" data-pg-action="reset">Reset</button>
+            <button type="button" class="btn" data-pg-action="copy">Copy</button>
+            <button type="button" class="btn btn--ghost" data-action="celebrate">Done 🎉</button>
+          </div>
+          <p class="pg-note">The preview runs in a sandboxed frame. Nothing you type here can break the deck.</p>
+        </div>
+      </div>
+
+      <div class="challenge">
+        <dl class="challenge-grid">
+          <dt>Goal</dt><dd>Change the event name, the button text and one colour.</dd>
+          <dt>Time</dt><dd>60 seconds</dd>
+          <dt>Hints</dt><dd>One: colours are the words after <code>background:</code>.</dd>
+          <dt>Points</dt><dd>1 per change · +1 if it still looks good</dd>
+          <dt>Success</dt><dd>The card still renders and reads as yours.</dd>
+          <dt>Extension</dt><dd>Change <code>border-radius</code> to <code>0</code>. What kind of event does it feel like now?</dd>
+        </dl>
+        <details class="reveal" data-kind="solution">
+          <summary>Solution</summary>
+          <div class="reveal-body">
+            <p class="small">Any three edits count. A typical one: replace the <code>h3</code> text, replace “Join this session”, and change <code>#d95a1f</code> to <code>#1b4dd8</code>.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Do not read the code. Hunt for the words you want to change and type over them. Go.”</dd>
+        <dt>Expect</dt><dd>Two or three students will delete a quote mark or an angle bracket and the card will collapse. Celebrate that loudly: “First bug of the day, thirty seconds in. Normal.”</dd>
+        <dt>Misconception</dt><dd>That breaking it is a failure. Use the Reset button in front of them so they see there is always a way back.</dd>
+        <dt>Hint first</dt><dd>“Look for text you can read in plain English. Start there.”</dd>
+        <dt>Timing</dt><dd>4 minutes total: 60 seconds of typing, 3 minutes of showing two or three screens.</dd>
+        <dt>Short session</dt><dd>Keep. This is the moment the room decides the workshop is for them.</dd>
+        <dt>Solution</dt><dd>Any three edits. There is no single right answer, and say so.</dd>
+        <dt>Next</dt><dd>“You have just modified a web interface. Now let us find out what actually happened.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-hook-message" data-section="Opening" data-title="You have already used code today" data-accent="html" aria-hidden="true">
+  <div class="slide-inner center" style="justify-content:center;">
+    <p class="kicker" style="justify-content:center;">Section 0 · The point of today</p>
+    <h1 style="max-width:20ch;">You have already<br>changed a web page.</h1>
+    <p class="lead" style="max-width:52ch; margin-inline:auto;">
+      Today is not about memorising every tag. It is about learning how to look at a page,
+      understand its pieces and start building your own version.
+    </p>
+    <div class="row center" style="margin-top:1cqi;">
+      <span class="chip chip--html">See</span>
+      <span class="chip chip--challenge">Predict</span>
+      <span class="chip chip--css">Type</span>
+      <span class="chip chip--devtools">Run</span>
+      <span class="chip chip--debug">Remix</span>
+      <span class="chip chip--plain">Explain</span>
+    </div>
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>Read the sentence on the slide word for word. It sets the contract for the whole session.</dd>
+        <dt>Expect</dt><dd>Relief. Several students expected to be tested on memorised syntax.</dd>
+        <dt>Misconception</dt><dd>“Real developers know everything by heart.” Tell them you look things up daily. It is true.</dd>
+        <dt>Hint first</dt><dd>n/a</dd>
+        <dt>Timing</dt><dd>1 minute.</dd>
+        <dt>Short session</dt><dd>Keep.</dd>
+        <dt>Solution</dt><dd>n/a</dd>
+        <dt>Next</dt><dd>“So what is the browser actually doing with those two files?”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<!-- ======================================================================
+     SECTION 1 — WHAT THE BROWSER IS DOING (10–18 min)
+     ====================================================================== -->
+
+<section class="slide" id="s-browser-job" data-section="1 · The browser" data-title="HTML, CSS and the browser" data-accent="css" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 1 · What the browser is doing</p>
+        <h2>Two files in. One page out.</h2>
+      </div>
+    </header>
+
+    <div class="flow">
+      <div class="flow-node tile--html">
+        <img class="tile-icon" style="margin-inline:auto;" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%20role%3D%22img%22%20aria-label%3D%22Angle%20brackets%20representing%20HTML%22%3E%20%3Ctitle%3EHTML%3C%2Ftitle%3E%20%3Cpath%20d%3D%22M17%2012%206%2024l11%2012%22%20fill%3D%22none%22%20stroke%3D%22%23ff9d5c%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M31%2012l11%2012-11%2012%22%20fill%3D%22none%22%20stroke%3D%22%23ff9d5c%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M27%209%2021%2039%22%20fill%3D%22none%22%20stroke%3D%22%23ff9d5c%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%20%3C%2Fsvg%3E" alt="">
+        <b>HTML</b>
+        <p class="small muted" style="margin:0;">The structure and the words. Headings, paragraphs, links, images, sections.</p>
+      </div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-node tile--css">
+        <img class="tile-icon" style="margin-inline:auto;" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%20role%3D%22img%22%20aria-label%3D%22A%20paint%20brush%20representing%20CSS%22%3E%20%3Ctitle%3ECSS%3C%2Ftitle%3E%20%3Crect%20x%3D%2210%22%20y%3D%226%22%20width%3D%2228%22%20height%3D%2216%22%20rx%3D%224%22%20fill%3D%22%235ad1ff%22%2F%3E%20%3Cpath%20d%3D%22M16%2022h16v8a8%208%200%200%201-8%208%208%208%200%200%201-8-8z%22%20fill%3D%22%235ad1ff%22%20opacity%3D%22.7%22%2F%3E%20%3Cpath%20d%3D%22M24%2038v6%22%20stroke%3D%22%235ad1ff%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%20%3C%2Fsvg%3E" alt="">
+        <b>CSS</b>
+        <p class="small muted" style="margin:0;">The appearance. Colour, size, spacing, layout, what happens on hover.</p>
+      </div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-node tile--browser">
+        <img class="tile-icon" style="margin-inline:auto;" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%20role%3D%22img%22%20aria-label%3D%22A%20magnifying%20glass%20representing%20developer%20tools%22%3E%20%3Ctitle%3EDevTools%3C%2Ftitle%3E%20%3Ccircle%20cx%3D%2221%22%20cy%3D%2221%22%20r%3D%2213%22%20fill%3D%22none%22%20stroke%3D%22%23e07bff%22%20stroke-width%3D%224%22%2F%3E%20%3Cpath%20d%3D%22M31%2031l10%2010%22%20stroke%3D%22%23e07bff%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M15%2021h12M21%2015v12%22%20stroke%3D%22%23e07bff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.7%22%2F%3E%20%3C%2Fsvg%3E" alt="">
+        <b>Browser</b>
+        <p class="small muted" style="margin:0;">Reads both files and draws the page on screen, every single time you refresh.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>The house version:</strong> HTML is the walls, doors and rooms. CSS is the paint, the furniture and the lighting. The browser is the builder who reads both plans and puts the house up in front of you.</p>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Three boxes. That is the entire mental model you need for the next three hours.”</dd>
+        <dt>Expect</dt><dd>Someone asks about JavaScript. Answer: “A third file that makes things move and respond. Not today — and you do not need it for a real, useful page.”</dd>
+        <dt>Misconception</dt><dd>That the browser “downloads a picture of the website”. It rebuilds the page from text every time.</dd>
+        <dt>Hint first</dt><dd>n/a</dd>
+        <dt>Timing</dt><dd>3 minutes maximum. Two slides on the analogy, then stop.</dd>
+        <dt>Short session</dt><dd>Keep this slide, cut the sorting activity that follows.</dd>
+        <dt>Solution</dt><dd>n/a</dd>
+        <dt>Next</dt><dd>“Quick sort. Structure, appearance, or something the browser does?”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-sorting" data-section="1 · The browser" data-title="Activity — sort it: HTML, CSS or browser" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Fast activity · Whole class <span class="chip chip--challenge">2 minutes</span></p>
+        <h2>Structure, appearance, or browser?</h2>
+      </div>
+      <button class="btn" data-timer-start="120" data-timer-label="Sorting round">Start 2 min</button>
+    </header>
+
+    <div class="quiz">
+      <div class="quiz-row" data-answer="html" data-because="a heading is a piece of content with a job. That is structure.">
+        <span class="quiz-q">“Nova Student Tech Day” as the main heading</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="html">Structure</button>
+          <button type="button" class="opt" data-value="css">Appearance</button>
+          <button type="button" class="opt" data-value="browser">Browser action</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+      <div class="quiz-row" data-answer="css" data-because="a colour is a decision about how something looks, not what it is.">
+        <span class="quiz-q">Making that heading dark blue</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="html">Structure</button>
+          <button type="button" class="opt" data-value="css">Appearance</button>
+          <button type="button" class="opt" data-value="browser">Browser action</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+      <div class="quiz-row" data-answer="browser" data-because="redrawing the page after you save is the browser's job, not yours.">
+        <span class="quiz-q">Showing your new text after you press refresh</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="html">Structure</button>
+          <button type="button" class="opt" data-value="css">Appearance</button>
+          <button type="button" class="opt" data-value="browser">Browser action</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+      <div class="quiz-row" data-answer="html" data-because="a list of three activities is content arranged in a shape.">
+        <span class="quiz-q">A list of the three activities on offer</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="html">Structure</button>
+          <button type="button" class="opt" data-value="css">Appearance</button>
+          <button type="button" class="opt" data-value="browser">Browser action</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+      <div class="quiz-row" data-answer="css" data-because="space between cards is a look-and-feel decision.">
+        <span class="quiz-q">Putting 24 pixels of space between the cards</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="html">Structure</button>
+          <button type="button" class="opt" data-value="css">Appearance</button>
+          <button type="button" class="opt" data-value="browser">Browser action</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Hands up, then I click. Teams get a point for the right call and a second point for a reason in one sentence.”</dd>
+        <dt>Expect</dt><dd>Row 2 splits the room: many call a heading colour “structure” because the heading is structure. Separate the noun from the paint.</dd>
+        <dt>Misconception</dt><dd>That anything visible is CSS. The words themselves are HTML; how they look is CSS.</dd>
+        <dt>Hint first</dt><dd>“Ask: if I deleted the CSS file, would this thing still be there in some form?” If yes, it is HTML.</dd>
+        <dt>Timing</dt><dd>4 minutes, five rows.</dd>
+        <dt>Short session</dt><dd>Run only rows 1–3.</dd>
+        <dt>Solution</dt><dd>Structure · Appearance · Browser · Structure · Appearance.</dd>
+        <dt>Next</dt><dd>“Right — let us make somewhere for your files to live.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+<!-- ======================================================================
+     SECTION 2 — PREPARE THE WORKSPACE (18–28 min)
+     ====================================================================== -->
+
+<section class="slide" id="s-folder" data-section="2 · Workspace" data-title="Your project folder" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 2 · Prepare the workspace</p>
+        <h2>A website is a folder.</h2>
+      </div>
+    </header>
+
+    <div class="split">
+      <div class="editor">
+        <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab">your project folder</span></div>
+        <pre class="code code--big">nova-tech-day/
+├── index.html
+└── styles.css</pre>
+      </div>
+      <div class="stack">
+        <dl class="deflist">
+          <dt>index.html</dt><dd>The home page. Browsers look for this name first, so a folder with an <code>index.html</code> “just opens”.</dd>
+          <dt>styles.css</dt><dd>All the appearance decisions, kept separately so one change can restyle the whole page.</dd>
+        </dl>
+        <div class="callout callout--warn">
+          <p><strong>Three naming rules that save an hour later:</strong></p>
+          <ul style="margin:.3em 0 0;">
+            <li>No spaces. Use <code>styles.css</code>, never <code>my styles.css</code>.</li>
+            <li>Same capitals everywhere. <code>Styles.css</code> and <code>styles.css</code> are different files on many systems.</li>
+            <li>Say what it is. <code>index.html</code>, not <code>page1final2REAL.html</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“There is no database, no server, no account. A website you build today is a folder you can email to someone.”</dd>
+        <dt>Expect</dt><dd>“Where does it go online?” Answer in one sentence and move on: “Later — deployment is on the map at the end.”</dd>
+        <dt>Misconception</dt><dd>That you need to be “online” to build a page. Everything today runs from the local file system.</dd>
+        <dt>Hint first</dt><dd>n/a</dd>
+        <dt>Timing</dt><dd>2 minutes.</dd>
+        <dt>Short session</dt><dd>Keep, and skip Route A if the class already has files open.</dd>
+        <dt>Solution</dt><dd>n/a</dd>
+        <dt>Next</dt><dd>“Two ways to get there. Pick the one that matches your laptop.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-route-a" data-section="2 · Workspace" data-title="Route A — VS Code setup" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Route A · Recommended <span class="chip chip--plain">Everyone follows along</span></p>
+        <h2>Set up in VS Code</h2>
+      </div>
+      <button class="btn" data-timer-start="300" data-timer-label="Setup — Route A">Start 5 min</button>
+    </header>
+
+    <div class="split split--wide-left">
+      <ol class="steps">
+        <li><span>Make a folder on your desktop called <code>nova-tech-day</code> (or your own project name).</span></li>
+        <li><span>Open VS Code → <strong>File → Open Folder</strong> → choose that folder.</span></li>
+        <li><span>In the Explorer panel, click <strong>New File</strong> and type <code>index.html</code>.</span></li>
+        <li><span>Click <strong>New File</strong> again and type <code>styles.css</code>.</span></li>
+        <li><span>Save with <kbd>Ctrl</kbd>+<kbd>S</kbd> (<kbd>Cmd</kbd>+<kbd>S</kbd> on Mac). Do this constantly.</span></li>
+        <li><span>Find <code>index.html</code> in your file manager and double-click it. It opens in your browser.</span></li>
+        <li><span>Put VS Code on the left half of the screen and the browser on the right half.</span></li>
+      </ol>
+
+      <div class="stack">
+        <div class="callout">
+          <p><strong>The loop you will repeat all day:</strong></p>
+          <p style="margin:0;">Type → <kbd>Ctrl</kbd>+<kbd>S</kbd> → click the browser → <kbd>F5</kbd> to refresh → look.</p>
+        </div>
+        <div class="callout callout--warn">
+          <p><strong>If nothing changes on screen,</strong> nine times out of ten you did not save, or you refreshed a different tab. Check those two before anything else.</p>
+        </div>
+        <p class="small muted">Windows snap: <kbd>Win</kbd>+<kbd>←</kbd> and <kbd>Win</kbd>+<kbd>→</kbd>. macOS: drag windows to each half.</p>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Do it with me, step by step. Nobody moves to step three until I see hands up for step two.”</dd>
+        <dt>Expect</dt><dd>Two or three students will create the file inside the wrong folder, or inside a Downloads zip. Walk the room now — it is cheaper than debugging it in twenty minutes.</dd>
+        <dt>Misconception</dt><dd>That VS Code “runs” the page. It only edits text; the browser runs it.</dd>
+        <dt>Hint first</dt><dd>“Look at the title bar of VS Code — does it show your folder name?”</dd>
+        <dt>Timing</dt><dd>6–8 minutes. This is the slowest part of the day; budget for it and do not rush.</dd>
+        <dt>Short session</dt><dd>Use Route B for everyone and skip this slide entirely.</dd>
+        <dt>Solution</dt><dd>Two empty files in one folder, both visible in the VS Code Explorer.</dd>
+        <dt>Next</dt><dd>“No VS Code? Route B works in this browser tab.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-route-b" data-section="2 · Workspace" data-title="Route B — browser fallback editor" data-accent="css" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Route B · Fallback <span class="chip chip--css">No installs</span></p>
+        <h2>No editor? Use this one.</h2>
+      </div>
+    </header>
+
+    <div class="split split--sidebar">
+      <div class="playground" data-playground>
+        <div class="pg-editors">
+          <div class="pg-editor">
+            <div class="editor-bar"><span class="file-tab file-tab--html">index.html</span></div>
+            <textarea data-pg-html rows="7" spellcheck="false" aria-label="Practice HTML">&lt;h1&gt;My page&lt;/h1&gt;
+&lt;p&gt;I am typing in a browser and it still works.&lt;/p&gt;</textarea>
+          </div>
+          <div class="pg-editor">
+            <div class="editor-bar"><span class="file-tab file-tab--css">styles.css</span></div>
+            <textarea data-pg-css rows="7" spellcheck="false" aria-label="Practice CSS">body {
+  font-family: Segoe UI, Arial, sans-serif;
+  color: #172033;
+}</textarea>
+          </div>
+        </div>
+        <div class="pg-side">
+          <iframe data-pg-preview class="pg-preview" sandbox title="Live preview"></iframe>
+          <div class="pg-actions">
+            <button type="button" class="btn btn--primary" data-pg-action="run">Run ▸</button>
+            <button type="button" class="btn" data-pg-action="reset">Reset</button>
+            <button type="button" class="btn" data-pg-action="copy">Copy to clipboard</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="callout">
+          <p><strong>Every playground in this deck works the same way.</strong> Type on the left, the preview updates on the right. Nothing is saved to a server.</p>
+        </div>
+        <ul class="checklist">
+          <li><strong>Run</strong> — redraw the preview now</li>
+          <li><strong>Reset</strong> — put the starting code back</li>
+          <li><strong>Copy</strong> — take the code into your real files</li>
+          <li><strong>Hint / Solution</strong> — only open after you have tried</li>
+        </ul>
+        <p class="small muted">Using Route B all day is completely fine. Copy your work into real files at the end so you can keep it.</p>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“If your laptop is locked down, this is your editor for the whole session and you lose nothing.”</dd>
+        <dt>Expect</dt><dd>Students on school-managed machines. Have this route ready before class rather than improvising.</dd>
+        <dt>Misconception</dt><dd>That the browser editor is “not real coding”. It is exactly the same HTML and CSS.</dd>
+        <dt>Hint first</dt><dd>n/a</dd>
+        <dt>Timing</dt><dd>2 minutes.</dd>
+        <dt>Short session</dt><dd>Make this the only route.</dd>
+        <dt>Solution</dt><dd>n/a</dd>
+        <dt>Next</dt><dd>“Two minutes. Everybody proves their setup works.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-setup-check" data-section="2 · Workspace" data-title="Checkpoint — setup" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Catch-up checkpoint <span class="chip chip--challenge">Nobody left behind</span></p>
+        <h2>Two minutes. Prove it works.</h2>
+      </div>
+      <button class="btn btn--primary" data-timer-start="120" data-timer-label="Setup checkpoint">Start 2 min</button>
+    </header>
+
+    <div class="split">
+      <div class="panel">
+        <p class="panel-title">Put your hand up if any of these is not true</p>
+        <ul class="checklist">
+          <li>I have a folder with a name I chose.</li>
+          <li>It contains <code>index.html</code> and <code>styles.css</code>.</li>
+          <li>I can open <code>index.html</code> in a browser.</li>
+          <li>I know which key saves the file.</li>
+          <li>I know which key refreshes the browser.</li>
+          <li>My editor and my browser are both visible at once.</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <div class="callout callout--ok">
+          <p><strong>Finished early?</strong> Type your event's name inside <code>index.html</code> — just the words, no tags yet — save, refresh, and check it appears in the browser.</p>
+        </div>
+        <div class="callout">
+          <p><strong>Pairing rule:</strong> if the person next to you is stuck, you get a point for helping <em>without touching their keyboard</em>.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Hands stay up until I have been to you. This is the only checkpoint where we truly wait for everyone.”</dd>
+        <dt>Expect</dt><dd>Roughly 15% of a beginner class needs help here. That is normal and not a bad sign.</dd>
+        <dt>Misconception</dt><dd>n/a</dd>
+        <dt>Hint first</dt><dd>n/a</dd>
+        <dt>Timing</dt><dd>2–4 minutes. Pace signal: if more than a third are stuck, switch the whole room to Route B.</dd>
+        <dt>Short session</dt><dd>Keep — skipping this costs more time later.</dd>
+        <dt>Solution</dt><dd>n/a</dd>
+        <dt>Next</dt><dd>“Now the first real HTML. We build it one line at a time.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<!-- ======================================================================
+     SECTION 3 — FIRST HTML DOCUMENT (28–45 min)
+     ====================================================================== -->
+
+<section class="slide" id="s-element-anatomy" data-section="3 · First HTML" data-title="Anatomy of an element" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 3 · Your first HTML document <span class="chip chip--html">New syntax</span></p>
+        <h2>One element. Three parts.</h2>
+      </div>
+    </header>
+
+    <div class="editor">
+      <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--html">index.html</span></div>
+      <pre class="code code--big"><span class="t-punct">&lt;</span><span class="t-tag">h1</span><span class="t-punct">&gt;</span>Nova Student Tech Day<span class="t-punct">&lt;/</span><span class="t-tag">h1</span><span class="t-punct">&gt;</span></pre>
+    </div>
+
+    <div class="cols-3">
+      <div class="tile tile--html">
+        <h3>Opening tag</h3>
+        <p class="small">Starts the element and names its job. <code>h1</code> means “the one main heading of this page”.</p>
+      </div>
+      <div class="tile">
+        <h3>Content</h3>
+        <p class="small">The part a visitor actually reads. Change this and the page changes.</p>
+      </div>
+      <div class="tile tile--html">
+        <h3>Closing tag</h3>
+        <p class="small">Same name with a <code>/</code> in front. It tells the browser where this element stops.</p>
+      </div>
+    </div>
+
+    <p class="lead">Opening tag + content + closing tag = one <strong>element</strong>.</p>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Angle bracket, name, angle bracket. Then your words. Then the same thing with a slash. That pattern is 90% of HTML.”</dd>
+        <dt>Expect</dt><dd>Someone asks what happens if you forget the closing tag. Say “brilliant question, we break one on purpose in ten minutes.”</dd>
+        <dt>Misconception</dt><dd>That the tag text appears on the page. Show that only the content between the tags is visible.</dd>
+        <dt>Hint first</dt><dd>“Which part of that line would you change to rename the event?”</dd>
+        <dt>Timing</dt><dd>3 minutes.</dd>
+        <dt>Short session</dt><dd>Keep — this is the single most important syntax slide.</dd>
+        <dt>Solution</dt><dd>Content is the only visible part.</dd>
+        <dt>Next</dt><dd>“Elements also live inside other elements. Watch.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-nesting" data-section="3 · First HTML" data-title="Nesting — elements inside elements" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 3 · One idea <span class="chip chip--html">Nesting</span></p>
+        <h2>Boxes inside boxes.</h2>
+      </div>
+    </header>
+
+    <div class="split">
+      <div class="nest nest--html">
+        <span>&lt;html&gt;</span>
+        <div class="nest nest--html">
+          <span>&lt;head&gt;</span> — information <em>about</em> the page
+          <div class="nest nest--html"><span>&lt;title&gt;</span> the tab name</div>
+        </div>
+        <div class="nest nest--html">
+          <span>&lt;body&gt;</span> — everything a visitor sees
+          <div class="nest nest--html"><span>&lt;h1&gt;</span> the main heading</div>
+          <div class="nest nest--html"><span>&lt;p&gt;</span> a paragraph</div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="callout">
+          <p><strong>Nesting rule:</strong> whatever you open last, you close first. Like putting boxes inside boxes — you cannot close the outer box while the inner one is still sticking out.</p>
+        </div>
+        <div class="editor">
+          <div class="editor-bar"><span class="file-tab file-tab--html">correct</span></div>
+          <pre class="code" data-lang="html">
+&lt;p&gt;Build &lt;strong&gt;something&lt;/strong&gt; good.&lt;/p&gt;</pre>
+        </div>
+        <div class="editor">
+          <div class="editor-bar"><span class="file-tab" style="color:#ff7b7b;">crossed over — do not do this</span></div>
+          <pre class="code" data-lang="html">
+&lt;p&gt;Build &lt;strong&gt;something good.&lt;/p&gt;&lt;/strong&gt;</pre>
+        </div>
+        <p class="small muted"><strong>Indentation</strong> — those two spaces at the start of a line — is only for humans. The browser ignores it. Your future self will not.</p>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Point at the dashed boxes. Each one is completely inside its parent. Never half in and half out.”</dd>
+        <dt>Expect</dt><dd>The crossed-over example looks fine to beginners because browsers often still render it. Say that plainly: “It usually works, and it will still eventually hurt you.”</dd>
+        <dt>Misconception</dt><dd>That indentation changes the page. It does not — it changes whether you can read your own file.</dd>
+        <dt>Hint first</dt><dd>“Read it aloud: open p, open strong, close…?”</dd>
+        <dt>Timing</dt><dd>3 minutes.</dd>
+        <dt>Short session</dt><dd>Keep the diagram, drop the crossed-over example.</dd>
+        <dt>Solution</dt><dd>Close <code>strong</code> before <code>p</code>.</dd>
+        <dt>Next</dt><dd>“Now type the skeleton with me. Four lines at a time.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-skeleton-1" data-section="3 · First HTML" data-title="Build step 1 — the page skeleton" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Progressive build · Step 1 of 2 <span class="chip chip--html">Type this</span></p>
+        <h2>The four lines every page starts with</h2>
+      </div>
+    </header>
+
+    <div class="split split--wide-left">
+      <div class="editor">
+        <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--html">index.html</span></div>
+        <pre class="code" data-lang="html" data-diff>
++&lt;!doctype html&gt;
++&lt;html lang="en"&gt;
++  &lt;head&gt;
++    &lt;meta charset="UTF-8"&gt;
++    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
++    &lt;title&gt;Nova Student Tech Day&lt;/title&gt;
++  &lt;/head&gt;
++  &lt;body&gt;
++  &lt;/body&gt;
++&lt;/html&gt;</pre>
+      </div>
+
+      <div class="stack">
+        <dl class="deflist">
+          <dt>&lt;!doctype html&gt;</dt><dd>“Use modern HTML rules.” One line, always first, never changes.</dd>
+          <dt>&lt;html lang="en"&gt;</dt><dd>Wraps the whole document. <code>lang</code> tells browsers and screen readers the language.</dd>
+          <dt>&lt;head&gt;</dt><dd>Information <em>about</em> the page. Nothing here appears on screen.</dd>
+          <dt>&lt;meta charset&gt;</dt><dd>“Read this file as UTF-8”, so accents and symbols do not turn into rubbish.</dd>
+          <dt>&lt;meta viewport&gt;</dt><dd>“Do not pretend a phone is a desktop.” Without it, phones zoom out and everything is tiny.</dd>
+          <dt>&lt;title&gt;</dt><dd>The browser tab name. The one thing in <code>head</code> people actually see.</dd>
+          <dt>&lt;body&gt;</dt><dd>Everything a visitor sees goes here. It is empty for now.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Type it, do not paste it. Your fingers need to feel the angle brackets once.”</dd>
+        <dt>Expect</dt><dd>Typos in the doctype and a missing quote in <code>lang="en"</code>. Both produce a page that still loads — do not let that pass silently.</dd>
+        <dt>Misconception</dt><dd>“The head is the top of the page.” No — the head is invisible. Prove it: save and refresh, the page is blank.</dd>
+        <dt>Hint first</dt><dd>“VS Code closes tags for you. If it does, do not type the closing tag twice.”</dd>
+        <dt>Timing</dt><dd>6 minutes including typing time.</dd>
+        <dt>Short session</dt><dd>Give this skeleton in the starter file and spend the time on <code>body</code> instead.</dd>
+        <dt>Solution</dt><dd>A blank white page with the right tab title. That is success.</dd>
+        <dt>Next</dt><dd>“Blank page? Perfect. Now put something in the body.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-skeleton-2" data-section="3 · First HTML" data-title="Build step 2 — first visible content" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Progressive build · Step 2 of 2 <span class="chip chip--html">Type this</span></p>
+        <h2>Two lines that make it real</h2>
+      </div>
+    </header>
+
+    <div class="split">
+      <div class="editor">
+        <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--html">index.html</span></div>
+        <pre class="code" data-lang="html" data-diff>
+   &lt;body&gt;
++    &lt;h1&gt;Nova Student Tech Day&lt;/h1&gt;
++    &lt;p&gt;A day for building, sharing and experimenting.&lt;/p&gt;
+   &lt;/body&gt;</pre>
+      </div>
+
+      <div class="win">
+        <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span><span class="win-url">file:///nova-tech-day/index.html</span></div>
+        <div class="win-view">
+          <h3 class="demo-h1" style="font-family:'Times New Roman',serif;">Nova Student Tech Day</h3>
+          <p class="demo-p" style="font-family:'Times New Roman',serif;">A day for building, sharing and experimenting.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="callout">
+        <p><strong>Why does it look like an old newspaper?</strong> Because there is no CSS yet. What you see is the browser's own default styling. Section 7 fixes that.</p>
+      </div>
+      <div class="callout callout--warn">
+        <p><strong>Your turn, no instructions:</strong> change the heading to your own event name and add a second paragraph. Save. Refresh.</p>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Two lines. Save. Refresh. Tell me what you see.”</dd>
+        <dt>Expect</dt><dd>Delight, then immediate disappointment at the ugly default font. Use that: it is the reason CSS exists.</dd>
+        <dt>Misconception</dt><dd>“It is broken because it is ugly.” It is not broken; it is unstyled. Name the difference.</dd>
+        <dt>Hint first</dt><dd>“Nothing changed? Save first, then refresh — in that order.”</dd>
+        <dt>Timing</dt><dd>4 minutes.</dd>
+        <dt>Short session</dt><dd>Keep.</dd>
+        <dt>Solution</dt><dd>Serif heading and paragraph on a white background.</dd>
+        <dt>Next</dt><dd>“Before I run the next one, predict it.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-predict-html" data-section="3 · First HTML" data-title="Challenge — Predict the Output" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Challenge 2 · Predict the Output <span class="chip chip--challenge">Teams</span></p>
+        <h2>Describe the result before we run it.</h2>
+      </div>
+      <button class="btn btn--primary" data-timer-start="30" data-timer-label="30s prediction">Start 30s</button>
+    </header>
+
+    <div class="split split--sidebar">
+      <div class="stack">
+        <div class="editor">
+          <div class="editor-bar"><span class="file-tab file-tab--html">index.html</span></div>
+          <pre class="code code--big" data-lang="html">
+&lt;h1&gt;Nova Tech Day&lt;/h1&gt;
+&lt;p&gt;Build something worth showing.&lt;/p&gt;</pre>
+        </div>
+        <div class="quiz">
+          <div class="quiz-row" data-answer="stacked" data-because="headings and paragraphs are block elements — each one starts on a new line and fills the width.">
+            <span class="quiz-q">How will these two lines appear?</span>
+            <span class="opt-row">
+              <button type="button" class="opt" data-value="same">Side by side</button>
+              <button type="button" class="opt" data-value="stacked">Stacked, heading bigger</button>
+              <button type="button" class="opt" data-value="hidden">Same size, one line</button>
+            </span>
+            <span class="quiz-feedback"></span>
+          </div>
+        </div>
+        <details class="reveal" data-kind="solution">
+          <summary>Reveal the answer</summary>
+          <div class="reveal-body">
+            <div class="win">
+              <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span><span class="win-url">file:///index.html</span></div>
+              <div class="win-view">
+                <h3 class="demo-h1" style="font-family:'Times New Roman',serif;">Nova Tech Day</h3>
+                <p class="demo-p" style="font-family:'Times New Roman',serif; margin:0;">Build something worth showing.</p>
+              </div>
+            </div>
+            <p class="small" style="margin-top:.6em;">Big bold heading on its own line, normal paragraph underneath. Nothing was told to be big or bold — <code>h1</code> means “most important heading”, and the browser has an opinion about what that looks like.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="challenge">
+        <dl class="challenge-grid">
+          <dt>Goal</dt><dd>Say or sketch what the browser will draw.</dd>
+          <dt>Time</dt><dd>30 seconds</dd>
+          <dt>Hints</dt><dd>One: think about whether things sit beside each other or below each other.</dd>
+          <dt>Points</dt><dd>2 for correct · +2 for a clear reason</dd>
+          <dt>Success</dt><dd>Mentions two lines and a size difference.</dd>
+          <dt>Extension</dt><dd>Swap the order of the two lines. Does the page change? Should it?</dd>
+        </dl>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“No typing yet. Pen, finger in the air, or words. Predict first — that is the whole skill.”</dd>
+        <dt>Expect</dt><dd>Most say “stacked”. Push for <em>why</em>: the reason is worth more points than the answer.</dd>
+        <dt>Misconception</dt><dd>That <code>h1</code> means “big text”. It means “most important heading”; big is just the default look, and CSS can change it.</dd>
+        <dt>Hint first</dt><dd>“Do paragraphs in a book sit beside each other?”</dd>
+        <dt>Timing</dt><dd>3 minutes.</dd>
+        <dt>Short session</dt><dd>Keep — predictions are cheap and high value.</dd>
+        <dt>Solution</dt><dd>Two stacked lines; the heading is larger and bold.</dd>
+        <dt>Next</dt><dd>“Now something that is properly broken. Fix it in pairs.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-bughunt-1" data-section="3 · First HTML" data-title="Challenge — Bug Hunt #1 (HTML)" data-accent="debug" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Challenge 3 · Bug Hunt <span class="chip chip--debug">Pairs</span></p>
+        <h2>Three faults. Find them, fix them.</h2>
+      </div>
+      <button class="btn btn--primary" data-timer-start="300" data-timer-label="Bug Hunt — pairs">Start 5 min</button>
+    </header>
+
+    <div class="split split--sidebar">
+      <div class="playground" data-playground>
+        <div class="pg-editors">
+          <div class="pg-editor">
+            <div class="editor-bar"><span class="file-tab file-tab--html">index.html (broken)</span></div>
+            <textarea data-pg-html rows="14" spellcheck="false" aria-label="Broken HTML to repair">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;title&gt;Nova Student Tech Day&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;p&gt;This paragraph is in the wrong place.&lt;/p&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Nova Student Tech Day
+    &lt;p&gt;A day for &lt;strong&gt;building and sharing.&lt;/p&gt;&lt;/strong&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</textarea>
+          </div>
+        </div>
+        <div class="pg-side">
+          <iframe data-pg-preview class="pg-preview" sandbox title="Preview of the broken page"></iframe>
+          <div class="pg-actions">
+            <button type="button" class="btn btn--primary" data-pg-action="run">Run ▸</button>
+            <button type="button" class="btn" data-pg-action="reset">Reset</button>
+            <button type="button" class="btn btn--ghost" data-action="celebrate">Fixed it 🎉</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="challenge">
+        <dl class="challenge-grid">
+          <dt>Goal</dt><dd>Repair three faults: one missing closing tag, one crossed-over nesting, one element outside <code>body</code>.</dd>
+          <dt>Time</dt><dd>5 minutes, in pairs</dd>
+          <dt>Hints</dt><dd>Two — take the second only if you are stuck after three minutes.</dd>
+          <dt>Points</dt><dd>2 per fault · +3 for naming all three out loud</dd>
+          <dt>Success</dt><dd>Heading, paragraph, bold text, in that order, nothing stray at the top.</dd>
+          <dt>Extension</dt><dd>Break it again in a new way and hand it to another pair.</dd>
+        </dl>
+        <details class="reveal" data-kind="hint">
+          <summary>Hint 1</summary>
+          <div class="reveal-body"><p class="small">Read the file top to bottom and ask at every line: “is this thing inside the box it belongs to?”</p></div>
+        </details>
+        <details class="reveal" data-kind="hint">
+          <summary>Hint 2</summary>
+          <div class="reveal-body"><p class="small">Count your <code>h1</code> tags. How many did you open? How many did you close?</p></div>
+        </details>
+        <details class="reveal" data-kind="solution">
+          <summary>Solution</summary>
+          <div class="reveal-body">
+            <pre class="code" data-lang="html" data-diff>
+   &lt;body&gt;
++    &lt;p&gt;This paragraph is in the wrong place.&lt;/p&gt;
++    &lt;h1&gt;Nova Student Tech Day&lt;/h1&gt;
++    &lt;p&gt;A day for &lt;strong&gt;building and sharing.&lt;/strong&gt;&lt;/p&gt;
+   &lt;/body&gt;</pre>
+            <p class="small">Move the stray paragraph inside <code>body</code>, close the <code>h1</code>, and close <code>strong</code> before <code>p</code>.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Do not rewrite it. Find what is wrong. Rewriting hides the lesson.”</dd>
+        <dt>Expect</dt><dd>Confusion that the broken page still renders something. That is the real lesson: browsers guess, and guesses are unreliable.</dd>
+        <dt>Misconception</dt><dd>“It looks fine, so it is fine.” Point at the stray paragraph the browser silently moved for them.</dd>
+        <dt>Hint first</dt><dd>Give hint 1 at three minutes, hint 2 only to pairs who ask.</dd>
+        <dt>Timing</dt><dd>7 minutes including the walkthrough.</dd>
+        <dt>Short session</dt><dd>Cut to a single fault — the missing closing heading tag.</dd>
+        <dt>Solution</dt><dd>See the hidden Solution panel on the slide.</dd>
+        <dt>Next</dt><dd>“Who can explain to the room why the bold text behaved so strangely?”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-checkpoint-1" data-section="3 · First HTML" data-title="Checkpoint 1 — a valid HTML page" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Catch-up checkpoint 1 of 8 <span class="chip chip--plain">Copy if you are behind</span></p>
+        <h2>Everyone should have exactly this.</h2>
+      </div>
+    </header>
+
+    <div class="split split--wide-left">
+      <div class="editor">
+        <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--html">index.html</span></div>
+        <pre class="code" data-lang="html">
+&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Nova Student Tech Day&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Nova Student Tech Day&lt;/h1&gt;
+    &lt;p&gt;A day for building, sharing and experimenting.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="stack">
+        <ul class="checklist">
+          <li>Doctype on line one</li>
+          <li><code>lang</code> on the <code>html</code> element</li>
+          <li>Charset and viewport in the head</li>
+          <li>A title that names your event</li>
+          <li>Exactly one <code>h1</code></li>
+          <li>Everything visible inside <code>body</code></li>
+        </ul>
+        <div class="callout callout--ok">
+          <p><strong>Behind?</strong> Copy this exactly, then change the title and heading to your own words. You are caught up.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“This is a catch-up slide. If your file does not look like this, fix it now — the next twenty minutes assume it.”</dd>
+        <dt>Expect</dt><dd>Two or three students still have content outside <code>body</code>. Walk the room.</dd>
+        <dt>Misconception</dt><dd>n/a</dd>
+        <dt>Hint first</dt><dd>n/a</dd>
+        <dt>Timing</dt><dd>2 minutes.</dd>
+        <dt>Short session</dt><dd>Keep every checkpoint slide. They are what stops the class fragmenting.</dd>
+        <dt>Solution</dt><dd>The code on the slide.</dd>
+        <dt>Next</dt><dd>“Time to fill it with something worth reading.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<!-- ======================================================================
+     SECTION 4 — ADD USEFUL CONTENT (45–65 min)
+     ====================================================================== -->
+
+<section class="slide" id="s-attributes" data-section="4 · Content" data-title="Attributes — extra information on a tag" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 4 · Useful content <span class="chip chip--html">New syntax</span></p>
+        <h2>Attributes: extra facts inside the opening tag</h2>
+      </div>
+    </header>
+
+    <div class="editor">
+      <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--html">index.html</span></div>
+      <pre class="code code--big"><span class="t-punct">&lt;</span><span class="t-tag">a</span> <span class="t-attr">href</span><span class="t-punct">=</span><span class="t-str">"#schedule"</span><span class="t-punct">&gt;</span>View the schedule<span class="t-punct">&lt;/</span><span class="t-tag">a</span><span class="t-punct">&gt;</span></pre>
+    </div>
+
+    <div class="split split--wide-left">
+      <dl class="deflist">
+        <dt>href</dt><dd>Where a link goes. <code>#schedule</code> jumps to the element with <code>id="schedule"</code> on this page.</dd>
+        <dt>src</dt><dd>Which file an image should load.</dd>
+        <dt>alt</dt><dd>What the image shows, in words, for anyone who cannot see it.</dd>
+        <dt>id</dt><dd>A unique name for one element. Used once per page.</dd>
+        <dt>class</dt><dd>A label you can reuse on many elements. This is how CSS finds things.</dd>
+      </dl>
+      <div class="stack">
+        <div class="callout">
+          <p><strong>The shape never changes:</strong> <code>name="value"</code>, inside the opening tag, separated by spaces. Quotes around the value, always.</p>
+        </div>
+        <div class="callout callout--warn">
+          <p><strong>Missing quote =</strong> the browser swallows the next part of your line. If text vanishes, check your quotes first.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“A tag says what something is. An attribute says something extra about it. Name, equals, value in quotes.”</dd>
+        <dt>Expect</dt><dd>Confusion between <code>id</code> and <code>class</code>. One-line rule: “id = one specific thing, class = a group of things.”</dd>
+        <dt>Misconception</dt><dd>That attributes show on the page. Only <code>alt</code> ever becomes visible, and only when the image fails.</dd>
+        <dt>Hint first</dt><dd>“Where inside the tag do attributes live — before or after the element name?”</dd>
+        <dt>Timing</dt><dd>4 minutes.</dd>
+        <dt>Short session</dt><dd>Teach <code>href</code>, <code>src</code>, <code>alt</code> and <code>class</code> only; drop <code>id</code> to the DevTools section.</dd>
+        <dt>Solution</dt><dd>n/a</dd>
+        <dt>Next</dt><dd>“Links, images and lists. Three tags, ten minutes, then you build.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-content-tags" data-section="4 · Content" data-title="Links, images, lists" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 4 · Progressive build <span class="chip chip--html">Type this</span></p>
+        <h2>Three tags that make a page useful</h2>
+      </div>
+    </header>
+
+    <div class="split">
+      <div class="editor">
+        <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--html">index.html</span></div>
+        <pre class="code" data-lang="html" data-diff>
+     &lt;p&gt;A day for building, sharing and experimenting.&lt;/p&gt;
++    &lt;a href="#schedule"&gt;View the schedule&lt;/a&gt;
++
++    &lt;img src="assets/images/event-hero.svg"
++         alt="A laptop showing a web page with three cards"&gt;
++
++    &lt;h2&gt;What happens on the day&lt;/h2&gt;
++    &lt;ul&gt;
++      &lt;li&gt;Build a page from an empty folder&lt;/li&gt;
++      &lt;li&gt;Take a real website apart&lt;/li&gt;
++      &lt;li&gt;Show your work in the demo hour&lt;/li&gt;
++    &lt;/ul&gt;
++    &lt;p&gt;Everything is &lt;strong&gt;hands-on&lt;/strong&gt;.&lt;/p&gt;</pre>
+      </div>
+
+      <div class="stack">
+        <dl class="deflist">
+          <dt>a</dt><dd>A link. Needs <code>href</code>. The words between the tags are what people click.</dd>
+          <dt>img</dt><dd>An image. No closing tag — it has no content, only attributes.</dd>
+          <dt>ul / li</dt><dd>An unordered list and the items in it. <code>li</code> always lives inside <code>ul</code> or <code>ol</code>.</dd>
+          <dt>h2</dt><dd>A section heading, one level below <code>h1</code>. Never skip from <code>h1</code> to <code>h3</code>.</dd>
+          <dt>strong</dt><dd>“This matters.” Bold is just how browsers show it.</dd>
+        </dl>
+        <div class="callout callout--warn">
+          <p><strong>About <code>br</code>:</strong> it forces a line break. Use it inside an address or a poem. Never use a row of them to push things apart — that is CSS spacing's job, and you will learn it in Section 9.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Add these to your own page as we go — your own activities, not mine.”</dd>
+        <dt>Expect</dt><dd>Broken image icons. That is a teaching gift: the path is wrong, or the file is not where they said it was.</dd>
+        <dt>Misconception</dt><dd>That <code>img</code> needs a closing tag. Explain: no content to wrap, so no closing tag.</dd>
+        <dt>Hint first</dt><dd>“Broken image? Read the <code>src</code> out loud as a set of directions from the file you are editing.”</dd>
+        <dt>Timing</dt><dd>8 minutes with typing.</dd>
+        <dt>Short session</dt><dd>Do links and lists; give the image line ready-made.</dd>
+        <dt>Solution</dt><dd>Link, image, heading, three-item list, bold word.</dd>
+        <dt>Next</dt><dd>“One question before the challenge — button or link?”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-button-or-link" data-section="4 · Content" data-title="Button or link?" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 4 · One idea <span class="chip chip--html">Choose correctly</span></p>
+        <h2>It looks like a button. Should it be one?</h2>
+      </div>
+    </header>
+
+    <div class="split">
+      <div class="panel panel--accent">
+        <p class="panel-title">Use a link &lt;a&gt; when…</p>
+        <ul style="margin:0;">
+          <li>It takes you somewhere — another page, or a section of this one.</li>
+          <li>“Register”, “View the schedule”, “Back to top”.</li>
+        </ul>
+        <pre class="code" data-lang="html">
+&lt;a class="button" href="#register"&gt;Save your place&lt;/a&gt;</pre>
+        <p class="small muted">Styled to look like a button. Still a link, so it still works with right-click, middle-click and back.</p>
+      </div>
+      <div class="panel">
+        <p class="panel-title">Use a button &lt;button&gt; when…</p>
+        <ul style="margin:0;">
+          <li>It <em>does</em> something on this page instead of going somewhere.</li>
+          <li>“Play”, “Add to list”, “Show more”.</li>
+        </ul>
+        <pre class="code" data-lang="html">
+&lt;button type="button"&gt;Show more sessions&lt;/button&gt;</pre>
+        <p class="small muted">Today's pages have no JavaScript, so nearly everything you build is a link.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Why bother?</strong> Both can be made to look identical. Only the correct one behaves correctly for keyboards, screen readers and the browser's back button. Choosing the right element is free accessibility.</p>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Ask one question: does it go somewhere, or does it do something?”</dd>
+        <dt>Expect</dt><dd>“But my link looks like a button, so it is a button.” Appearance is CSS; behaviour is the element.</dd>
+        <dt>Misconception</dt><dd>That <code>button</code> is the more “professional” choice. It is only right for actions.</dd>
+        <dt>Hint first</dt><dd>“If I middle-click it, should it open in a new tab? Then it is a link.”</dd>
+        <dt>Timing</dt><dd>3 minutes.</dd>
+        <dt>Short session</dt><dd>Reduce to the single sentence in the callout.</dd>
+        <dt>Solution</dt><dd>Goes somewhere → link. Does something → button.</dd>
+        <dt>Next</dt><dd>“Your first build challenge. Three minutes, no finished code from me.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-micro-challenge" data-section="4 · Content" data-title="Challenge — build the About block" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Challenge 4 · Mini build <span class="chip chip--challenge">Individual or pairs</span></p>
+        <h2>Build this block yourself.</h2>
+      </div>
+      <button class="btn btn--primary" data-timer-start="180" data-timer-label="Mini challenge">Start 3 min</button>
+    </header>
+
+    <div class="split split--sidebar">
+      <div class="stack">
+        <div class="win">
+          <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span><span class="win-url">the result you are aiming for</span></div>
+          <div class="win-view">
+            <h4 style="font-family:'Times New Roman',serif; font-size:clamp(13px,1.9cqi,26px); margin:0 0 .4em;">What happens on the day</h4>
+            <p class="demo-p" style="font-family:'Times New Roman',serif;">Six short workshops, three student talks and one very loud demo hour.</p>
+            <ul style="font-family:'Times New Roman',serif; font-size:clamp(10px,1.4cqi,19px); color:#33405c; margin:0 0 .6em 1.2em;">
+              <li>Build a page from an empty folder</li>
+              <li>Take a real website apart</li>
+              <li>Show your work in the demo hour</li>
+            </ul>
+            <p style="font-family:'Times New Roman',serif; margin:0;"><a href="#s-micro-challenge" style="color:#1b4dd8;">Jump to the schedule</a></p>
+          </div>
+        </div>
+        <p class="small muted">No CSS yet — this is what plain HTML looks like, and that is fine.</p>
+      </div>
+
+      <div class="challenge">
+        <dl class="challenge-grid">
+          <dt>Goal</dt><dd>In your own page, add a section heading, a short description, a list of three activities, and a link that jumps to your schedule.</dd>
+          <dt>Time</dt><dd>3 minutes</dd>
+          <dt>Hints</dt><dd>One hint, on request.</dd>
+          <dt>Points</dt><dd>4 for all four items · +2 if the link actually jumps · +1 clean indentation</dd>
+          <dt>Success</dt><dd>Clicking the link moves the page to your schedule heading.</dd>
+          <dt>Extension</dt><dd>Add a “Back to top” link at the bottom of the page.</dd>
+        </dl>
+        <p class="small"><strong>Tags you may need:</strong> <code>h2</code>, <code>p</code>, <code>ul</code>, <code>li</code>, <code>a</code></p>
+        <details class="reveal" data-kind="hint">
+          <summary>Hint</summary>
+          <div class="reveal-body"><p class="small">A jump link needs two halves: <code>href="#schedule"</code> on the link, and <code>id="schedule"</code> on the thing you want to land on.</p></div>
+        </details>
+        <details class="reveal" data-kind="solution">
+          <summary>Solution — open after the timer</summary>
+          <div class="reveal-body">
+            <pre class="code" data-lang="html">
+&lt;h2&gt;What happens on the day&lt;/h2&gt;
+&lt;p&gt;Six short workshops, three student talks and one very loud demo hour.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Build a page from an empty folder&lt;/li&gt;
+  &lt;li&gt;Take a real website apart&lt;/li&gt;
+  &lt;li&gt;Show your work in the demo hour&lt;/li&gt;
+&lt;/ul&gt;
+&lt;a href="#schedule"&gt;Jump to the schedule&lt;/a&gt;
+
+&lt;h2 id="schedule"&gt;Schedule&lt;/h2&gt;</pre>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“I am showing you the result, not the code. You have the tags. Go.”</dd>
+        <dt>Expect</dt><dd>Links that do not jump, because the <code>id</code> is missing on the target. This is the single most common bug in this section.</dd>
+        <dt>Misconception</dt><dd>That <code>href="#schedule"</code> searches for the word “schedule” on the page. It looks for a matching <code>id</code>.</dd>
+        <dt>Hint first</dt><dd>Give the hint at 90 seconds, not before.</dd>
+        <dt>Timing</dt><dd>6 minutes including two students showing their screens.</dd>
+        <dt>Short session</dt><dd>Drop the jump link; keep heading, paragraph, list.</dd>
+        <dt>Solution</dt><dd>In the hidden Solution panel.</dd>
+        <dt>Next</dt><dd>“Two teams up. Which tag would you use?”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-tag-relay" data-section="4 · Content" data-title="Challenge — Tag Relay" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Challenge 5 · Tag Relay <span class="chip chip--challenge">Teams</span></p>
+        <h2>Which element fits the job?</h2>
+      </div>
+      <button class="btn" data-timer-start="180" data-timer-label="Tag Relay">Start 3 min</button>
+    </header>
+
+    <div class="quiz">
+      <div class="quiz-row" data-answer="ul" data-because="the order does not matter, so an unordered list is right.">
+        <span class="quiz-q">Three activities, in no particular order</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="p">p</button>
+          <button type="button" class="opt" data-value="ul">ul + li</button>
+          <button type="button" class="opt" data-value="br">p with br</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+      <div class="quiz-row" data-answer="ol" data-because="a schedule runs in order, so an ordered list carries that meaning.">
+        <span class="quiz-q">A schedule of times, in order</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="ul">ul + li</button>
+          <button type="button" class="opt" data-value="ol">ol + li</button>
+          <button type="button" class="opt" data-value="h3">lots of h3</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+      <div class="quiz-row" data-answer="a" data-because="it goes somewhere, so it is a link — styled to look like a button.">
+        <span class="quiz-q">“Register now”, which jumps to the sign-up section</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="button">button</button>
+          <button type="button" class="opt" data-value="a">a with href</button>
+          <button type="button" class="opt" data-value="strong">strong</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+      <div class="quiz-row" data-answer="h2" data-because="it is the heading of a section, one level below the page's h1.">
+        <span class="quiz-q">The title of the sessions section</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="h1">another h1</button>
+          <button type="button" class="opt" data-value="h2">h2</button>
+          <button type="button" class="opt" data-value="strongp">p with strong</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+      <div class="quiz-row" data-answer="img" data-because="a meaningful picture is an img, and it needs alt text describing it.">
+        <span class="quiz-q">A photo of last year's event, described for screen readers</span>
+        <span class="opt-row">
+          <button type="button" class="opt" data-value="img">img with alt</button>
+          <button type="button" class="opt" data-value="imgonly">img with no alt</button>
+          <button type="button" class="opt" data-value="p">p describing it</button>
+        </span>
+        <span class="quiz-feedback"></span>
+      </div>
+    </div>
+
+    <div class="challenge challenge--wide">
+      <dl class="challenge-grid">
+        <dt>Goal</dt><dd>Pick the element that carries the right meaning, not just the right look.</dd>
+        <dt>Time</dt><dd>3 minutes · one answer per team per row</dd>
+        <dt>Hints</dt><dd>None. Discussion inside the team is allowed and encouraged.</dd>
+        <dt>Points</dt><dd>1 per correct row · +2 for the best explanation of any row</dd>
+        <dt>Success</dt><dd>The team can say what would be lost by choosing the wrong one.</dd>
+        <dt>Extension</dt><dd>Invent a sixth scenario and challenge another team with it.</dd>
+      </dl>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Every row has an answer that looks fine and an answer that means the right thing. I want the meaning.”</dd>
+        <dt>Expect</dt><dd>Row 3 divides the room. Let the argument run for thirty seconds before resolving it.</dd>
+        <dt>Misconception</dt><dd>That <code>p</code> with <code>br</code> is “the same as” a list. It looks similar and means nothing.</dd>
+        <dt>Hint first</dt><dd>“If the CSS disappeared, would the page still make sense?”</dd>
+        <dt>Timing</dt><dd>5 minutes.</dd>
+        <dt>Short session</dt><dd>Run rows 1–3.</dd>
+        <dt>Solution</dt><dd>ul · ol · a · h2 · img with alt.</dd>
+        <dt>Next</dt><dd>“Same question, bigger scale: what do we call the regions of a page?”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-checkpoint-2" data-section="4 · Content" data-title="Checkpoint 2 — content and links" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Catch-up checkpoint 2 of 8 <span class="chip chip--plain">Inside body</span></p>
+        <h2>Your body should now look roughly like this.</h2>
+      </div>
+    </header>
+
+    <div class="split split--wide-left">
+      <div class="editor">
+        <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--html">index.html — inside &lt;body&gt;</span></div>
+        <pre class="code" data-lang="html">
+&lt;h1&gt;Nova Student Tech Day&lt;/h1&gt;
+&lt;p&gt;A day for building, sharing and experimenting.&lt;/p&gt;
+&lt;a href="#schedule"&gt;View the schedule&lt;/a&gt;
+
+&lt;img src="assets/images/event-hero.svg"
+     alt="A laptop showing a web page with three cards"&gt;
+
+&lt;h2&gt;What happens on the day&lt;/h2&gt;
+&lt;p&gt;Six short workshops, three student talks and one demo hour.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Build a page from an empty folder&lt;/li&gt;
+  &lt;li&gt;Take a real website apart&lt;/li&gt;
+  &lt;li&gt;Show your work in the demo hour&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id="schedule"&gt;Schedule&lt;/h2&gt;
+&lt;p&gt;Doors open at 09:30. Demo hour starts at 16:00.&lt;/p&gt;</pre>
+      </div>
+      <div class="stack">
+        <ul class="checklist">
+          <li>One <code>h1</code>, then <code>h2</code>s — no skipped levels</li>
+          <li>A link with a real <code>href</code></li>
+          <li>An image with useful <code>alt</code> text</li>
+          <li>A list with three <code>li</code> items</li>
+          <li>An <code>id</code> the link can jump to</li>
+        </ul>
+        <div class="callout callout--ok">
+          <p><strong>Yours says something different?</strong> Good. The shape matters, the words are yours.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Shape, not words. If your list has different activities, you are doing it right.”</dd>
+        <dt>Expect</dt><dd>Some students have copied the example verbatim. Nudge them: “Whose event is this?”</dd>
+        <dt>Misconception</dt><dd>n/a</dd>
+        <dt>Hint first</dt><dd>n/a</dd>
+        <dt>Timing</dt><dd>2 minutes.</dd>
+        <dt>Short session</dt><dd>Keep.</dd>
+        <dt>Solution</dt><dd>Code on the slide.</dd>
+        <dt>Next</dt><dd>“Now we give those regions proper names.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<!-- ======================================================================
+     SECTION 5 — SEMANTIC HTML (65–80 min)
+     ====================================================================== -->
+
+<section class="slide" id="s-semantic-compare" data-section="5 · Semantic HTML" data-title="div soup versus named regions" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 5 · Name things by their purpose <span class="chip chip--html">Compare</span></p>
+        <h2>Which one tells you what the page is?</h2>
+      </div>
+    </header>
+
+    <div class="split">
+      <div class="editor">
+        <div class="editor-bar"><span class="file-tab">version A</span></div>
+        <pre class="code code--big" data-lang="html">
+&lt;div&gt;
+  &lt;div&gt;
+    &lt;div&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;div&gt;...&lt;/div&gt;
+&lt;/div&gt;</pre>
+      </div>
+      <div class="editor">
+        <div class="editor-bar"><span class="file-tab file-tab--html">version B</span></div>
+        <pre class="code code--big" data-lang="html">
+&lt;header&gt;
+  &lt;nav&gt;...&lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+  &lt;section&gt;...&lt;/section&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;...&lt;/footer&gt;</pre>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Both draw the same pixels.</strong> Only one of them tells a search engine, a screen reader, a teammate — or you next week — what each part is for.</p>
+    </div>
+    <div class="callout callout--warn">
+      <p><strong><code>div</code> is not wrong.</strong> It is the right choice when you need a box to group or style things and no meaningful element describes it. Reach for a name first; fall back to <code>div</code> when there is no honest name.</p>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Read version A out loud. Now version B. Which one could you explain to somebody over the phone?”</dd>
+        <dt>Expect</dt><dd>Instant agreement that B is clearer — this slide sells itself. Do not over-explain it.</dd>
+        <dt>Misconception</dt><dd>That <code>div</code> is a beginner mistake. Correct this explicitly; professional code is full of them.</dd>
+        <dt>Hint first</dt><dd>n/a</dd>
+        <dt>Timing</dt><dd>3 minutes.</dd>
+        <dt>Short session</dt><dd>Keep — it is quick and it changes how they write for the rest of the day.</dd>
+        <dt>Solution</dt><dd>Version B.</dd>
+        <dt>Next</dt><dd>“Here is the map of a page. Six names, that is all.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-semantic-map" data-section="5 · Semantic HTML" data-title="The six regions of a page" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Section 5 · One idea <span class="chip chip--html">Six names</span></p>
+        <h2>The map of almost every page you will ever build</h2>
+      </div>
+    </header>
+
+    <div class="split split--wide-left">
+      <div class="stack" style="gap:.5cqi;">
+        <div class="panel" style="border-color:var(--html); background:var(--html-soft); padding:.9cqi 1.2cqi;">
+          <b style="font-family:ui-monospace,monospace; color:var(--html);">&lt;header&gt;</b>
+          <span class="small muted"> — the top strip: site name and</span>
+          <div class="panel" style="margin-top:.5cqi; padding:.6cqi 1cqi; background:var(--surface-2);">
+            <b style="font-family:ui-monospace,monospace; color:var(--html);">&lt;nav&gt;</b> <span class="small muted">— the set of links to the main areas</span>
+          </div>
+        </div>
+        <div class="panel" style="border-color:var(--css); background:var(--css-soft); padding:.9cqi 1.2cqi;">
+          <b style="font-family:ui-monospace,monospace; color:var(--css);">&lt;main&gt;</b>
+          <span class="small muted"> — the one-per-page container for the real content</span>
+          <div class="panel" style="margin-top:.5cqi; padding:.6cqi 1cqi; background:var(--surface-2);">
+            <b style="font-family:ui-monospace,monospace; color:var(--css);">&lt;section&gt;</b> <span class="small muted">— one themed block: about, schedule, register</span>
+          </div>
+          <div class="panel" style="margin-top:.4cqi; padding:.6cqi 1cqi; background:var(--surface-2);">
+            <b style="font-family:ui-monospace,monospace; color:var(--css);">&lt;article&gt;</b> <span class="small muted">— one self-contained thing: a card, a talk, a post</span>
+          </div>
+        </div>
+        <div class="panel" style="border-color:var(--muted); padding:.9cqi 1.2cqi;">
+          <b style="font-family:ui-monospace,monospace;">&lt;footer&gt;</b> <span class="small muted">— the bottom strip: contact, credits, small print</span>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="callout">
+          <p><strong>Section or article?</strong> If you could lift it out and post it somewhere on its own and it would still make sense — that is an <code>article</code>. A speaker card is an article. “Our schedule” is a section.</p>
+        </div>
+        <div class="callout callout--warn">
+          <p><strong>One <code>main</code> per page.</strong> Everything that is not navigation, header or footer belongs inside it.</p>
+        </div>
+        <p class="small muted">These elements do almost nothing visually. They are for meaning — and later, they make your CSS far easier to write.</p>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Six words. Header, nav, main, section, article, footer. That is the vocabulary for structuring any page.”</dd>
+        <dt>Expect</dt><dd>“What is the difference between section and article?” — the callout answers it. Do not go deeper than one sentence.</dd>
+        <dt>Misconception</dt><dd>That these elements change how things look. Show that they do not; only meaning changes.</dd>
+        <dt>Hint first</dt><dd>“Which of these would a table of contents be built from?”</dd>
+        <dt>Timing</dt><dd>4 minutes.</dd>
+        <dt>Short session</dt><dd>Teach header, main, footer only.</dd>
+        <dt>Solution</dt><dd>n/a</dd>
+        <dt>Next</dt><dd>“Stand up. We are going to be the page.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-human-dom" data-section="5 · Semantic HTML" data-title="Challenge — Human DOM" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Challenge 6 · Human DOM <span class="chip chip--challenge">Whole class, on your feet</span></p>
+        <h2>Arrange yourselves into a valid page.</h2>
+      </div>
+      <button class="btn btn--primary" data-timer-start="300" data-timer-label="Human DOM">Start 5 min</button>
+    </header>
+
+    <div class="split split--sidebar">
+      <div class="stack">
+        <p class="lead">Nine cards. One correct nesting. Wrong order is fine — wrong <em>nesting</em> is not.</p>
+        <div class="row">
+          <span class="chip chip--html">header</span>
+          <span class="chip chip--html">nav</span>
+          <span class="chip chip--css">main</span>
+          <span class="chip chip--css">section “About”</span>
+          <span class="chip chip--css">section “Schedule”</span>
+          <span class="chip chip--css">section “Sessions”</span>
+          <span class="chip chip--devtools">article “Card 1”</span>
+          <span class="chip chip--devtools">article “Card 2”</span>
+          <span class="chip chip--plain">footer</span>
+        </div>
+        <details class="reveal" data-kind="solution">
+          <summary>Solution — open after the timer</summary>
+          <div class="reveal-body">
+            <pre class="code" data-lang="html">
+&lt;header&gt;
+  &lt;nav&gt;...&lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+  &lt;section id="about"&gt;...&lt;/section&gt;
+  &lt;section id="schedule"&gt;...&lt;/section&gt;
+  &lt;section id="sessions"&gt;
+    &lt;article&gt;Card 1&lt;/article&gt;
+    &lt;article&gt;Card 2&lt;/article&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;...&lt;/footer&gt;</pre>
+            <p class="small">The two articles must stand <em>inside</em> the sessions section. The nav must stand inside the header. Everything except header and footer stands inside main.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="challenge">
+        <dl class="challenge-grid">
+          <dt>Goal</dt><dd>Nine students hold nine cards and physically stand in the correct nesting — people inside a region stand behind that region's student.</dd>
+          <dt>Time</dt><dd>5 minutes</dd>
+          <dt>Hints</dt><dd>One: “Which card can only exist inside another card?”</dd>
+          <dt>Points</dt><dd>5 for correct nesting · +3 if the class explains one relationship</dd>
+          <dt>Success</dt><dd>Every card is inside the region it belongs to.</dd>
+          <dt>Extension</dt><dd>Add an <code>h1</code> card. Where does it go, and why not in the header?</dd>
+        </dl>
+        <p class="small muted">No space to move? Do it on screen: the chips above can be read out and arranged verbally, or print the card sheet from the README.</p>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“You are not standing in a line. You are standing in boxes. If you are inside main, stand behind main.”</dd>
+        <dt>Expect</dt><dd>The two article cards will try to stand beside the sections rather than inside one. That is the exact misconception worth catching.</dd>
+        <dt>Misconception</dt><dd>That nesting is about order on the page rather than containment.</dd>
+        <dt>Hint first</dt><dd>“Can an article about a talk exist outside every section? What would it be part of?”</dd>
+        <dt>Timing</dt><dd>7 minutes. Energy resets here — do it right before the break.</dd>
+        <dt>Short session</dt><dd>Run it as a discussion using the chips on screen, 90 seconds.</dd>
+        <dt>Solution</dt><dd>In the hidden Solution panel.</dd>
+        <dt>Next</dt><dd>“Sit down and put that structure into your own file.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-checkpoint-3" data-section="5 · Semantic HTML" data-title="Checkpoint 3 — semantic structure" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Catch-up checkpoint 3 of 8 <span class="chip chip--plain">Wrap what you already wrote</span></p>
+        <h2>Wrap your content. Do not retype it.</h2>
+      </div>
+      <button class="btn" data-timer-start="300" data-timer-label="Wrap in semantic regions">Start 5 min</button>
+    </header>
+
+    <div class="split split--wide-left">
+      <div class="editor">
+        <div class="editor-bar"><span class="dots"><i></i><i></i><i></i></span><span class="file-tab file-tab--html">index.html — inside &lt;body&gt;</span></div>
+        <pre class="code" data-lang="html" data-diff>
++&lt;header class="site-header"&gt;
++  &lt;a class="logo" href="#top"&gt;Nova Tech Day&lt;/a&gt;
++  &lt;nav class="navigation"&gt;
++    &lt;a href="#about"&gt;About&lt;/a&gt;
++    &lt;a href="#schedule"&gt;Schedule&lt;/a&gt;
++    &lt;a href="#sessions"&gt;Sessions&lt;/a&gt;
++  &lt;/nav&gt;
++&lt;/header&gt;
++
++&lt;main id="top"&gt;
++  &lt;section class="hero"&gt;
+     &lt;h1&gt;Nova Student Tech Day&lt;/h1&gt;
+     &lt;p&gt;A day for building, sharing and experimenting.&lt;/p&gt;
++  &lt;/section&gt;
++
++  &lt;section id="about"&gt; ...your about content... &lt;/section&gt;
++  &lt;section id="schedule"&gt; ...your schedule... &lt;/section&gt;
++  &lt;section id="sessions"&gt; ...your cards... &lt;/section&gt;
++&lt;/main&gt;
++
++&lt;footer class="site-footer"&gt;
++  &lt;p&gt;Made by your name, at your school.&lt;/p&gt;
++&lt;/footer&gt;</pre>
+      </div>
+
+      <div class="stack">
+        <ul class="checklist">
+          <li>A <code>header</code> containing a <code>nav</code></li>
+          <li>One <code>main</code></li>
+          <li>At least three <code>section</code> elements</li>
+          <li>Each section has an <code>id</code> your nav links to</li>
+          <li>A <code>footer</code> at the end</li>
+          <li>Class names on the pieces you will style later</li>
+        </ul>
+        <div class="callout callout--ok">
+          <p><strong>Test it now:</strong> click every link in your nav. If one does not jump, the <code>id</code> and the <code>href</code> do not match.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“You are not writing new content. You are putting walls around content that already exists.”</dd>
+        <dt>Expect</dt><dd>Someone deletes their content while adding wrappers. Remind them: add the opening tag above, the closing tag below.</dd>
+        <dt>Misconception</dt><dd>That the page should look different afterwards. It will look almost identical — that is expected.</dd>
+        <dt>Hint first</dt><dd>“Add the closing tag immediately after the opening one, then move it down.”</dd>
+        <dt>Timing</dt><dd>8 minutes. This is the last HTML-only task before the break.</dd>
+        <dt>Short session</dt><dd>Wrap header, main and footer only.</dd>
+        <dt>Solution</dt><dd>Code on the slide.</dd>
+        <dt>Next</dt><dd>“Ten minutes. Back at the time on screen.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<!-- ======================================================================
+     ASSIGNMENT 1 — set at the end of session one (after slide 28)
+     In a single-day delivery, skip these four slides.
+     ====================================================================== -->
+
+<section class="slide" id="s-assignment-brief" data-section="Assignment 1" data-title="Assignment 1 — the brief" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Assignment 1 · Take-home <span class="chip chip--challenge">Due next session</span></p>
+        <h2>Structure something real. Two pages. No CSS.</h2>
+      </div>
+    </header>
+
+    <div class="split split--wide-left">
+      <div class="stack">
+        <p class="lead">Build a small two-page website about something you actually care about, using only the HTML you have written today.</p>
+        <div class="callout">
+          <p><strong>Pick your own subject.</strong> A club you are in · a game you play · a band · a sport · a place you know well · a person you admire · a thing you collect · a cause you care about. If you would not read it, do not write it.</p>
+        </div>
+        <div class="callout callout--warn">
+          <p><strong>The one hard rule: no CSS.</strong> No <code>style</code> attributes, no <code>&lt;style&gt;</code> block, no stylesheet. Your page will look plain — black text, blue links, Times New Roman. <em>That is correct.</em> We style it next session, and styling is far easier on top of good structure.</p>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="panel">
+          <p class="panel-title">Your folder</p>
+          <pre class="code">my-project/
+├── index.html
+└── about.html</pre>
+          <p class="small muted">Two files, one folder. No <code>styles.css</code> this time — you would only be tempted.</p>
+        </div>
+        <div class="panel">
+          <p class="panel-title">Roughly how long</p>
+          <ul class="checklist">
+            <li>Page one — 40 minutes</li>
+            <li>Page two — 25 minutes</li>
+            <li>Checking and fixing — 15 minutes</li>
+          </ul>
+          <p class="small muted">If it is taking three hours, you are writing too much text. The structure is the assignment, not the essay.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Everything on the next slide is something you built today. There is nothing new to learn before you start — only one or two optional extras.”</dd>
+        <dt>Expect</dt><dd>“Can I use CSS? I found a tutorial.” Hold the line, and say why: structure gets skipped forever once styling starts being fun.</dd>
+        <dt>Misconception</dt><dd>That a plain page means an unfinished page. Show them Checkpoint 2 again — unstyled, valid, complete.</dd>
+        <dt>Hint first</dt><dd>“Write your headings first, all of them, before a single paragraph. The shape comes before the words.”</dd>
+        <dt>Timing</dt><dd>3 minutes to brief. Say the actual due date out loud and write it on the board.</dd>
+        <dt>Short session</dt><dd>Set page one only and drop the second page.</dd>
+        <dt>Solution</dt><dd>Any subject. The marker is structure, not topic.</dd>
+        <dt>Next</dt><dd>“Here is exactly what has to be in it.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-assignment-required" data-section="Assignment 1" data-title="Assignment 1 — what must be in it" data-accent="challenge" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Assignment 1 · Checklist <span class="chip chip--html">All of this you have done</span></p>
+        <h2>Tick every box.</h2>
+      </div>
+    </header>
+
+    <div class="cols-3">
+      <div class="panel panel--accent">
+        <p class="panel-title">Both pages</p>
+        <ul class="checklist">
+          <li><code>&lt;!doctype html&gt;</code> on line one</li>
+          <li><code>&lt;html lang="en"&gt;</code></li>
+          <li>charset and viewport <code>meta</code> tags</li>
+          <li>A <code>title</code> that names the page, not “Document”</li>
+          <li>A <code>header</code> containing a <code>nav</code></li>
+          <li>One <code>main</code></li>
+          <li>Exactly one <code>h1</code></li>
+          <li>A <code>footer</code> with your name</li>
+          <li>Tidy indentation</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <p class="panel-title">Page one — index.html</p>
+        <ul class="checklist">
+          <li>At least <strong>three</strong> <code>section</code> elements</li>
+          <li>Each section has an <code>id</code> and an <code>h2</code></li>
+          <li>A nav link that jumps to each section</li>
+          <li>At least <strong>two</strong> <code>article</code> elements inside one section</li>
+          <li>A list of at least three items</li>
+          <li>One <code>img</code> with real <code>alt</code> text</li>
+          <li>One <code>strong</code> where the emphasis is genuine</li>
+          <li>A link to page two</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <p class="panel-title">Page two — about.html</p>
+        <ul class="checklist">
+          <li>At least <strong>two</strong> <code>section</code> elements</li>
+          <li>A nav link back to page one</li>
+          <li>At least one thing from the next slide</li>
+          <li>Something that could not just live on page one — give it a reason to exist</li>
+        </ul>
+        <div class="callout callout--ok" style="margin-top:1cqi;">
+          <p><strong>Page two ideas:</strong> a timeline, a set of rules, a list of people, a how-to, a set of answers to questions people ask.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Photograph this slide, or take the printed checklist. Tick boxes as you go — do not leave the checking to the end.”</dd>
+        <dt>Expect</dt><dd>The “two articles inside one section” item is the one people skip. It is also the one that proves they understood nesting.</dd>
+        <dt>Misconception</dt><dd>That <code>section</code> and <code>article</code> are interchangeable. Repeat the test: could you lift it out and have it still make sense?</dd>
+        <dt>Hint first</dt><dd>“Build page one completely, check it, then copy the whole file to about.html and gut the middle.”</dd>
+        <dt>Timing</dt><dd>3 minutes.</dd>
+        <dt>Short session</dt><dd>Drop the article requirement and the second page.</dd>
+        <dt>Solution</dt><dd>Checkpoint 3 on slide 28 is the shape they are aiming for.</dd>
+        <dt>Next</dt><dd>“And here is the little bit extra — five things you have not used yet.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-assignment-stretch" data-section="Assignment 1" data-title="Assignment 1 — a little more" data-accent="html" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Assignment 1 · Stretch <span class="chip chip--html">Use at least one</span></p>
+        <h2>Five new elements. Same rules as everything else.</h2>
+      </div>
+      <button class="btn" data-timer-start="300" data-timer-label="Try the new elements">Try them — 5 min</button>
+    </header>
+
+    <div class="split split--sidebar">
+      <div class="playground" data-playground>
+        <div class="pg-editors">
+          <div class="pg-editor">
+            <div class="editor-bar"><span class="file-tab file-tab--html">try them here</span></div>
+            <textarea data-pg-html rows="16" spellcheck="false" aria-label="Try the five new elements">&lt;h2&gt;How a match works&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Toss for ends&lt;/li&gt;
+  &lt;li&gt;Two halves of forty minutes&lt;/li&gt;
+  &lt;li&gt;Handshakes, then chips&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;figure&gt;
+  &lt;img src="team.jpg" alt="Our team lined up before kickoff"&gt;
+  &lt;figcaption&gt;The squad, twenty minutes before the whistle.&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;We lost every game and learned every rule.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Equipment
+    &lt;ul&gt;
+      &lt;li&gt;Boots&lt;/li&gt;
+      &lt;li&gt;Shin pads&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Snacks&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;a href="about.html"&gt;Read about the club&lt;/a&gt;</textarea>
+          </div>
+        </div>
+        <div class="pg-side">
+          <iframe data-pg-preview class="pg-preview" sandbox title="Preview of the new elements"></iframe>
+          <div class="pg-actions">
+            <button type="button" class="btn btn--primary" data-pg-action="run">Run ▸</button>
+            <button type="button" class="btn" data-pg-action="reset">Reset</button>
+            <button type="button" class="btn" data-pg-action="copy">Copy</button>
+          </div>
+          <p class="pg-note">The image will not load here — there is no <code>team.jpg</code> in this deck. Notice what the <code>alt</code> text does when a picture is missing.</p>
+        </div>
+      </div>
+
+      <div class="stack">
+        <dl class="deflist">
+          <dt>ol</dt><dd>An <strong>ordered</strong> list. Use it when the order carries meaning: steps, rankings, a timetable. The numbers come free.</dd>
+          <dt>figure<br>figcaption</dt><dd>An image plus a caption, tied together so a browser knows the caption belongs to that picture. <code>alt</code> describes it; the caption comments on it.</dd>
+          <dt>blockquote</dt><dd>A quotation from somewhere else. Put a <code>p</code> inside it. Say who said it.</dd>
+          <dt>nested ul</dt><dd>A list inside a list item — not inside the <code>ul</code>. Look carefully at where the inner <code>&lt;ul&gt;</code> opens.</dd>
+          <dt>a link to a file</dt><dd>Write <code>href="about.html"</code> to reach another <em>file</em> rather than an <code>id</code>. No <code>#</code>. Same folder, exact spelling, exact capitals.</dd>
+        </dl>
+        <div class="callout callout--warn">
+          <p><strong>Use at least one of these,</strong> and be ready to say why that element and not a different one.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“Five minutes. Change the words to yours and run it. The nested list is the one worth staring at.”</dd>
+        <dt>Expect</dt><dd>The nested list gets opened as a sibling of the outer <code>li</code> rather than inside it. It still renders, roughly — which is exactly why it is worth pointing out.</dd>
+        <dt>Misconception</dt><dd>That <code>figcaption</code> replaces <code>alt</code>. It does not: the caption is read by everyone, the alt text stands in for the image itself.</dd>
+        <dt>Hint first</dt><dd>“Where does the inner <code>&lt;ul&gt;</code> open — before or after the closing <code>&lt;/li&gt;</code>?”</dd>
+        <dt>Timing</dt><dd>6 minutes with the playground.</dd>
+        <dt>Short session</dt><dd>Show <code>ol</code> and the page-to-page link only.</dd>
+        <dt>Solution</dt><dd>The starting code in the playground is already correct — have them break it and fix it.</dd>
+        <dt>Next</dt><dd>“Before you hand it in, run these checks yourself.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+
+<section class="slide" id="s-assignment-submit" data-section="Assignment 1" data-title="Assignment 1 — check, mark, submit" data-accent="debug" aria-hidden="true">
+  <div class="slide-inner">
+    <header class="slide-head">
+      <div>
+        <p class="kicker">Assignment 1 · Before you hand it in <span class="chip chip--debug">Self-check</span></p>
+        <h2>Ten checks, then submit.</h2>
+      </div>
+    </header>
+
+    <div class="cols-3">
+      <div class="panel">
+        <p class="panel-title">Check it yourself first</p>
+        <ul class="checklist">
+          <li>Both pages open in a browser</li>
+          <li>Every nav link goes somewhere real</li>
+          <li>Page one links to page two, and back again</li>
+          <li>Every jump link lands on a section</li>
+          <li>The image loads — or you know why it does not</li>
+          <li>The <code>alt</code> text describes the picture</li>
+          <li>No link says “click here”</li>
+          <li>One <code>h1</code> per page, no skipped levels</li>
+          <li>Every tag you opened, you closed</li>
+          <li>Nothing visible sits outside <code>body</code></li>
+        </ul>
+      </div>
+
+      <div class="panel panel--accent">
+        <p class="panel-title">How it is marked — 20 points</p>
+        <ul class="pointlist">
+          <li><span>Valid document structure, both pages</span><b>4</b></li>
+          <li><span>Semantic regions used honestly</span><b>4</b></li>
+          <li><span>Headings and nesting</span><b>4</b></li>
+          <li><span>Links and images that work</span><b>4</b></li>
+          <li><span>Real content, plus one stretch element</span><b>4</b></li>
+        </ul>
+        <div class="callout callout--ok" style="margin-top:1cqi;">
+          <p><strong>No marks for looks.</strong> There is no CSS, so there is nothing to judge. Marks are for structure, working links and words worth reading.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="panel-title">The five most likely faults</p>
+        <ol class="steps steps--compact">
+          <li><span>Link to page two spelled differently from the file — <code>About.html</code> is not <code>about.html</code>.</span></li>
+          <li><span>Jump link with no matching <code>id</code>.</span></li>
+          <li><span>Image path pointing somewhere that does not exist.</span></li>
+          <li><span>A missing closing tag, so half the page goes strange.</span></li>
+          <li><span><code>alt=""</code> left on a photograph that actually matters.</span></li>
+        </ol>
+        <div class="callout callout--warn" style="margin-top:1cqi;">
+          <p><strong>Submit:</strong> put both files in one folder, zip the folder, upload it. Be ready to explain any line I point at.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h4>Instructor notes</h4>
+      <dl>
+        <dt>Say</dt><dd>“The ten checks are the assignment as much as the building is. Run them before you upload, not after I mark it.”</dd>
+        <dt>Expect</dt><dd>Filename-case mismatches are the single biggest cause of broken submissions — it works on their machine and breaks on yours. Warn twice.</dd>
+        <dt>Misconception</dt><dd>“It opened for me, so it works.” Local file systems forgive capitalisation; almost nothing else does.</dd>
+        <dt>Hint first</dt><dd>“Close your editor, open both files fresh from the folder, and click every single link.”</dd>
+        <dt>Timing</dt><dd>3 minutes. Confirm the submission route and the due date out loud.</dd>
+        <dt>Short session</dt><dd>Read the ten checks aloud and hand out the printed version.</dd>
+        <dt>Solution</dt><dd>Rubric and printable checklist are both in README §15.</dd>
+        <dt>Next</dt><dd>“Next session: we make it look like something. Bring this file — we build straight on top of it.”</dd>
+      </dl>
+    </aside>
+  </div>
+</section>
+</main>
+
+<!-- ======================================================================
+     DECK CHROME
+     ====================================================================== -->
+
+<div class="progress" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+<div class="section-marks" id="sectionMarks" aria-hidden="true"></div>
+
+<footer class="toolbar">
+  <div class="toolbar-meta">
+    <span class="toolbar-section" id="toolbarSection"></span>
+    <span class="toolbar-title" id="toolbarTitle"></span>
+  </div>
+
+  <nav class="toolbar-nav" aria-label="Slide navigation">
+    <button type="button" class="icon-btn" data-action="prev">◀ Prev</button>
+    <span class="counter" id="counter" role="status" aria-live="polite">1 / 1</span>
+    <button type="button" class="icon-btn" data-action="next">Next ▶</button>
+  </nav>
+
+  <div class="toolbar-actions">
+    <button type="button" class="icon-btn" data-action="toggle-panel" data-panel-toggle="overview" aria-pressed="false">All slides</button>
+    <button type="button" class="icon-btn" data-action="toggle-notes" aria-pressed="false">Notes</button>
+    <button type="button" class="icon-btn" data-action="toggle-panel" data-panel-toggle="timer" aria-pressed="false">Timer</button>
+    <button type="button" class="icon-btn" data-action="toggle-panel" data-panel-toggle="scoreboard" aria-pressed="false">Scores</button>
+    <button type="button" class="icon-btn" data-action="reset-exercises">Reset exercises</button>
+    <button type="button" class="icon-btn" data-action="toggle-theme" aria-pressed="false">Bright room</button>
+    <button type="button" class="icon-btn" data-action="fullscreen">Full screen</button>
+    <button type="button" class="icon-btn" data-action="toggle-panel" data-panel-toggle="help" aria-label="Keyboard shortcuts">?</button>
+  </div>
+</footer>
+
+<aside class="panel-float overview" id="overview" hidden aria-label="Slide navigator">
+  <button type="button" class="icon-btn overview-close" data-action="close-panel">Close</button>
+  <h2>All slides</h2>
+  <div class="overview-grid" id="overviewGrid"></div>
+</aside>
+
+<aside class="panel-float timer" id="timer" hidden aria-label="Classroom timer">
+  <h2>Timer <span id="timerLabel" class="muted"></span></h2>
+  <p class="timer-display" id="timerDisplay" role="timer">3:00</p>
+  <div class="timer-presets">
+    <button type="button" class="icon-btn" data-timer-preset="30" data-timer-label="30s prediction">30s</button>
+    <button type="button" class="icon-btn" data-timer-preset="60" data-timer-label="60s speed edit">60s</button>
+    <button type="button" class="icon-btn" data-timer-preset="180" data-timer-label="3 min mini challenge">3m</button>
+    <button type="button" class="icon-btn" data-timer-preset="300" data-timer-label="5 min pair challenge">5m</button>
+    <button type="button" class="icon-btn" data-timer-preset="900" data-timer-label="15 min project build">15m</button>
+  </div>
+  <div class="timer-controls">
+    <button type="button" class="icon-btn" id="timerToggle" data-timer="start">Start</button>
+    <button type="button" class="icon-btn" data-timer="reset">Reset</button>
+    <button type="button" class="icon-btn" data-action="toggle-sound" aria-pressed="true">Sound on</button>
+    <button type="button" class="icon-btn" data-action="close-panel">Hide</button>
+  </div>
+</aside>
+
+<aside class="panel-float scoreboard" id="scoreboard" hidden aria-label="Team scoreboard">
+  <h2>Team points</h2>
+  <p class="team-count">
+    <label for="teamCount">Number of teams</label>
+    <select id="teamCount">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+    </select>
+  </p>
+  <div id="teamRows"></div>
+  <div class="scoreboard-foot">
+    <button type="button" class="icon-btn" data-action="reset-scores">Reset scores</button>
+    <button type="button" class="icon-btn" data-action="close-panel">Hide</button>
+  </div>
+  <p class="small muted" style="margin-top:.6rem;">Points for correct predictions, clear explanations, finding bugs, helping another team, readable code and optional extensions — not for speed alone. Scores are kept in this browser and survive a refresh.</p>
+</aside>
+
+<aside class="panel-float help" id="help" hidden aria-label="Keyboard shortcuts">
+  <button type="button" class="icon-btn overview-close" data-action="close-panel">Close</button>
+  <h2>Keyboard shortcuts</h2>
+  <table>
+    <tbody>
+      <tr><td><kbd>→</kbd> <kbd>Space</kbd> <kbd>PageDown</kbd></td><td>Next slide</td></tr>
+      <tr><td><kbd>←</kbd> <kbd>PageUp</kbd></td><td>Previous slide</td></tr>
+      <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>First / last slide</td></tr>
+      <tr><td><kbd>O</kbd></td><td>Open the slide navigator</td></tr>
+      <tr><td><kbd>N</kbd></td><td>Show or hide instructor notes</td></tr>
+      <tr><td><kbd>T</kbd></td><td>Show or hide the timer</td></tr>
+      <tr><td><kbd>S</kbd></td><td>Show or hide the scoreboard</td></tr>
+      <tr><td><kbd>B</kbd></td><td>Switch between dark and bright classroom modes</td></tr>
+      <tr><td><kbd>F</kbd></td><td>Full screen</td></tr>
+      <tr><td><kbd>R</kbd></td><td>Reset the exercises on this slide</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Close open panels</td></tr>
+      <tr><td><kbd>?</kbd></td><td>This list</td></tr>
+    </tbody>
+  </table>
+  <p class="small muted">Shortcuts are ignored while you are typing in a code editor or a text field.</p>
+</aside>
+
+<div class="confetti-layer" id="confetti" aria-hidden="true"></div>
+
+<script>
+/* ==========================================================================
+   Web Development From Zero — presentation behaviour
+   --------------------------------------------------------------------------
+   No dependencies, no build step. Everything here is plain browser JS.
+
+   Sections:
+     1.  Small helpers (storage, DOM, sound)
+     2.  Syntax highlighting for the code panels
+     3.  Deck navigation, progress, overview
+     4.  Presenter notes, theme, fullscreen
+     5.  Timers
+     6.  Team scoreboard
+     7.  Live playgrounds (sandboxed iframe previews)
+     8.  Box model lab, Flexbox lab, viewport tester
+     9.  Quizzes and sorting activities
+     10. Celebration + exercise reset
+     11. Keyboard shortcuts and start-up
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  /* ---------- 1. Helpers ---------- */
+
+  const $ = (selector, scope) => (scope || document).querySelector(selector);
+  const $$ = (selector, scope) =>
+    Array.from((scope || document).querySelectorAll(selector));
+
+  /** localStorage that never throws — private mode and file:// may block it. */
+  const store = {
+    get(key, fallback) {
+      try {
+        const raw = window.localStorage.getItem("wdz." + key);
+        return raw === null ? fallback : JSON.parse(raw);
+      } catch (error) {
+        return fallback;
+      }
+    },
+    set(key, value) {
+      try {
+        window.localStorage.setItem("wdz." + key, JSON.stringify(value));
+      } catch (error) {
+        /* Preferences are a convenience, never a requirement. */
+      }
+    },
+  };
+
+  const prefersReducedMotion = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let soundEnabled = store.get("sound", true);
+
+  /** Short two-tone chime used when a timer finishes. */
+  function playChime() {
+    if (!soundEnabled) return;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    try {
+      const ctx = new AudioCtx();
+      [660, 880].forEach((frequency, index) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = frequency;
+        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.22, ctx.currentTime + 0.02 + index * 0.18);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35 + index * 0.18);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(ctx.currentTime + index * 0.18);
+        osc.stop(ctx.currentTime + 0.45 + index * 0.18);
+      });
+      setTimeout(() => ctx.close(), 1200);
+    } catch (error) {
+      /* Sound is optional. */
+    }
+  }
+
+  /* ---------- 2. Syntax highlighting ---------- */
+
+  const ENTITIES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" };
+  const escapeHtml = (text) => text.replace(/[&<>"]/g, (ch) => ENTITIES[ch]);
+
+  function colourTag(rawTag) {
+    return escapeHtml(rawTag)
+      .replace(/^(&lt;[!/]?)([\w-]+)/, '<span class="t-punct">$1</span><span class="t-tag">$2</span>')
+      .replace(
+        /([\w-]+)(=)(&quot;[^&]*?&quot;)/g,
+        '<span class="t-attr">$1</span><span class="t-punct">$2</span><span class="t-str">$3</span>'
+      )
+      .replace(/(&gt;)$/, '<span class="t-punct">$1</span>');
+  }
+
+  function highlightMarkup(source) {
+    const tagPattern = /<!--[\s\S]*?-->|<[!/]?[a-zA-Z][^>]*>/g;
+    let out = "";
+    let cursor = 0;
+    let match;
+    while ((match = tagPattern.exec(source)) !== null) {
+      out += escapeHtml(source.slice(cursor, match.index));
+      out += match[0].startsWith("<!--")
+        ? '<span class="t-comment">' + escapeHtml(match[0]) + "</span>"
+        : colourTag(match[0]);
+      cursor = tagPattern.lastIndex;
+    }
+    return out + escapeHtml(source.slice(cursor));
+  }
+
+  function colourValues(value) {
+    return value.replace(
+      /(#[0-9a-fA-F]{3,8}\b|\b\d+(?:\.\d+)?(?:px|rem|em|%|s|ms|ch|vw|vh|deg)?\b)/g,
+      '<span class="t-num">$1</span>'
+    );
+  }
+
+  function highlightStyles(source) {
+    const escaped = escapeHtml(source);
+    // One pass, ordered alternatives: comment | at-rule | declaration | selector.
+    const pattern =
+      /(\/\*[\s\S]*?\*\/)|(@[\w-]+)|(^[ \t]+)([-\w]+)(\s*:\s*)([^;\n]*)(;?)|(^[ \t]*[^\n{}]+)(?=\{)/gm;
+    return escaped.replace(
+      pattern,
+      (whole, comment, atRule, indent, prop, colon, value, semi, selector) => {
+        if (comment) return '<span class="t-comment">' + comment + "</span>";
+        if (atRule) return '<span class="t-at">' + atRule + "</span>";
+        if (prop) {
+          return (
+            indent +
+            '<span class="t-prop">' + prop + "</span>" +
+            colon +
+            '<span class="t-val">' + colourValues(value) + "</span>" +
+            semi
+          );
+        }
+        if (selector) return '<span class="t-sel">' + selector + "</span>";
+        return whole;
+      }
+    );
+  }
+
+  const highlightFor = (lang, source) =>
+    lang === "css" ? highlightStyles(source) : highlightMarkup(source);
+
+  /** Diff blocks keep their "+" / "-" markers and colour each line separately. */
+  function highlightDiff(lang, source) {
+    return source
+      .split("\n")
+      .map((line) => {
+        const marker = line.charAt(0);
+        if (marker === "+" || marker === "-") {
+          const cls = marker === "+" ? "dline add" : "dline del";
+          return '<span class="' + cls + '">' + highlightFor(lang, line.slice(1)) + "</span>";
+        }
+        return '<span class="dline">' + highlightFor(lang, line) + "</span>";
+      })
+      .join("\n");
+  }
+
+  function paintCodeBlocks() {
+    $$("pre[data-lang]").forEach((block) => {
+      const lang = block.getAttribute("data-lang");
+      const source = block.textContent.replace(/^\n/, "").replace(/\s+$/, "");
+      block.innerHTML = block.hasAttribute("data-diff")
+        ? highlightDiff(lang, source)
+        : highlightFor(lang, source);
+    });
+  }
+
+  /* ---------- 3. Deck navigation ---------- */
+
+  const deck = $(".deck");
+  const slides = $$(".slide");
+  const counter = $("#counter");
+  const progressFill = $("#progressFill");
+  const toolbarSection = $("#toolbarSection");
+  const toolbarTitle = $("#toolbarTitle");
+  let currentIndex = 0;
+
+  function slideIndexFromHash() {
+    const id = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+    if (!id) return -1;
+    return slides.findIndex((slide) => slide.id === id);
+  }
+
+  function goTo(index, options) {
+    const settings = options || {};
+    const target = Math.max(0, Math.min(slides.length - 1, index));
+    slides.forEach((slide, i) => {
+      const active = i === target;
+      slide.classList.toggle("is-active", active);
+      slide.setAttribute("aria-hidden", active ? "false" : "true");
+    });
+    currentIndex = target;
+
+    const slide = slides[target];
+    counter.textContent = target + 1 + " / " + slides.length;
+    progressFill.style.width = ((target + 1) / slides.length) * 100 + "%";
+    toolbarSection.textContent = slide.dataset.section || "";
+    toolbarTitle.textContent = slide.dataset.title || "";
+
+    if (!settings.silent) {
+      const newHash = "#" + slide.id;
+      if (window.location.hash !== newHash) {
+        history.replaceState(null, "", newHash);
+      }
+    }
+    store.set("slide", slide.id);
+    markOverviewCurrent();
+    const inner = slide.querySelector(".slide-inner");
+    if (inner) inner.scrollTop = 0;
+  }
+
+  const next = () => goTo(currentIndex + 1);
+  const previous = () => goTo(currentIndex - 1);
+
+  /* Section markers on the progress bar */
+  function buildSectionMarks() {
+    const marks = $("#sectionMarks");
+    let lastSection = null;
+    slides.forEach((slide, index) => {
+      if (slide.dataset.section === lastSection) return;
+      lastSection = slide.dataset.section;
+      const mark = document.createElement("span");
+      mark.className = "section-mark";
+      mark.style.left = (index / slides.length) * 100 + "%";
+      mark.title = lastSection;
+      marks.appendChild(mark);
+    });
+  }
+
+  /* Slide navigator */
+  function buildOverview() {
+    const grid = $("#overviewGrid");
+    const fragment = document.createDocumentFragment();
+    slides.forEach((slide, index) => {
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "overview-item";
+      item.dataset.action = "goto";
+      item.dataset.index = String(index);
+      item.innerHTML =
+        '<b>' + String(index + 1).padStart(2, "0") + "</b>" +
+        '<span class="ov-sec"></span><span class="ov-title"></span>';
+      item.querySelector(".ov-sec").textContent = slide.dataset.section || "";
+      item.querySelector(".ov-title").textContent = slide.dataset.title || "";
+      fragment.appendChild(item);
+    });
+    grid.appendChild(fragment);
+  }
+
+  function markOverviewCurrent() {
+    $$(".overview-item").forEach((item, index) => {
+      item.classList.toggle("is-current", index === currentIndex);
+      item.setAttribute("aria-current", index === currentIndex ? "true" : "false");
+    });
+  }
+
+  function togglePanel(id, force) {
+    const panel = document.getElementById(id);
+    if (!panel) return;
+    const show = typeof force === "boolean" ? force : panel.hidden;
+    panel.hidden = !show;
+    const trigger = $('[data-panel-toggle="' + id + '"]');
+    if (trigger) trigger.setAttribute("aria-pressed", String(show));
+    if (show) {
+      const focusable = panel.querySelector("button, input, select");
+      if (focusable) focusable.focus();
+    }
+  }
+
+  /* ---------- 4. Notes, theme, fullscreen ---------- */
+
+  function applyNotes(on) {
+    document.body.classList.toggle("notes-on", on);
+    const button = $('[data-action="toggle-notes"]');
+    if (button) button.setAttribute("aria-pressed", String(on));
+    store.set("notes", on);
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    const button = $('[data-action="toggle-theme"]');
+    if (button) {
+      button.setAttribute("aria-pressed", String(theme === "light"));
+      button.textContent = theme === "light" ? "Dark room" : "Bright room";
+    }
+    store.set("theme", theme);
+  }
+
+  function toggleFullscreen() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
+  }
+
+  /* ---------- 5. Timers ---------- */
+
+  const timerPanel = $("#timer");
+  const timerDisplay = $("#timerDisplay");
+  const timerLabel = $("#timerLabel");
+  let timerTotal = 180;
+  let timerRemaining = 180;
+  let timerHandle = null;
+
+  const formatTime = (seconds) =>
+    Math.floor(seconds / 60) + ":" + String(seconds % 60).padStart(2, "0");
+
+  function renderTimer() {
+    timerDisplay.textContent = formatTime(Math.max(0, timerRemaining));
+    timerPanel.classList.toggle("is-final", timerRemaining <= 10 && timerRemaining > 0);
+    timerPanel.classList.toggle("is-done", timerRemaining <= 0);
+    const toggleButton = $("#timerToggle");
+    toggleButton.textContent = timerHandle ? "Pause" : "Start";
+    toggleButton.dataset.timer = timerHandle ? "pause" : "start";
+  }
+
+  function stopTimer() {
+    if (timerHandle) {
+      clearInterval(timerHandle);
+      timerHandle = null;
+    }
+  }
+
+  function startTimer() {
+    if (timerHandle || timerRemaining <= 0) return;
+    timerHandle = setInterval(() => {
+      timerRemaining -= 1;
+      if (timerRemaining <= 0) {
+        timerRemaining = 0;
+        stopTimer();
+        playChime();
+      }
+      renderTimer();
+    }, 1000);
+    renderTimer();
+  }
+
+  function setTimer(seconds, label, autoStart) {
+    stopTimer();
+    timerTotal = seconds;
+    timerRemaining = seconds;
+    timerLabel.textContent = label || formatTime(seconds) + " round";
+    togglePanel("timer", true);
+    renderTimer();
+    if (autoStart) startTimer();
+  }
+
+  /* ---------- 6. Team scoreboard ---------- */
+
+  const DEFAULT_TEAMS = ["Team Tag", "Team Selector", "Team Flexbox", "Team Inspect", "Team Semantic", "Team Remix"];
+  let teams = store.get("scores", null) || DEFAULT_TEAMS.slice(0, 4).map((name) => ({ name: name, score: 0 }));
+
+  function saveTeams() {
+    store.set("scores", teams);
+  }
+
+  function renderTeams() {
+    const holder = $("#teamRows");
+    holder.innerHTML = "";
+    teams.forEach((team, index) => {
+      const row = document.createElement("div");
+      row.className = "team-row";
+      row.innerHTML =
+        '<input type="text" value="" aria-label="Team name">' +
+        '<button type="button" class="score-btn" data-score="-1" aria-label="Subtract a point">&minus;</button>' +
+        '<span class="team-score">0</span>' +
+        '<button type="button" class="score-btn" data-score="1" aria-label="Add a point">+</button>';
+      row.dataset.team = String(index);
+      row.querySelector("input").value = team.name;
+      row.querySelector(".team-score").textContent = String(team.score);
+      holder.appendChild(row);
+    });
+    $("#teamCount").value = String(teams.length);
+  }
+
+  function changeTeamCount(count) {
+    const wanted = Number(count);
+    while (teams.length < wanted) {
+      teams.push({ name: DEFAULT_TEAMS[teams.length] || "Team " + (teams.length + 1), score: 0 });
+    }
+    teams = teams.slice(0, wanted);
+    saveTeams();
+    renderTeams();
+  }
+
+  /* ---------- 7. Live playgrounds ---------- */
+
+  const PREVIEW_SHELL =
+    '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1">' +
+    "<style>html{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#172033;background:#fff}" +
+    "body{margin:0;padding:14px}img{max-width:100%;display:block}</style>";
+
+  function renderPlayground(playground) {
+    const htmlArea = $("[data-pg-html]", playground);
+    const cssArea = $("[data-pg-css]", playground);
+    const frame = $("[data-pg-preview]", playground);
+    if (!frame) return;
+    const css = cssArea ? cssArea.value : "";
+    const markup = htmlArea ? htmlArea.value : "";
+    // Student code only ever runs inside a sandboxed frame, never in this page.
+    frame.srcdoc = PREVIEW_SHELL + "<style>" + css + "</style></head><body>" + markup + "</body></html>";
+  }
+
+  function resetPlayground(playground) {
+    $$("[data-pg-html], [data-pg-css]", playground).forEach((area) => {
+      area.value = area.dataset.initial || "";
+    });
+    $$("details.reveal", playground).forEach((reveal) => {
+      reveal.open = false;
+    });
+    renderPlayground(playground);
+  }
+
+  function copyPlayground(playground, button) {
+    const htmlArea = $("[data-pg-html]", playground);
+    const cssArea = $("[data-pg-css]", playground);
+    const parts = [];
+    if (htmlArea) parts.push("<!-- index.html -->\n" + htmlArea.value);
+    if (cssArea) parts.push("/* styles.css */\n" + cssArea.value);
+    const text = parts.join("\n\n");
+    const done = () => {
+      const original = button.textContent;
+      button.textContent = "Copied";
+      setTimeout(() => {
+        button.textContent = original;
+      }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, () => legacyCopy(text, done));
+    } else {
+      legacyCopy(text, done);
+    }
+  }
+
+  function legacyCopy(text, done) {
+    const scratch = document.createElement("textarea");
+    scratch.value = text;
+    scratch.setAttribute("aria-hidden", "true");
+    scratch.style.position = "fixed";
+    scratch.style.opacity = "0";
+    document.body.appendChild(scratch);
+    scratch.select();
+    try {
+      document.execCommand("copy");
+      done();
+    } catch (error) {
+      /* Clipboard blocked — students can still select the text by hand. */
+    }
+    document.body.removeChild(scratch);
+  }
+
+  function setUpPlaygrounds() {
+    $$("[data-playground]").forEach((playground) => {
+      $$("[data-pg-html], [data-pg-css]", playground).forEach((area) => {
+        area.dataset.initial = area.value;
+      });
+      renderPlayground(playground);
+    });
+  }
+
+  /* Typing runs the preview shortly after the student stops typing. */
+  let liveRunTimer = null;
+  document.addEventListener("input", (event) => {
+    const area = event.target.closest("[data-pg-html], [data-pg-css]");
+    if (!area) return;
+    const playground = area.closest("[data-playground]");
+    clearTimeout(liveRunTimer);
+    liveRunTimer = setTimeout(() => renderPlayground(playground), 450);
+  });
+
+  /* Tab inside a code textarea should indent, not jump to the next control. */
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Tab" || event.shiftKey) return;
+    const area = event.target.closest("[data-pg-html], [data-pg-css]");
+    if (!area) return;
+    event.preventDefault();
+    const start = area.selectionStart;
+    area.value = area.value.slice(0, start) + "  " + area.value.slice(area.selectionEnd);
+    area.selectionStart = area.selectionEnd = start + 2;
+  });
+
+  /* ---------- 8. Box model lab, Flexbox lab, viewport tester ---------- */
+
+  function updateBoxLab(lab) {
+    const target = $("[data-box-target]", lab);
+    const outer = $("[data-box-outer]", lab);
+    const values = {};
+    $$("[data-box]", lab).forEach((input) => {
+      values[input.dataset.box] = Number(input.value);
+      const output = $('output[for="' + input.id + '"]', lab);
+      if (output) output.textContent = input.value + "px";
+    });
+    const borderBox = $("[data-box-toggle]", lab).checked;
+    outer.style.setProperty("--m", values.margin + "px");
+    target.style.setProperty("--p", values.padding + "px");
+    target.style.setProperty("--b", values.border + "px");
+    target.style.setProperty("--w", values.width + "px");
+    target.style.setProperty("--bs", borderBox ? "border-box" : "content-box");
+
+    const painted = borderBox
+      ? values.width
+      : values.width + values.padding * 2 + values.border * 2;
+    $("[data-box-readout]", lab).textContent =
+      "box-sizing: " + (borderBox ? "border-box" : "content-box") +
+      "  →  space used across the page: " + painted + "px" +
+      " (+ " + values.margin * 2 + "px margin)";
+  }
+
+  function updateFlexLab(lab) {
+    const stage = $("[data-flex-stage]", lab);
+    const declarations = ["display: flex"];
+    $$("[data-flex]", lab).forEach((control) => {
+      const property = control.dataset.flex;
+      const value = control.value;
+      stage.style.setProperty(property, value);
+      declarations.push(property + ": " + value);
+    });
+    const output = $("[data-flex-css]", lab);
+    if (output) {
+      output.textContent = ".cards {\n  " + declarations.join(";\n  ") + ";\n}";
+      output.innerHTML = highlightStyles(output.textContent);
+    }
+  }
+
+  function setViewportWidth(tester, width) {
+    const frame = $("[data-viewport-frame]", tester);
+    frame.style.width = width === "full" ? "100%" : width + "px";
+    $$("[data-viewport-width]", tester).forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.viewportWidth === width));
+    });
+    const label = $("[data-viewport-label]", tester);
+    if (label) {
+      label.textContent =
+        width === "full" ? "Full width" : width + "px — " + (Number(width) <= 420 ? "phone" : Number(width) <= 820 ? "tablet" : "laptop");
+    }
+  }
+
+  /* ---------- 9. Quizzes ---------- */
+
+  function answerQuiz(option) {
+    const row = option.closest(".quiz-row");
+    const correct = option.dataset.value === row.dataset.answer;
+    $$(".opt", row).forEach((other) => {
+      other.classList.remove("is-right", "is-wrong");
+      other.setAttribute("aria-pressed", "false");
+    });
+    option.setAttribute("aria-pressed", "true");
+    option.classList.add(correct ? "is-right" : "is-wrong");
+    row.classList.toggle("is-right", correct);
+    row.classList.toggle("is-wrong", !correct);
+    const feedback = $(".quiz-feedback", row);
+    if (feedback) {
+      feedback.textContent = correct
+        ? "Correct — " + (row.dataset.because || "")
+        : "Not quite. Try again, then say out loud why.";
+    }
+    if (correct) celebrate(6);
+  }
+
+  function resetQuizzes(scope) {
+    $$(".quiz-row", scope).forEach((row) => {
+      row.classList.remove("is-right", "is-wrong");
+      $$(".opt", row).forEach((option) => {
+        option.classList.remove("is-right", "is-wrong");
+        option.setAttribute("aria-pressed", "false");
+      });
+      const feedback = $(".quiz-feedback", row);
+      if (feedback) feedback.textContent = "";
+    });
+  }
+
+  /* ---------- 9b. Student files carried inside the single-file build ----------
+
+     The multi-file deck links to student-starter/ and student-finished-example/
+     on disk. The standalone build has no folders to link to, so those files
+     travel inside the page as JSON and are handed out as downloads or opened
+     from a blob URL. Both builds share this code; in the multi-file deck the
+     JSON block is simply absent and none of these buttons exist. */
+
+  function embeddedFiles() {
+    const node = document.getElementById("student-files");
+    if (!node) return null;
+    try {
+      return JSON.parse(node.textContent);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function downloadEmbedded(filename, key) {
+    const files = embeddedFiles();
+    if (!files || !files[key]) return;
+    const blob = new Blob([files[key]], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 8000);
+  }
+
+  function openEmbeddedPage(key) {
+    const files = embeddedFiles();
+    if (!files || !files[key]) return;
+    const blob = new Blob([files[key]], { type: "text/html;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank", "noopener");
+    setTimeout(() => URL.revokeObjectURL(url), 120000);
+  }
+
+  /* ---------- 10. Celebration + reset ---------- */
+
+  const CONFETTI_COLOURS = ["#ffab6a", "#64d3ff", "#cdf75c", "#e58cff", "#6df0bb"];
+
+  function celebrate(count) {
+    if (prefersReducedMotion()) return;
+    const layer = $("#confetti");
+    const total = count || 40;
+    for (let i = 0; i < total; i += 1) {
+      const bit = document.createElement("span");
+      bit.className = "confetti-bit";
+      bit.style.left = Math.random() * 100 + "vw";
+      bit.style.background = CONFETTI_COLOURS[i % CONFETTI_COLOURS.length];
+      bit.style.animationDelay = Math.random() * 0.4 + "s";
+      bit.style.transform = "rotate(" + Math.random() * 180 + "deg)";
+      layer.appendChild(bit);
+      setTimeout(() => bit.remove(), 2400);
+    }
+  }
+
+  /** Put every interactive widget on the current slide back to its start. */
+  function resetExercises() {
+    const slide = slides[currentIndex];
+    $$("[data-playground]", slide).forEach(resetPlayground);
+    resetQuizzes(slide);
+    $$("details.reveal", slide).forEach((reveal) => {
+      reveal.open = false;
+    });
+    $$("[data-boxlab]", slide).forEach((lab) => {
+      $$("[data-box]", lab).forEach((input) => {
+        input.value = input.dataset.initial || input.defaultValue;
+      });
+      $("[data-box-toggle]", lab).checked = false;
+      updateBoxLab(lab);
+    });
+    $$("[data-flexlab]", slide).forEach((lab) => {
+      $$("[data-flex]", lab).forEach((control) => {
+        control.value = control.dataset.initial || control.options[0].value;
+      });
+      updateFlexLab(lab);
+    });
+    $$("[data-viewport-tester]", slide).forEach((tester) => setViewportWidth(tester, "full"));
+  }
+
+  /* ---------- 11. Events, shortcuts, start-up ---------- */
+
+  /* One delegated click handler for the whole deck. */
+  document.addEventListener("click", (event) => {
+    const option = event.target.closest(".opt");
+    if (option && option.closest(".quiz-row")) {
+      answerQuiz(option);
+      return;
+    }
+
+    const scoreButton = event.target.closest(".score-btn");
+    if (scoreButton) {
+      const row = scoreButton.closest(".team-row");
+      const index = Number(row.dataset.team);
+      const delta = Number(scoreButton.dataset.score);
+      teams[index].score += delta;
+      // Update just this number so repeated clicks keep keyboard focus.
+      row.querySelector(".team-score").textContent = String(teams[index].score);
+      saveTeams();
+      if (delta > 0) celebrate(10);
+      return;
+    }
+
+    const timerButton = event.target.closest("[data-timer]");
+    if (timerButton) {
+      const mode = timerButton.dataset.timer;
+      if (mode === "start") startTimer();
+      if (mode === "pause") {
+        stopTimer();
+        renderTimer();
+      }
+      if (mode === "reset") {
+        stopTimer();
+        timerRemaining = timerTotal;
+        renderTimer();
+      }
+      return;
+    }
+
+    const preset = event.target.closest("[data-timer-preset]");
+    if (preset) {
+      setTimer(Number(preset.dataset.timerPreset), preset.dataset.timerLabel, false);
+      return;
+    }
+
+    const starter = event.target.closest("[data-timer-start]");
+    if (starter) {
+      setTimer(Number(starter.dataset.timerStart), starter.dataset.timerLabel, true);
+      return;
+    }
+
+    const pgButton = event.target.closest("[data-pg-action]");
+    if (pgButton) {
+      const playground = pgButton.closest("[data-playground]");
+      const action = pgButton.dataset.pgAction;
+      if (action === "run") {
+        renderPlayground(playground);
+        pgButton.textContent = "Run ▸";
+      }
+      if (action === "reset") resetPlayground(playground);
+      if (action === "copy") copyPlayground(playground, pgButton);
+      return;
+    }
+
+    const viewportButton = event.target.closest("[data-viewport-width]");
+    if (viewportButton) {
+      setViewportWidth(viewportButton.closest("[data-viewport-tester]"), viewportButton.dataset.viewportWidth);
+      return;
+    }
+
+    const actionButton = event.target.closest("[data-action]");
+    if (!actionButton) return;
+    const action = actionButton.dataset.action;
+
+    switch (action) {
+      case "next": next(); break;
+      case "prev": previous(); break;
+      case "first": goTo(0); break;
+      case "last": goTo(slides.length - 1); break;
+      case "goto":
+        goTo(Number(actionButton.dataset.index));
+        togglePanel("overview", false);
+        break;
+      case "toggle-notes": applyNotes(!document.body.classList.contains("notes-on")); break;
+      case "toggle-theme":
+        applyTheme(document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light");
+        break;
+      case "fullscreen": toggleFullscreen(); break;
+      case "toggle-panel": togglePanel(actionButton.dataset.panelToggle); break;
+      case "close-panel": togglePanel(actionButton.closest(".panel-float").id, false); break;
+      case "reset-exercises": resetExercises(); break;
+      case "reset-scores":
+        teams.forEach((team) => {
+          team.score = 0;
+        });
+        saveTeams();
+        $$(".team-score").forEach((cell) => {
+          cell.textContent = "0";
+        });
+        break;
+      case "toggle-sound":
+        soundEnabled = !soundEnabled;
+        store.set("sound", soundEnabled);
+        actionButton.setAttribute("aria-pressed", String(soundEnabled));
+        actionButton.textContent = soundEnabled ? "Sound on" : "Sound off";
+        break;
+      case "celebrate": celebrate(70); break;
+      case "print": window.print(); break;
+      case "open-example": openEmbeddedPage("example-standalone"); break;
+      case "download-starter-html": downloadEmbedded("index.html", "starter-index"); break;
+      case "download-starter-css": downloadEmbedded("styles.css", "starter-styles"); break;
+      case "download-example-html": downloadEmbedded("index.html", "example-index"); break;
+      case "download-example-css": downloadEmbedded("styles.css", "example-styles"); break;
+      default: break;
+    }
+  });
+
+  document.addEventListener("change", (event) => {
+    if (event.target.matches("[data-box], [data-box-toggle]")) {
+      updateBoxLab(event.target.closest("[data-boxlab]"));
+    }
+    if (event.target.matches("[data-flex]")) {
+      updateFlexLab(event.target.closest("[data-flexlab]"));
+    }
+    if (event.target.id === "teamCount") {
+      changeTeamCount(event.target.value);
+    }
+  });
+
+  document.addEventListener("input", (event) => {
+    if (event.target.matches("[data-box]")) {
+      updateBoxLab(event.target.closest("[data-boxlab]"));
+    }
+    if (event.target.closest(".team-row") && event.target.matches("input[type='text']")) {
+      const index = Number(event.target.closest(".team-row").dataset.team);
+      teams[index].name = event.target.value;
+      saveTeams();
+    }
+  });
+
+  const TYPING_TAGS = ["INPUT", "TEXTAREA", "SELECT"];
+
+  document.addEventListener("keydown", (event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    if (TYPING_TAGS.indexOf(event.target.tagName) !== -1 || event.target.isContentEditable) return;
+
+    switch (event.key) {
+      case "ArrowRight":
+      case "PageDown":
+        event.preventDefault(); next(); break;
+      case " ":
+        event.preventDefault(); next(); break;
+      case "ArrowLeft":
+      case "PageUp":
+        event.preventDefault(); previous(); break;
+      case "Home": event.preventDefault(); goTo(0); break;
+      case "End": event.preventDefault(); goTo(slides.length - 1); break;
+      case "n": case "N": applyNotes(!document.body.classList.contains("notes-on")); break;
+      case "o": case "O": togglePanel("overview"); break;
+      case "t": case "T": togglePanel("timer"); break;
+      case "s": case "S": togglePanel("scoreboard"); break;
+      case "b": case "B":
+        applyTheme(document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light");
+        break;
+      case "f": case "F": toggleFullscreen(); break;
+      case "r": case "R": resetExercises(); break;
+      case "?": togglePanel("help"); break;
+      case "Escape":
+        $$(".panel-float").forEach((panel) => {
+          if (panel.id !== "timer") panel.hidden = true;
+        });
+        break;
+      default: break;
+    }
+  });
+
+  window.addEventListener("hashchange", () => {
+    const index = slideIndexFromHash();
+    if (index >= 0 && index !== currentIndex) goTo(index, { silent: true });
+  });
+
+  function start() {
+    paintCodeBlocks();
+    buildSectionMarks();
+    buildOverview();
+    setUpPlaygrounds();
+    renderTeams();
+    renderTimer();
+
+    $$("[data-boxlab]").forEach((lab) => {
+      $$("[data-box]", lab).forEach((input) => {
+        input.dataset.initial = input.value;
+      });
+      updateBoxLab(lab);
+    });
+    $$("[data-flexlab]").forEach((lab) => {
+      $$("[data-flex]", lab).forEach((control) => {
+        control.dataset.initial = control.value;
+      });
+      updateFlexLab(lab);
+    });
+    $$("[data-viewport-tester]").forEach((tester) => setViewportWidth(tester, "full"));
+
+    applyTheme(store.get("theme", "dark"));
+    applyNotes(store.get("notes", false));
+    const soundButton = $('[data-action="toggle-sound"]');
+    if (soundButton) {
+      soundButton.setAttribute("aria-pressed", String(soundEnabled));
+      soundButton.textContent = soundEnabled ? "Sound on" : "Sound off";
+    }
+
+    const fromHash = slideIndexFromHash();
+    const storedId = store.get("slide", null);
+    const fromStore = storedId ? slides.findIndex((slide) => slide.id === storedId) : -1;
+    goTo(fromHash >= 0 ? fromHash : Math.max(0, fromStore), { silent: fromHash >= 0 });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
+})();
+
+</script>
+</body>
+</html>
