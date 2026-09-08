@@ -85,6 +85,43 @@ Useful cut points:
 | Responsive page | `s-checkpoint-7` | + box model, Flexbox, media queries |
 | Everything | `null` | the full deck |
 
+### Running it locally
+
+**You do not need a server to present.** Double-click any deck file and it runs:
+`session-1.html`, `workshop.html`, or `javascript/js-workshop.html`. The single
+files carry everything inside them, and the JavaScript deck's code runners work
+with no server at all.
+
+The one thing that needs a server: **local storage**. Team scores, the theme and
+your last slide are remembered in the browser, and some browsers block storage on
+`file://` paths. If the scoreboard forgets itself between refreshes, that is why.
+
+Run a server when you want scores to persist, or when you want the class on their
+own laptops with no internet:
+
+**Double-click `serve.bat`.** It serves this folder on port 8000 and prints both
+addresses — the one for your laptop and the one for the classroom wifi.
+
+Or by hand, from this folder:
+
+```bash
+python -m http.server 8000 --bind 0.0.0.0
+```
+
+Then:
+
+| Who | Address |
+| --- | --- |
+| You | `http://localhost:8000/javascript/js-workshop.html` |
+| Students on the same wifi | `http://YOUR-IP:8000/javascript/js-workshop.html` |
+
+Find your IP with `ipconfig`, or just read it off the `serve.bat` window.
+
+Windows will ask to allow Python through the firewall the first time. Say **yes
+for Private networks** — decline it and students cannot connect. School wifi that
+isolates clients from each other will also block this; if so, fall back to the
+GitHub Pages link or a USB stick.
+
 ### Putting it online
 
 `workshop.html` is a static page with no dependencies, so any host will serve

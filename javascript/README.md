@@ -27,6 +27,26 @@ node build-standalone.js
 
 Node is needed only by you, never by students.
 
+### Running it without a server
+
+Double-click `js-workshop.html`. The deck runs and — verified — the sandboxed
+code runners still execute student code and report errors, because they never
+needed a server in the first place.
+
+The exception is **local storage**: team scores, the theme and your last slide
+are remembered in the browser, and some browsers block storage on `file://`
+paths. Everything degrades gracefully if it is blocked, but the scoreboard will
+forget itself between refreshes.
+
+For scores that persist, or to put the class on their own laptops with no
+internet, double-click `serve.bat` in the folder above this one, or run:
+
+```bash
+python -m http.server 8000 --bind 0.0.0.0
+```
+
+then send students to `http://YOUR-IP:8000/javascript/js-workshop.html`.
+
 ---
 
 ## 2. Files
