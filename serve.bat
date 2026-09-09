@@ -27,9 +27,10 @@ if errorlevel 1 (
 )
 
 rem Pick the adapter that actually has a default gateway, so we report the
-rem real wifi address rather than a virtual one.
+rem real wifi address rather than a virtual one. Written without pipes on
+rem purpose: inside a for /f, cmd mangles them before PowerShell sees them.
 set IP=
-for /f "delims=" %%i in ('powershell -NoProfile -Command "(Get-NetIPConfiguration ^| Where-Object { $_.IPv4DefaultGateway -ne $null } ^| Select-Object -First 1).IPv4Address.IPAddress"') do set IP=%%i
+for /f "delims=" %%i in ('powershell -NoProfile -Command "(Get-NetIPConfiguration).Where({ $_.IPv4DefaultGateway -ne $null })[0].IPv4Address.IPAddress"') do set IP=%%i
 if "%IP%"=="" set IP=your-ip-here
 
 echo.
