@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Six CSS Techniques — build a hero and a curved gallery</title>
+<style>
+/* ==========================================================================
+   Six CSS techniques · a 30-minute live-demo deck
+   Every demo is driven by CSS custom properties, so the controls only ever
+   set one variable. No framework, no build step, no network.
+   ========================================================================== */
+
+:root {
+  --page: #ffffff;
+  --ink: #101116;
+  --ink-2: #55596a;
+  --ink-3: #8a8fa3;
+  --line: #dcdde4;
+  --accent: #1552e0;
+  --accent-2: #e0561f;
+  --code-bg: #12141c;
+  --code-ink: #e6e9f2;
+
+  --sans: "Segoe UI", -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  --serif: "Georgia", "Iowan Old Style", "Times New Roman", serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--page);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: .001ms !important; }
+}
+
+/* ---------- deck ---------- */
+
+.deck {
+  height: 100dvh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+.slide {
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5vh 5vw 9vh;
+  border-bottom: 1px solid var(--line);
+}
+
+.wrap { width: 100%; max-width: 1500px; margin: 0 auto; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: clamp(.72rem, 1vw, .95rem);
+  letter-spacing: .04em;
+  color: var(--ink-3);
+  margin: 0 0 .6rem;
+}
+.eyebrow b { color: var(--accent); font-weight: 600; }
+
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5.5vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -.02em;
+  margin: 0 0 1rem;
+  max-width: 20ch;
+}
+
+h2 {
+  font-family: var(--mono);
+  font-size: clamp(1.5rem, 3.2vw, 2.9rem);
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  margin: 0 0 .7rem;
+  font-weight: 600;
+}
+
+.why {
+  font-size: clamp(1rem, 1.55vw, 1.45rem);
+  line-height: 1.4;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 68ch;
+}
+
+.head { margin-bottom: clamp(1.2rem, 3vh, 2.4rem); }
+
+.split {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: clamp(1.5rem, 3vw, 3.4rem);
+  align-items: center;
+}
+
+.side { display: flex; flex-direction: column; gap: 1.2rem; min-width: 0; }
+
+/* ---------- demo stage ---------- */
+
+.stage {
+  position: relative;
+  border: 1px solid var(--line);
+  background: #f7f7f5;
+  overflow: hidden;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stage-tall { min-height: clamp(320px, 52vh, 560px); }
+
+/* ---------- code ---------- */
+
+pre.code {
+  margin: 0;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  font-family: var(--mono);
+  font-size: clamp(.8rem, 1.05vw, 1.05rem);
+  line-height: 1.55;
+  padding: 1.1rem 1.3rem;
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+.code .sel { color: #7ee0b8; }
+.code .prop { color: #9db4ff; }
+.code .val { color: #ffcf7a; }
+.code .com { color: #6f7590; font-style: italic; }
+
+/* ---------- controls ---------- */
+
+.controls { display: flex; flex-direction: column; gap: .95rem; }
+
+.ctrl { display: flex; flex-direction: column; gap: .3rem; }
+
+.ctrl-top {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  font-family: var(--mono);
+  font-size: clamp(.78rem, 1vw, .95rem);
+}
+.ctrl-top span { color: var(--ink-2); }
+.ctrl-top output { color: var(--accent); font-weight: 600; }
+
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
+
+.seg { display: flex; flex-wrap: wrap; gap: .4rem; }
+.seg label {
+  font-family: var(--mono);
+  font-size: clamp(.72rem, .95vw, .9rem);
+  border: 1px solid var(--line);
+  padding: .38rem .7rem;
+  cursor: pointer;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg input:checked + span { color: var(--page); }
+.seg label:has(input:checked) { background: var(--ink); border-color: var(--ink); color: var(--page); }
+.seg label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.switch { display: flex; align-items: center; gap: .6rem; font-family: var(--mono); font-size: clamp(.8rem, 1vw, .95rem); cursor: pointer; }
+.switch input { width: 1.15rem; height: 1.15rem; accent-color: var(--accent); }
+
+.aside-note {
+  font-size: clamp(.82rem, 1.02vw, 1rem);
+  line-height: 1.45;
+  color: var(--ink-2);
+  border-left: 3px solid var(--accent-2);
+  padding-left: .85rem;
+  margin: 0;
+}
+
+/* ---------- gallery pieces (slides 1, 2, 3, close) ---------- */
+
+.gallery {
+  --spread: 8deg;
+  --origin: bottom center;
+  --of: hidden;
+  --curve-bottom: -300px;
+  --curve-width: 900px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  overflow: var(--of);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fan { display: flex; justify-content: center; align-items: flex-end; gap: 10px; }
+
+.card {
+  width: clamp(74px, 9vw, 132px);
+  aspect-ratio: 3 / 4;
+  flex: none;
+  transform: rotate(calc(var(--i) * var(--spread)));
+  transform-origin: var(--origin);
+  box-shadow: 0 10px 26px rgba(16, 17, 22, .22);
+  overflow: hidden;
+  background: #ccc;
+}
+.card svg { width: 100%; height: 100%; display: block; }
+
+.curve-mask {
+  position: absolute;
+  bottom: var(--curve-bottom);
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--curve-width);
+  height: 400px;
+  border-radius: 50%;
+  background: #f7f7f5;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ---------- glow (slide 4) ---------- */
+
+.glow-stage { background: #0d1b3a; }
+
+/* No local --blur here on purpose: declaring it would shadow the value the
+   .hero sets, and the closing slide drives all three glows from the parent. */
+.glow {
+  width: min(70%, 520px);
+  height: 150px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  filter: blur(var(--blur, 40px));
+  transform: rotate(-15deg);
+}
+
+/* ---------- mask (slide 5) ---------- */
+
+.mask-stage { background: repeating-conic-gradient(#ececed 0% 25%, #f8f8f7 0% 50%) 0 0 / 26px 26px; }
+
+.photo {
+  --stop1: 60%;
+  --stop2: 100%;
+  --dir: to bottom;
+  width: clamp(160px, 22vw, 260px);
+  aspect-ratio: 5 / 7;
+  -webkit-mask-image: linear-gradient(var(--dir), black var(--stop1), transparent var(--stop2));
+          mask-image: linear-gradient(var(--dir), black var(--stop1), transparent var(--stop2));
+}
+.photo svg { width: 100%; height: 100%; display: block; }
+
+/* ---------- clamp (slide 6) ---------- */
+
+.clamp-outer { width: 100%; display: flex; justify-content: center; }
+.clamp-stage {
+  /* --vw stands in for the viewport width. The box shows as much of it as
+     the slide can physically fit; the font-size is computed from the full
+     simulated width, so it behaves exactly like 8vw would at that size. */
+  --vw: 900px;
+  width: min(var(--vw), 100%);
+  border: 1px dashed var(--accent);
+  background: var(--page);
+  padding: 1.6rem;
+  overflow: hidden;
+}
+.clamp-stage h3 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, calc(var(--vw) * 0.08), 7rem);
+  line-height: 1.03;
+  margin: 0;
+  letter-spacing: -.02em;
+}
+.readout {
+  font-family: var(--mono);
+  font-size: clamp(.78rem, 1vw, .95rem);
+  color: var(--ink-2);
+  margin: .9rem 0 0;
+}
+.readout b { color: var(--accent); }
+.readout .pin { color: var(--accent-2); }
+
+/* ---------- composed reference pieces ---------- */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1552e0 0%, #6f9bf2 42%, #ffffff 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.hero { --blur: 46px; }
+.hero .glow { position: absolute; }
+.hero .g1 { top: 18%; left: -8%; width: 60%; height: 120px; transform: rotate(-18deg); }
+.hero .g2 { top: 42%; right: -10%; width: 55%; height: 90px; transform: rotate(12deg); }
+.hero .g3 { top: 8%; left: 30%; width: 40%; height: 70px; transform: rotate(-6deg); }
+
+.hero-title {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  transform: translate(-50%, -50%);
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 7cqw, 5rem);
+  line-height: .98;
+  letter-spacing: -.03em;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 1;
+  text-shadow: 0 2px 30px rgba(10, 30, 80, .35);
+}
+
+.hero-photo {
+  position: relative;
+  z-index: 2;
+  width: clamp(120px, 34%, 300px);
+  -webkit-mask-image: linear-gradient(to bottom, black var(--stop1, 62%), transparent 100%);
+          mask-image: linear-gradient(to bottom, black var(--stop1, 62%), transparent 100%);
+}
+.hero-photo svg { width: 100%; height: auto; display: block; }
+
+.bookends { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 2.4vw, 2.4rem); }
+.bookend { display: flex; flex-direction: column; gap: .7rem; min-width: 0; }
+.bookend .stage { min-height: clamp(280px, 46vh, 520px); container-type: inline-size; }
+.bookend h3 { font-family: var(--mono); font-size: clamp(.85rem, 1.1vw, 1.05rem); font-weight: 600; margin: 0; }
+.bookend p { margin: 0; font-size: clamp(.8rem, 1vw, .98rem); color: var(--ink-2); line-height: 1.4; }
+
+/* ---------- overflow demo ---------- */
+
+.of-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; width: 100%; padding: 1.2rem; }
+.of-box { border: 2px solid var(--accent); background: #fff; height: 190px; display: flex; align-items: center; justify-content: center; position: relative; }
+.of-box .escape {
+  width: 120px; height: 260px;
+  background: linear-gradient(160deg, var(--accent-2), #f0a35c);
+  box-shadow: 0 12px 30px rgba(16,17,22,.25);
+}
+.of-hidden { overflow: hidden; }
+.of-visible { overflow: visible; }
+.of-label { position: absolute; top: -1.7rem; left: 0; font-family: var(--mono); font-size: .78rem; color: var(--ink-2); }
+
+/* ---------- deck chrome ---------- */
+
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .5rem 1.1rem;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: .78rem;
+  color: var(--ink-2);
+}
+.bar nav { display: flex; gap: .35rem; }
+.bar button {
+  font: inherit; background: none; border: 1px solid var(--line);
+  padding: .28rem .7rem; cursor: pointer; color: var(--ink);
+}
+.bar button:hover { background: var(--ink); color: var(--page); border-color: var(--ink); }
+.bar .where { color: var(--ink); }
+
+.progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 51; width: 0; transition: width .15s linear; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media (max-width: 900px) {
+  .split, .bookends, .of-pair { grid-template-columns: 1fr; }
+  .slide { padding: 4vh 5vw 8vh; }
+  .stage { min-height: 240px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="deck" id="deck">
+
+<!-- ========== BOOKEND: what we're building toward ========== -->
+<section class="slide" data-name="What we're building">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">six css techniques &middot; <b>about 30 minutes</b></p>
+      <h1>Two things you've seen a hundred times. Six properties away.</h1>
+      <p class="why">You already have flexbox, positioning, gradients and a row of images. Everything below is built
+        from those plus the six techniques in this deck — nothing else.</p>
+    </div>
+
+    <div class="bookends">
+      <div class="bookend">
+        <div class="stage">
+          <div class="hero">
+            <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+            <p class="hero-title">Golden Hour</p>
+            <div class="hero-photo" data-portrait></div>
+          </div>
+        </div>
+        <h3>A. The hero</h3>
+        <p>Diagonal gradient, blurred light streaks, a serif headline that reads as if it sits behind the photo, and a
+          photo that dissolves into the page instead of stopping at a hard edge.</p>
+      </div>
+
+      <div class="bookend">
+        <div class="stage">
+          <div class="gallery" style="--spread:7deg; --origin:bottom center; --curve-bottom:-300px; --curve-width:900px;">
+            <div class="fan" data-fan></div>
+            <div class="curve-mask"></div>
+          </div>
+        </div>
+        <h3>B. The curved gallery</h3>
+        <p>Five images fanned like a hand of cards, with the bottom of the row swallowed by a curve rather than a
+          straight line.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 1 · rotate + transform-origin ========== -->
+<section class="slide" data-name="rotate() + transform-origin">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">technique <b>01</b> &middot; the fan</p>
+      <h2>transform: rotate() + transform-origin</h2>
+      <p class="why">Rotating pivots around the element's centre by default. <strong>transform-origin</strong> moves that
+        pivot — which is the difference between a tidy fan and a messy pile.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage stage-tall">
+        <div class="gallery" id="g1" style="--spread:8deg; --origin:bottom center;">
+          <div class="fan" data-fan></div>
+        </div>
+      </div>
+
+      <div class="side">
+        <pre class="code"><span class="sel">.card</span> {
+  <span class="prop">transform</span>: <span class="val">rotate(-8deg)</span>;
+  <span class="prop">transform-origin</span>: <span class="val">bottom center</span>;
+}</pre>
+
+        <div class="controls">
+          <div class="ctrl">
+            <div class="ctrl-top"><span>rotation spread</span><output id="o-spread">8deg</output></div>
+            <input type="range" min="-12" max="12" step="1" value="8"
+                   data-css="--spread" data-unit="deg" data-target="#g1" data-out="#o-spread">
+          </div>
+
+          <div class="ctrl">
+            <div class="ctrl-top"><span>transform-origin</span><output id="o-origin">bottom center</output></div>
+            <div class="seg">
+              <label><input type="radio" name="origin" value="center"
+                            data-css="--origin" data-target="#g1" data-out="#o-origin"><span>center</span></label>
+              <label><input type="radio" name="origin" value="bottom center" checked
+                            data-css="--origin" data-target="#g1" data-out="#o-origin"><span>bottom center</span></label>
+              <label><input type="radio" name="origin" value="center 400px"
+                            data-css="--origin" data-target="#g1" data-out="#o-origin"><span>center 400px</span></label>
+            </div>
+          </div>
+        </div>
+
+        <p class="aside-note">Each card gets the same rule — only its multiplier differs (&minus;2, &minus;1, 0, 1, 2),
+          so the spread slider drives all five at once.<br>
+          <code>center 400px</code> puts the pivot 400px <em>below</em> each card — an off-element point. That is what
+          bends a flat row into an arc.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 2 · oversized circle ========== -->
+<section class="slide" data-name="Oversized circle cutoff">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">technique <b>02</b> &middot; the curve</p>
+      <h2>An oversized circle, in the background colour</h2>
+      <p class="why">To replace a straight edge with a curve, don't try to bend the element. Lay a much bigger circle on
+        top, paint it the page colour, and let it cover the edge.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage stage-tall">
+        <div class="gallery" id="g2" style="--spread:7deg; --origin:bottom center; --curve-bottom:-300px; --curve-width:900px;">
+          <div class="fan" data-fan></div>
+          <div class="curve-mask"></div>
+        </div>
+      </div>
+
+      <div class="side">
+        <pre class="code"><span class="sel">.curve-mask</span> {
+  <span class="prop">position</span>: <span class="val">absolute</span>;
+  <span class="prop">bottom</span>: <span class="val">-300px</span>;
+  <span class="prop">left</span>: <span class="val">50%</span>;
+  <span class="prop">transform</span>: <span class="val">translateX(-50%)</span>;
+  <span class="prop">width</span>: <span class="val">900px</span>;
+  <span class="prop">height</span>: <span class="val">400px</span>;
+  <span class="prop">border-radius</span>: <span class="val">50%</span>;
+  <span class="prop">background</span>: <span class="val">var(--page-bg)</span>;
+}</pre>
+
+        <div class="controls">
+          <div class="ctrl">
+            <div class="ctrl-top"><span>bottom (how far pushed down)</span><output id="o-cb">-300px</output></div>
+            <input type="range" min="-380" max="-120" step="5" value="-300"
+                   data-css="--curve-bottom" data-unit="px" data-target="#g2" data-out="#o-cb">
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span>width (how shallow the curve)</span><output id="o-cw">900px</output></div>
+            <input type="range" min="420" max="1600" step="20" value="900"
+                   data-css="--curve-width" data-unit="px" data-target="#g2" data-out="#o-cw">
+          </div>
+        </div>
+
+        <p class="aside-note"><strong>This same trick works at the seam between any two page sections</strong>, not just
+          under images. Wider circle = shallower curve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3 · overflow ========== -->
+<section class="slide" data-name="overflow: hidden vs visible">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">technique <b>03</b> &middot; containment</p>
+      <h2>overflow: hidden vs visible</h2>
+      <p class="why">Use <strong>hidden</strong> to keep something in its box — glows, fanned images poking out. Use
+        <strong>visible</strong> when you want a child to escape on purpose, like a product breaking out of a card.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage stage-tall">
+        <div class="gallery" id="g3" style="--spread:11deg; --origin:bottom center; --of:hidden;">
+          <div class="fan" data-fan></div>
+        </div>
+      </div>
+
+      <div class="side">
+        <pre class="code"><span class="com">/* same markup, one property apart */</span>
+<span class="sel">.wrapper-a</span> { <span class="prop">overflow</span>: <span class="val">hidden</span>;  <span class="com">/* clipped */</span> }
+<span class="sel">.wrapper-b</span> { <span class="prop">overflow</span>: <span class="val">visible</span>; <span class="com">/* escapes */</span> }</pre>
+
+        <div class="of-pair">
+          <div class="of-box of-hidden"><span class="of-label">hidden</span><div class="escape"></div></div>
+          <div class="of-box of-visible"><span class="of-label">visible</span><div class="escape"></div></div>
+        </div>
+
+        <div class="controls">
+          <label class="switch">
+            <input type="checkbox" checked data-css="--of" data-target="#g3"
+                   data-on="hidden" data-off="visible" data-out="#o-of">
+            <span>gallery overflow:</span> <output id="o-of">hidden</output>
+          </label>
+        </div>
+
+        <p class="aside-note">Flip it and watch the fan spill past the section edge. That spill is exactly what
+          <code>hidden</code> is for.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 4 · filter: blur ========== -->
+<section class="slide" data-name="filter: blur()">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">technique <b>04</b> &middot; the glow</p>
+      <h2>filter: blur()</h2>
+      <p class="why">Blur turns a plain gradient rectangle into a soft glow. That's how atmospheric light streaks behind
+        hero text are made — with no image asset at all.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage stage-tall glow-stage">
+        <div class="glow" id="g4" style="--blur:40px;"></div>
+      </div>
+
+      <div class="side">
+        <pre class="code"><span class="sel">.glow</span> {
+  <span class="prop">width</span>: <span class="val">500px</span>;
+  <span class="prop">height</span>: <span class="val">150px</span>;
+  <span class="prop">background</span>: <span class="val">linear-gradient(90deg,
+      transparent, rgba(255,255,255,.5), transparent)</span>;
+  <span class="prop">filter</span>: <span class="val">blur(40px)</span>;
+  <span class="prop">transform</span>: <span class="val">rotate(-15deg)</span>;
+}</pre>
+
+        <div class="controls">
+          <div class="ctrl">
+            <div class="ctrl-top"><span>blur radius</span><output id="o-blur">40px</output></div>
+            <input type="range" min="0" max="80" step="1" value="40"
+                   data-css="--blur" data-unit="px" data-target="#g4" data-out="#o-blur">
+          </div>
+        </div>
+
+        <p class="aside-note">Drag to 0 and it's just a gradient rectangle. Everything atmospheric about it is the one
+          blur value.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 5 · mask-image ========== -->
+<section class="slide" data-name="mask-image with a gradient">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">technique <b>05</b> &middot; the fade</p>
+      <h2>mask-image with a gradient</h2>
+      <p class="why">A mask hides parts of an element using a gradient: black stays, transparent disappears. It's how a
+        photo dissolves into the page, and how text can look like it sits behind one.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage stage-tall mask-stage">
+        <div class="photo" id="g5" data-portrait style="--stop1:60%; --stop2:100%; --dir:to bottom;"></div>
+      </div>
+
+      <div class="side">
+        <pre class="code"><span class="sel">.photo</span> {
+  <span class="prop">-webkit-mask-image</span>: <span class="val">linear-gradient(to bottom,
+             black 60%, transparent 100%)</span>;
+  <span class="prop">mask-image</span>: <span class="val">linear-gradient(to bottom,
+             black 60%, transparent 100%)</span>;
+}</pre>
+
+        <div class="controls">
+          <div class="ctrl">
+            <div class="ctrl-top"><span>black ends at</span><output id="o-s1">60%</output></div>
+            <input type="range" min="0" max="100" step="1" value="60"
+                   data-css="--stop1" data-unit="%" data-target="#g5" data-out="#o-s1">
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span>fully transparent at</span><output id="o-s2">100%</output></div>
+            <input type="range" min="0" max="100" step="1" value="100"
+                   data-css="--stop2" data-unit="%" data-target="#g5" data-out="#o-s2">
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span>direction</span><output id="o-dir">to bottom</output></div>
+            <div class="seg">
+              <label><input type="radio" name="dir" value="to bottom" checked
+                            data-css="--dir" data-target="#g5" data-out="#o-dir"><span>bottom</span></label>
+              <label><input type="radio" name="dir" value="to top"
+                            data-css="--dir" data-target="#g5" data-out="#o-dir"><span>top</span></label>
+              <label><input type="radio" name="dir" value="to left"
+                            data-css="--dir" data-target="#g5" data-out="#o-dir"><span>left</span></label>
+              <label><input type="radio" name="dir" value="to right"
+                            data-css="--dir" data-target="#g5" data-out="#o-dir"><span>right</span></label>
+            </div>
+          </div>
+        </div>
+
+        <p class="aside-note">Bring the two stops close together for a hard edge; push them apart for a long, soft
+          dissolve. The chequerboard behind is the page showing through.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 6 · clamp ========== -->
+<section class="slide" data-name="clamp() for fluid type">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">technique <b>06</b> &middot; the headline</p>
+      <h2>clamp() for fluid type</h2>
+      <p class="why">A fixed font-size breaks on very small and very large screens. <strong>clamp(min, preferred,
+        max)</strong> lets text scale with the viewport but never past safe limits.</p>
+    </div>
+
+    <div class="split">
+      <div class="stage stage-tall" style="background:#fff;">
+        <div class="clamp-outer">
+          <div class="clamp-stage" id="g6">
+            <h3 id="clampText">Golden Hour</h3>
+            <p class="readout">container <b id="o-cw2">900px</b> &nbsp;·&nbsp; computed font-size
+              <b id="o-fs">72px</b> <span class="pin" id="o-pin"></span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="side">
+        <pre class="code"><span class="sel">h1</span> { <span class="prop">font-size</span>: <span class="val">clamp(2rem, 8vw, 7rem)</span>; }
+
+<span class="com">/* min 32px · preferred 8% of width · max 112px */</span></pre>
+
+        <div class="controls">
+          <div class="ctrl">
+            <div class="ctrl-top"><span>simulated viewport width</span><output id="o-vw">900px</output></div>
+            <input type="range" min="300" max="1500" step="10" value="900" id="clampWidth">
+          </div>
+        </div>
+
+        <p class="aside-note">Watch the readout: below <strong>400px</strong> it pins to the 32px floor, above
+          <strong>1400px</strong> it pins to the 112px ceiling, and in between it scales smoothly.<br>
+          <em>Demo note:</em> the slider stands in for the viewport, so the text keeps growing even once the dashed box
+          runs out of room on this screen — exactly what <code>8vw</code> does on a monitor wider than the box.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CLOSING: it all clicks together ========== -->
+<section class="slide" data-name="All six, composed">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">putting it together &middot; <b>no new ideas</b></p>
+      <h2>01+02+03 &rarr; the gallery &nbsp;·&nbsp; 04+05+06 &rarr; the hero</h2>
+      <p class="why">Same six properties, composed. Every control below is one you've already used.</p>
+    </div>
+
+    <div class="bookends">
+      <div class="bookend">
+        <div class="stage">
+          <div class="gallery" id="c1" style="--spread:7deg; --origin:bottom center; --of:hidden; --curve-bottom:-300px; --curve-width:900px;">
+            <div class="fan" data-fan></div>
+            <div class="curve-mask"></div>
+          </div>
+        </div>
+        <h3>Curved gallery &mdash; rotate + circle + overflow</h3>
+        <div class="controls">
+          <div class="ctrl">
+            <div class="ctrl-top"><span>spread</span><output id="o-c-spread">7deg</output></div>
+            <input type="range" min="0" max="14" step="1" value="7"
+                   data-css="--spread" data-unit="deg" data-target="#c1" data-out="#o-c-spread">
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span>curve width</span><output id="o-c-cw">900px</output></div>
+            <input type="range" min="420" max="1600" step="20" value="900"
+                   data-css="--curve-width" data-unit="px" data-target="#c1" data-out="#o-c-cw">
+          </div>
+        </div>
+      </div>
+
+      <div class="bookend">
+        <div class="stage">
+          <div class="hero" id="c2" style="--blur:46px;">
+            <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+            <p class="hero-title">Golden Hour</p>
+            <div class="hero-photo" id="c2p" data-portrait style="--stop1:62%;"></div>
+          </div>
+        </div>
+        <h3>Hero &mdash; blur + mask + clamp</h3>
+        <div class="controls">
+          <div class="ctrl">
+            <div class="ctrl-top"><span>glow blur</span><output id="o-h-blur">46px</output></div>
+            <input type="range" min="0" max="80" step="1" value="46"
+                   data-css="--blur" data-unit="px" data-target="#c2" data-out="#o-h-blur">
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span>photo fade starts at</span><output id="o-h-s1">62%</output></div>
+            <input type="range" min="10" max="100" step="1" value="62"
+                   data-css="--stop1" data-unit="%" data-target="#c2p" data-out="#o-h-s1">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer class="bar">
+  <span class="where"><span id="slideNo">1</span> / <span id="slideTotal">8</span> &nbsp;·&nbsp; <span id="slideName"></span></span>
+  <nav>
+    <button type="button" data-go="-1">&larr; prev</button>
+    <button type="button" data-go="1">next &rarr;</button>
+  </nav>
+</footer>
+
+<script>
+/* ==========================================================================
+   Three small jobs: build the placeholder artwork, bind every control to one
+   CSS custom property, and move between slides.
+   ========================================================================== */
+
+/* ---------- 1. placeholder artwork (no external files) ---------- */
+
+var PALETTES = [
+  ["#1b3a5c", "#0e2438", "#f2b544"],
+  ["#5c2233", "#33121d", "#f2856b"],
+  ["#1f4d3d", "#0e2a21", "#9fd98a"],
+  ["#3a2a5c", "#1d1435", "#c39bf0"],
+  ["#5c4a1b", "#33290e", "#ffd88a"]
+];
+
+function cardSvg(i) {
+  var p = PALETTES[i % PALETTES.length];
+  return '<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder landscape">' +
+    '<rect width="300" height="400" fill="' + p[0] + '"/>' +
+    '<circle cx="212" cy="92" r="46" fill="' + p[2] + '"/>' +
+    '<path d="M0 300 L92 208 L168 296 L238 232 L300 288 L300 400 L0 400Z" fill="' + p[1] + '"/>' +
+    '<path d="M0 352 L120 284 L214 342 L300 300 L300 400 L0 400Z" fill="' + p[0] + '" opacity=".65"/>' +
+    "</svg>";
+}
+
+var PORTRAIT =
+  '<svg viewBox="0 0 400 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder portrait of a person">' +
+  '<rect width="400" height="560" fill="#c8d6e6"/>' +
+  '<circle cx="200" cy="300" r="150" fill="#b3c6dc"/>' +
+  '<path d="M52 560 Q52 348 200 348 Q348 348 348 560Z" fill="#2b3a55"/>' +
+  '<circle cx="200" cy="196" r="92" fill="#e8b48d"/>' +
+  '<path d="M108 190 Q112 96 200 96 Q288 96 292 190 Q292 140 200 140 Q108 140 108 190Z" fill="#3a2a22"/>' +
+  '<path d="M150 372 Q200 424 250 372 L250 348 L150 348Z" fill="#e8b48d"/>' +
+  "</svg>";
+
+document.querySelectorAll("[data-fan]").forEach(function (fan) {
+  for (var i = 0; i < 5; i += 1) {
+    var card = document.createElement("div");
+    card.className = "card";
+    /* -2 -1 0 1 2 — one shared rule, five multipliers */
+    card.style.setProperty("--i", i - 2);
+    card.innerHTML = cardSvg(i);
+    fan.appendChild(card);
+  }
+});
+
+document.querySelectorAll("[data-portrait]").forEach(function (el) {
+  el.innerHTML = PORTRAIT;
+});
+
+/* ---------- 2. controls: every one sets a single custom property ---------- */
+
+function readValue(control) {
+  if (control.type === "checkbox") {
+    return control.checked ? control.dataset.on : control.dataset.off;
+  }
+  return control.value + (control.dataset.unit || "");
+}
+
+function bind(control) {
+  var target = document.querySelector(control.dataset.target);
+  var out = control.dataset.out ? document.querySelector(control.dataset.out) : null;
+  if (!target) return;
+
+  function apply() {
+    if (control.type === "radio" && !control.checked) return;
+    var value = readValue(control);
+    target.style.setProperty(control.dataset.css, value);
+    if (out) out.textContent = value;
+  }
+
+  control.addEventListener("input", apply);
+  control.addEventListener("change", apply);
+  if (control.type !== "radio" || control.checked) apply();
+}
+
+document.querySelectorAll("[data-css]").forEach(bind);
+
+/* ---------- 3. the clamp demo needs a computed readout ---------- */
+
+var clampWidth = document.getElementById("clampWidth");
+if (clampWidth) {
+  var stage = document.getElementById("g6");
+  var text = document.getElementById("clampText");
+  var outW = document.getElementById("o-vw");
+  var outW2 = document.getElementById("o-cw2");
+  var outFs = document.getElementById("o-fs");
+  var outPin = document.getElementById("o-pin");
+
+  var showClamp = function () {
+    var w = Number(clampWidth.value);
+    stage.style.setProperty("--vw", w + "px");
+    outW.textContent = w + "px";
+
+    /* Report the width actually painted, not the width we asked for — on a
+       narrow screen the box cannot physically reach 1500px, and saying it did
+       would be a lie the students can see through. */
+    var shown = Math.round(stage.getBoundingClientRect().width);
+    outW2.textContent = shown < w ? shown + "px shown" : w + "px";
+
+    /* Read what the browser resolved rather than recomputing clamp ourselves. */
+    var px = parseFloat(getComputedStyle(text).fontSize);
+    outFs.textContent = Math.round(px) + "px";
+    if (px <= 32.5) outPin.textContent = "— pinned to the 2rem floor";
+    else if (px >= 111.5) outPin.textContent = "— pinned to the 7rem ceiling";
+    else outPin.textContent = "— scaling with the viewport";
+  };
+
+  clampWidth.addEventListener("input", showClamp);
+  window.addEventListener("resize", showClamp);
+  showClamp();
+}
+
+/* ---------- 4. navigation ---------- */
+
+var deck = document.getElementById("deck");
+var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+var slideNo = document.getElementById("slideNo");
+var slideName = document.getElementById("slideName");
+var progress = document.getElementById("progress");
+var at = 0;
+
+document.getElementById("slideTotal").textContent = slides.length;
+
+function goTo(index) {
+  at = Math.max(0, Math.min(slides.length - 1, index));
+  slides[at].scrollIntoView({ behavior: "smooth", block: "start" });
+  paintChrome();
+}
+
+function paintChrome() {
+  slideNo.textContent = at + 1;
+  slideName.textContent = slides[at].dataset.name || "";
+  progress.style.width = ((at + 1) / slides.length) * 100 + "%";
+}
+
+/* Keep the counter honest when someone scrolls by hand or by trackpad. */
+if ("IntersectionObserver" in window) {
+  var watcher = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        at = slides.indexOf(entry.target);
+        paintChrome();
+      }
+    });
+  }, { root: deck, threshold: 0.55 });
+  slides.forEach(function (s) { watcher.observe(s); });
+}
+
+document.querySelectorAll("[data-go]").forEach(function (button) {
+  button.addEventListener("click", function () { goTo(at + Number(button.dataset.go)); });
+});
+
+var TYPING = ["INPUT", "TEXTAREA", "SELECT"];
+
+document.addEventListener("keydown", function (event) {
+  if (TYPING.indexOf(event.target.tagName) !== -1) return;
+  if (event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === "PageDown" || event.key === " ") {
+    event.preventDefault(); goTo(at + 1);
+  } else if (event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "PageUp") {
+    event.preventDefault(); goTo(at - 1);
+  } else if (event.key === "Home") {
+    event.preventDefault(); goTo(0);
+  } else if (event.key === "End") {
+    event.preventDefault(); goTo(slides.length - 1);
+  }
+});
+
+paintChrome();
+</script>
+</body>
+</html>
