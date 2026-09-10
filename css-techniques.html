@@ -220,6 +220,29 @@ input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
 
 .fan { display: flex; justify-content: center; align-items: flex-end; gap: 10px; }
 
+/* Slide 3 only. The overflow lesson needs something that genuinely does not
+   fit: this box is deliberately narrower and shorter than the fan inside it,
+   and it is bordered so the boundary being escaped is visible. */
+.gallery--tight {
+  width: min(52%, 300px);
+  height: 92px;
+  min-height: 0;               /* .gallery inherits the stage's min-height */
+  flex: none;
+  border: 2px solid var(--accent);
+  background: #fff;
+  margin: auto;
+}
+.gallery--tight .fan { align-items: center; }
+.tight-label {
+  position: absolute;
+  top: -1.5rem;
+  left: 0;
+  font-family: var(--mono);
+  font-size: clamp(.68rem, .9vw, .82rem);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
 .card {
   width: clamp(74px, 9vw, 132px);
   aspect-ratio: 3 / 4;
@@ -558,7 +581,8 @@ input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
 
     <div class="split">
       <div class="stage stage-tall">
-        <div class="gallery" id="g3" style="--spread:11deg; --origin:bottom center; --of:hidden;">
+        <div class="gallery gallery--tight" id="g3" style="--spread:11deg; --origin:bottom center; --of:hidden;">
+          <span class="tight-label">.wrapper</span>
           <div class="fan" data-fan></div>
         </div>
       </div>
@@ -581,8 +605,9 @@ input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
           </label>
         </div>
 
-        <p class="aside-note">Flip it and watch the fan spill past the section edge. That spill is exactly what
-          <code>hidden</code> is for.</p>
+        <p class="aside-note">The blue box is deliberately too small for the fan. Flip the switch and watch the cards
+          spill straight out of it. That spill is exactly what <code>hidden</code> is for — and exactly what you want
+          when a product image should break out of a card.</p>
       </div>
     </div>
   </div>
