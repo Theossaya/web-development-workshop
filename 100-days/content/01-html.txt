@@ -1,0 +1,299 @@
+@@ level | 1 | Structure | HTML | Days 1 to 14
+TEXT
+HTML decides what every part of a page is: a heading, a list, a form, a table. You probably know the basic tags already. This level is about using the right ones for the right job, because every later level depends on it. CSS styles what your HTML says, and JavaScript finds things by what your HTML calls them.
+
+There is no CSS in this level at all. Your pages will look plain, and that is on purpose. A page that makes sense with no styling is a page that is easy to style later.
+BY-THE-END
+- a nine-page site with shared navigation
+- a leaderboard table, a tournament list and a news page
+- a sign-up form that checks its own input
+- every page passing the W3C validator with no errors
+
+@@ day | 1 | Start the Lobby | phone
+LEARN
+Every page needs the same few lines in its `head`. You will write them nine times in the next two weeks, so learn what each one does.
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lobby | Home of our gaming crew</title>
+  <meta name="description" content="Tournaments, match nights and leaderboards for our gaming community.">
+</head>
+<body>
+  <h1>Lobby</h1>
+</body>
+</html>
+```
+
+The `viewport` line stops phones from shrinking your page to fit a desktop-sized screen. Without it, everything looks tiny. The `description` is the short summary search engines often show under your link. The `lang` attribute tells screen readers which language to read the page in.
+BUILD
+Make a folder called `lobby` with an `index.html` inside it. Type the head yourself instead of pasting it. Choose your community's name and use it in the title and the `h1`. Under the heading, write two short paragraphs: who the community is for, which games you play and where you usually meet (a WhatsApp group, a Discord server, somebody's parlour on Saturdays).
+
+At the bottom of the body, add an HTML comment listing the pages you will build: home, games, tournaments, leaderboard and join.
+DONE
+- The page opens in your preview and shows your heading
+- The browser tab shows your title
+- Pasting your code into validator.w3.org (choose "Validate by direct input") gives no errors
+STRETCH
+Add a favicon. Make a small square picture of your logo, save it as `favicon.png` and link it with `<link rel="icon" href="favicon.png">`.
+
+@@ day | 2 | The shape of the homepage | phone
+LEARN
+Pick elements for what they mean, not how they look. These are the ones that give a page its structure:
+
+```html
+<header>
+  <a href="index.html">Lobby</a>
+  <nav>...</nav>
+</header>
+<main>
+  <section>
+    <h2>Games we play</h2>
+    <article>...</article>
+  </section>
+  <aside>...</aside>
+</main>
+<footer>...</footer>
+```
+
+Use one `main` per page. A `section` is a part of the page with its own heading. An `article` is something that makes sense on its own, like a game card or a news post. An `aside` is related to the page but not the main point, like a box about the next tournament.
+BUILD
+Rebuild your homepage with a real structure. The header holds your site name and a `nav` with five links (use `href="#"` for now). Inside `main`, add:
+
+- a hero section with the `h1`, one line about your community and a "Join the crew" link
+- a "Games we play" section with three articles, each with an `h3` and one sentence about why your crew plays that game
+- an `aside` called "Next tournament" with the game, the date and the prize
+
+The footer holds your social links and a copyright line.
+DONE
+- There is exactly one `h1`, sections use `h2` and cards use `h3`
+- Every section has a heading
+- Read with no styles, the page makes sense from top to bottom
+STRETCH
+Close the file and write the whole structure again from memory in a new file, in under fifteen minutes.
+
+@@ day | 3 | Five pages, one navigation | phone
+LEARN
+A relative link points to a file based on where the current file is. `games.html` means the file next to this one. `pages/games.html` means inside a folder called pages. `../index.html` means one folder up.
+
+```html
+<nav>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="games.html" aria-current="page">Games</a></li>
+    <li><a href="tournaments.html">Tournaments</a></li>
+  </ul>
+</nav>
+```
+
+`aria-current="page"` tells screen readers which link is the page they are on. In Level 2 you will also use it to highlight that link.
+BUILD
+Create `games.html`, `tournaments.html`, `leaderboard.html` and `join.html`. Copy your header and footer into each one. Point every nav link at the right file, and on each page put `aria-current="page"` on the link for that page. Give each page its own title and description.
+DONE
+- From any page, you can reach every other page
+- Every tab shows a different title
+- Only one link per page has `aria-current`
+STUCK
+If a link shows an error page, check the spelling and the capital letters. `games.html` and `Games.html` are different files on most servers.
+STRETCH
+Move the four new pages into a `pages` folder and fix every link, including the ones pointing back home. Then decide whether it was worth it. Moving them back is allowed.
+
+@@ day | 4 | Images that behave | phone
+LEARN
+An image needs four things: a source, alt text, a width and a height.
+
+```html
+<figure>
+  <img src="images/efootball.jpg"
+       alt="Two players celebrating a last-minute winner in eFootball"
+       width="640" height="360" loading="lazy">
+  <figcaption>The final of our eFootball Friday league</figcaption>
+</figure>
+```
+
+Width and height let the browser save space for the image before it loads, so the page does not jump around. `loading="lazy"` waits until the image is nearly on screen, which saves data. Alt text describes what is in the picture for anyone who cannot see it. "Image of game" tells them nothing.
+
+Use screenshots you took yourself or placeholder images. Game cover art belongs to the publishers, so do not copy it from the internet for a site you will publish.
+BUILD
+On `games.html`, build six game cards. Each card is an `article` with an image, an `h2` with the game's name and a sentence about the game. Keep all images in an `images` folder.
+DONE
+- Six cards, each with an image that loads
+- Every image has alt text, a width and a height
+- Every image after the first two has `loading="lazy"`
+STRETCH
+Resize your screenshots to 640 pixels wide before adding them. Most phone photo editors can do it, and squoosh.app does it in the browser. Note how much smaller the files get.
+
+@@ day | 5 | Lists and details | phone
+LEARN
+There are three kinds of list. Use `ul` when the order does not matter, `ol` when it does, and `dl` for pairs of labels and values.
+
+```html
+<dl>
+  <dt>Genre</dt>
+  <dd>Football</dd>
+  <dt>Platforms</dt>
+  <dd>Mobile, PlayStation</dd>
+  <dt>Players per match</dt>
+  <dd>2</dd>
+</dl>
+```
+
+A list inside a list goes inside an `li`, not between two of them.
+BUILD
+Under each game card, add a `dl` with the genre, the platforms, the number of players per match and where your crew plays it. On `tournaments.html`, add a rules section with an `ol` of at least eight rules. One rule must have a nested list, such as the rule about what happens when someone disconnects.
+DONE
+- Every card has a `dl` with at least four pairs
+- The rules use `ol`, because their order matters
+- The nested list sits inside an `li`
+STRETCH
+Add a "What to bring" list for in-person events: controller, charger, power bank, and anything else your crew always forgets.
+
+@@ day | 6 | The leaderboard table | phone
+LEARN
+Use a table for data that has rows and columns, never for page layout.
+
+```html
+<table>
+  <caption>Season 1 standings</caption>
+  <thead>
+    <tr>
+      <th scope="col">Rank</th>
+      <th scope="col">Gamer tag</th>
+      <th scope="col">Points</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <th scope="row">Ada_Snipes</th>
+      <td>58</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+`scope` tells screen readers whether a heading belongs to its column or its row, so they can read "Points: 58" instead of just "58".
+BUILD
+On `leaderboard.html`, build a table of ten players with these columns: rank, gamer tag, main game, wins, losses and points. Make each gamer tag a row heading. Add a caption, and a `tfoot` with the date it was last updated in a `time` element: `<time datetime="2026-10-03">3 October</time>`.
+DONE
+- The caption describes the table
+- Column headings use `scope="col"` and gamer tags use `scope="row"`
+- The `time` element has a `datetime` in year-month-day format
+STRETCH
+Add a second table with two column groups, "This month" and "All time", each covering wins and points. Use `colspan` on the group headings.
+
+@@ day | 7 | The join form | phone
+LEARN
+Every input needs a `label`. Match the label's `for` to the input's `id`, and tapping the label then puts the cursor in the input, which is a bigger target on a phone.
+
+```html
+<label for="phone">Phone number</label>
+<input id="phone" name="phone" type="tel">
+```
+
+The `type` changes the keyboard people see. `tel` gives a number pad, `email` adds the @ key and `number` gives digits. That alone makes a form easier to fill in on a phone.
+BUILD
+On `join.html`, build a sign-up form with a gamer tag, full name, email, phone number, age, main game (a `select` with at least six games), platform (radio buttons for mobile, PC, PlayStation, Xbox and other), how they heard about you (a `select`), a short bio (`textarea`), an "I agree to the rules" checkbox and a submit button.
+DONE
+- Every input has a visible label that focuses it when tapped
+- The phone field brings up a number pad on your phone
+- All platform radio buttons share one `name`, so only one can be picked
+STRETCH
+Swap the main game `select` for a text input with a `datalist`, so people can pick from your list or type a game you did not think of.
+
+@@ day | 8 | Validation with plain HTML | phone
+LEARN
+HTML can check a form before it is sent, without any JavaScript.
+
+```html
+<label for="tag">Gamer tag</label>
+<input id="tag" name="tag" required minlength="3" maxlength="16"
+       pattern="[A-Za-z0-9_]+" title="Letters, numbers and underscores only">
+
+<label for="phone">Phone number</label>
+<input id="phone" name="phone" type="tel" required
+       pattern="0[789][01][0-9]{8}" placeholder="08031234567">
+```
+
+That phone pattern accepts eleven-digit numbers starting with 070, 071, 080, 081, 090 or 091. `fieldset` and `legend` group related fields under a heading.
+BUILD
+Add rules to every field that needs one: required fields, a gamer tag of 3 to 16 letters, numbers or underscores, a Nigerian mobile number, and an age from 13 to 99. The rules checkbox must be required. Group the form into three fieldsets: "About you", "Your gaming" and "The rules".
+DONE
+- Submitting an empty form shows the browser's error messages
+- "ab" is rejected as a gamer tag, and so is "king tunde" with a space
+- "12345" is rejected as a phone number, and so is an age of 12
+STRETCH
+Accept numbers written with +234 as well. The pattern `(0|\+234)[789][01][0-9]{8}` takes both.
+
+@@ day | 9 | Make it work for everyone | laptop
+LEARN
+About one person in six lives with some kind of disability. Many use a keyboard instead of a mouse or a screen reader instead of their eyes. Most of what they need comes free if your HTML is correct.
+
+```html
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header>...</header>
+  <main id="main">...</main>
+</body>
+```
+
+A skip link lets keyboard users jump past the navigation on every page. Headings should go in order without skipping levels. Link text should make sense on its own: "See the tournament rules", not "click here".
+DEVICE
+Today's keyboard test needs a keyboard. Use a laptop, or connect a Bluetooth keyboard to your phone. Without either, do every other check today and come back to the Tab test later.
+BUILD
+Go through all five pages. Add a skip link as the first thing in each `body`, and give each `main` the id it points to. Fix any heading that skips a level. Rewrite any link text that would not make sense read alone. Then press Tab through every page from top to bottom and write down anything you could not reach or could not see.
+DONE
+- The skip link is the first thing Tab reaches on every page
+- Every link, button and input can be reached with Tab
+- No heading level is skipped and no link says "click here"
+STRETCH
+Turn on your phone's screen reader, TalkBack on Android or VoiceOver on iPhone, and listen to your homepage for two minutes. Write down one thing that surprised you. Search for how to turn it off before you turn it on.
+
+@@ day | 10 | Clips and embeds | phone
+LEARN
+To embed a YouTube video, use an `iframe` with a `title` that says what the video is. Screen readers announce the title, and without it they just say "frame".
+
+```html
+<iframe src="https://www.youtube.com/embed/VIDEO_ID"
+        title="Ada_Snipes' winning goal in the season final"
+        width="560" height="315" loading="lazy" allowfullscreen></iframe>
+<p><a href="https://www.youtube.com/watch?v=VIDEO_ID">Watch the clip on YouTube</a></p>
+```
+
+For your own video files, use `video` with `controls` so people can pause it, and a `poster` image that shows before it plays. Embeds need internet to load.
+BUILD
+Add a "Clip of the week" section to your homepage with a YouTube embed of a gaming highlight from your community, a title describing it and a link to the video underneath. On `games.html`, add one short video file (under 5 MB) with controls and a poster image.
+DONE
+- The `iframe` has a title that describes the clip
+- The video has controls and shows a poster before playing
+- The link under the embed opens the same video
+STRETCH
+Record a ten-second clip of your own gameplay and use it instead of the YouTube embed.
+
+@@ boss | 1 | 11-14 | The whole Lobby in HTML | phone
+TEXT
+Four days to turn five rough pages into a complete site you would be happy to show someone, still with no CSS. Plain HTML that reads well is the foundation everything else sits on, so do this week properly.
+MUST
+- `tournaments.html` lists three upcoming tournaments, each an `article` with the game, the date and time in a `time` element, the format (knockout or league), the entry fee, the prize in naira and a link to register
+- `news.html` has three posts, each an `article` with a title, author, date in a `time` element and two paragraphs
+- `about.html` says who runs the community, how to join the group chat, and has a code of conduct as a list
+- `404.html` exists and links home
+- every page has the same header, navigation and footer, with `aria-current` on the right link
+- every page passes the W3C validator with no errors
+NICE
+- a "Hall of fame" table on `about.html` with past champions
+- a contact form on `about.html` built with what you learned on days 7 and 8
+PLAN
+11 | Tournaments page: three events with all their details. Use games your crew really plays and dates in the next few months.
+12 | News page with three posts, and a single post page (`post-1.html`) that the first headline links to.
+13 | About page and 404 page. Then go through every page and make the headers and footers match exactly.
+14 | Validate every page, fix every error and click every link. Add a short changelog at the bottom of `about.html` listing what you built in days 1 to 14.
+DONE
+- nine pages, all reachable from the navigation or from another page
+- zero validator errors on every page
+- no broken links and no broken images
+STUCK
+Validator errors often come in a chain. Fix the first one and run it again. Half of the rest may disappear with it.

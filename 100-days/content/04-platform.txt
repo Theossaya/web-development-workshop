@@ -1,0 +1,220 @@
+@@ level | 4 | The platform | Weekly projects | Days 73 to 100
+TEXT
+From here it is boss weeks only. Each one builds a feature too big for an evening: a full game library, tournaments with live brackets, a leaderboard worked out from real match results, and finally a launch.
+
+You already know everything these weeks need, apart from a few new ideas each one introduces. The hard part now is holding a bigger piece of code in your head. Two habits make that much easier. Keep your data in one place and change the page only from one `render` function. And when something breaks, test the smallest piece you can on its own before looking at the whole thing.
+BY-THE-END
+- a searchable, filterable game library with shareable links
+- tournaments with registration and knockout brackets
+- a leaderboard, player profiles and clan pages built from match results
+- a launched site your community actually uses
+
+@@ boss | 4 | 73-79 | The game library | preview
+TEXT
+Your games page has grown piece by piece: cards from data, search, saved games, detail pages. This week you join all of it into one proper library with filters and sorting that work together, and addresses you can share. When someone sends `games.html?genre=football&platform=mobile` to the group chat, whoever opens it sees exactly the same list.
+MUST
+- one `state` object holding the search term, genre, platforms, sort order and a saved-only switch
+- one `render()` function that filters, sorts and draws the cards from `state`, and nothing else touches the grid
+- a genre `select`, platform checkboxes and the search box from day 70, all working together
+- sorting by name, by max players and by number of upcoming tournaments
+- a "Saved only" switch using your saved games from day 53
+- a "Clear filters" button
+- the current filters kept in the address, and read back when the page loads
+- a result count that screen readers announce, and a helpful message when nothing matches
+NICE
+- filter counts, like "Football (4)", in the genre list
+- a "Surprise me" button that opens a random game's page
+PLAN
+73 | Write the `state` object and the `render()` function. Move your search into it, so the search box only updates `state.search` and calls `render()`.
+74 | Add the genre select and the platform checkboxes. Make them combine with the search.
+75 | Add sorting. For "most tournaments", count each game's upcoming tournaments from `tournaments.json`.
+76 | Add the Saved only switch and the Clear filters button.
+77 | Keep the state in the address with `URLSearchParams` and `history.replaceState`, and read it on page load.
+78 | Empty state, loading state, error state and the announced result count.
+79 | Test every combination you can think of. Write the must-have list on paper and tick each item as you prove it works.
+LEARN
+Every control only changes `state` and calls `render()`. Nothing else draws anything.
+
+```js
+const state = { search: "", genre: "all", platforms: [], sort: "name", savedOnly: false };
+
+function render() {
+  let list = games.filter(game => matches(game, state));
+  list = sortGames(list, state.sort);
+  drawCards(list);
+  count.textContent = `Showing ${list.length} of ${games.length} games`;
+  saveStateToAddress(state);
+}
+
+genreSelect.addEventListener("change", () => {
+  state.genre = genreSelect.value;
+  render();
+});
+```
+
+To update the address without reloading the page:
+
+```js
+const params = new URLSearchParams();
+if (state.genre !== "all") params.set("genre", state.genre);
+history.replaceState(null, "", `?${params}`);
+```
+DONE
+- opening a shared filtered link shows the same results as the person who sent it
+- no combination of filters leaves an empty grid without an explanation
+- the grid is only ever drawn by `render()`
+STUCK
+If filters seem to fight each other, you have more than one function drawing the cards. Search your code for every place that changes the grid. There should be exactly one.
+
+@@ boss | 5 | 80-86 | Tournaments and brackets | laptop
+TEXT
+This is the part your community will use most. Tournaments load from your data, show whether they are upcoming, live or finished, let players register, and then run a knockout bracket from the first round to a champion.
+MUST
+- a `tournament.html?id=...` page showing the tournament's details, its status worked out from its date, and a countdown if it has not started
+- a registration form asking for gamer tag and platform, with the slots remaining shown, no duplicate tags, and registration closed once it is full or has started
+- registrations saved in `localStorage`, kept separately for each tournament
+- a "Generate bracket" button that shuffles the registered players fairly and pairs them up, giving byes when the number of players is not a power of two
+- tapping a player in a match makes them the winner and moves them into the next round, until one champion is left
+- the bracket drawn as one column per round, scrolling sideways on a phone
+NICE
+- undo a winner
+- a printable version of the bracket
+- a champion screen with a Share button, reusing your code from day 62
+PLAN
+80 | The tournament page: its details, status from its date, and the countdown from day 54.
+81 | The registration form, slots remaining, duplicate check and closing rules, saved for each tournament.
+82 | Write `shuffle()` and check it gives a different order most times you run it.
+83 | Build round one with byes. Store the bracket as an array of rounds, where each round is an array of matches like `{ a, b, winner }`.
+84 | Tapping a player sets the winner and fills the right spot in the next round.
+85 | Draw the bracket with CSS grid, one column per round, scrolling sideways on narrow screens.
+86 | The champion screen, saving the bracket so a refresh keeps it, and a full test with 5, 8 and 11 players.
+LEARN
+A fair shuffle, known as the Fisher-Yates shuffle:
+
+```js
+function shuffle(list) {
+  const copy = [...list];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+```
+
+A knockout bracket needs 2, 4, 8, 16 or 32 players. Find the next of those sizes, and the difference is how many byes you need:
+
+```js
+let size = 2;
+while (size < players.length) size *= 2;
+const byes = size - players.length;
+```
+
+Give the byes out first, so no match ever has two byes. With five players you need three byes, so round one is three players each against a bye, then the last two players against each other. A player against a bye goes straight through to round two.
+DONE
+- the brackets for 5, 8 and 11 players are all correct
+- no match ever has a bye on both sides
+- refreshing the page keeps the bracket exactly as it was
+STUCK
+Draw the bracket for five players on paper first, and write out the array for each round beside it. Make your code produce exactly those arrays in the console before you draw anything on screen.
+
+@@ boss | 6 | 87-93 | Players, clans and the real leaderboard | preview
+TEXT
+So far your leaderboard reads wins straight from `players.json`, which is not how real leaderboards work. They are worked out from a list of match results, so they cannot disagree with what happened. This week you build that, along with a profile for every player and a page for every clan.
+MUST
+- `matches.json` with at least 40 results, each with a date, game id, two players and two scores
+- a function that works out each player's played, won, drawn, lost, points and form (their last five results as W, D or L) from the matches alone
+- the leaderboard built from those numbers and sortable by tapping any column heading, with `aria-sort` on the sorted column
+- a game filter on the leaderboard
+- `profile.html?tag=...` showing a player's stats, tier, clan, form and last ten matches
+- `clans.json` and `clan.html?id=...` listing each clan's members and their combined points
+- every gamer tag anywhere on the site linking to that player's profile
+NICE
+- a page comparing two players side by side
+- an "Edit my profile" form that saves a bio and favourite game to `localStorage` and shows them on your own profile
+- an avatar made from the player's initials, in a colour worked out from their tag
+PLAN
+87 | Write `matches.json`. Then write `statsFor(tag, matches)` and test it against one player whose numbers you work out by hand.
+88 | Build the leaderboard from the worked-out stats, with sortable headings and `aria-sort`.
+89 | The game filter, and the form guide showing the last five results.
+90 | `profile.html` with stats and match history.
+91 | `clans.json`, the clan pages, and links between players and their clans.
+92 | One of the nice-to-haves.
+93 | Make every gamer tag on the site a link to its profile. Test with a tag that does not exist.
+LEARN
+A colour that is always the same for the same tag, useful for avatars:
+
+```js
+function colourFor(tag) {
+  let hash = 0;
+  for (const ch of tag) hash = (hash * 31 + ch.charCodeAt(0)) % 360;
+  return `hsl(${hash} 60% 45%)`;
+}
+```
+
+For sortable headings, put a `button` inside each `th`. When one is tapped, set `aria-sort="ascending"` or `"descending"` on its `th` and remove `aria-sort` from the others.
+DONE
+- every number on the leaderboard can be checked against `matches.json`
+- every gamer tag on the site is a link
+- an unknown tag shows "Player not found" with a link back to the leaderboard
+STUCK
+If a player's numbers look wrong, filter the matches down to just that player and `console.table` them. Then count their wins with your finger.
+
+@@ boss | 7 | 94-100 | Launch week | laptop
+TEXT
+Your last week is not about new features. It is about making what you have solid enough to hand to your community. Everything here is checking, fixing and finishing, and it is the difference between a project and something people use.
+MUST
+- an accessibility pass: every page used with the keyboard only, alt text checked, contrast checked in both themes, headings in order, focus always visible, and `aria-live` wherever content changes
+- a speed pass, with the PageSpeed Insights mobile score written down before and after
+- link previews, so your link shows a title, description and picture when it is shared on WhatsApp
+- a `README.md` on GitHub saying what Lobby is, with screenshots, how to run it and what you would build next
+- Eruda and every debugging `console.log` removed
+- a final version live and tested on at least three different phones
+NICE
+- a web app manifest, so people can add Lobby to their home screen like an app
+- a "What I learned" page on the site
+PLAN
+94 | Accessibility pass: use every page with the keyboard only and fix everything you find.
+95 | Speed pass with PageSpeed Insights, then fix the top suggestions.
+96 | Responsive pass on real devices. Borrow two phones and a laptop.
+97 | Link preview tags and a 1200 by 630 pixel share image. Test by sending the link to yourself on WhatsApp.
+98 | Clean up: delete unused files and code, make names consistent, add comments wherever the code is not obvious. Write the README.
+99 | Deploy the final version. Ask three people to try to break it and write down everything that goes wrong.
+100 | Fix what they found. Then post the link in your community with a short message about what it does.
+LEARN
+Link previews come from Open Graph tags in each page's `head`:
+
+```html
+<meta property="og:title" content="Lobby | Gaming community">
+<meta property="og:description" content="Tournaments, match nights and leaderboards for our crew.">
+<meta property="og:image" content="https://your-username.github.io/lobby/images/share.png">
+<meta property="og:url" content="https://your-username.github.io/lobby/">
+<meta property="og:type" content="website">
+```
+
+The image address must be a full `https` address, not a relative path. WhatsApp remembers previews, so if you change the image and the old one still shows, test with a slightly different link, such as your address with `?v=2` on the end.
+DONE
+- sharing the link on WhatsApp shows your picture and description
+- no page has a single error in the console
+- three people have used Lobby on their own phones
+- the README on GitHub has at least two screenshots
+
+@@ page | After day 100
+TEXT
+You now have a working community site built from nothing but HTML, CSS and JavaScript, and you understand every line of it. These are the next steps, roughly in order.
+
+### A server and a database
+
+Lobby's biggest limit is that everything people save stays on their own phone. Real accounts, shared tournament registrations and a chat everyone can read need a server and a database. The two usual routes are to learn Node.js and write your own server, or to use a service such as Firebase or Supabase that gives you accounts and a database without running a server yourself. Either way, your Lobby front end stays almost exactly as it is.
+
+### Git, properly
+
+If you have been uploading through the GitHub website, learn Git on a laptop: branches, commits with good messages, and going back to an earlier version when something breaks.
+
+### A framework, later
+
+React, Vue and Svelte are popular because they make the `state` and `render()` pattern from boss week 4 easier on large sites. You already understand the problem they solve, which makes them much easier to learn. Do not start one until plain JavaScript feels comfortable.
+
+### Keep building
+
+The fastest way to improve now is to build a second, different site from an empty folder, without this guide open. A booking page for a barber, a menu for a local restaurant, or a results site for your school's football league. Pick something a real person would use, and ask them what they need before you start.

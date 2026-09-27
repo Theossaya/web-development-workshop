@@ -1,0 +1,478 @@
+@@ level | 2 | Style | CSS | Days 15 to 37
+TEXT
+CSS decides how everything looks and where it sits. Gaming sites tend to be dark, bold and full of cards, and by the end of this level yours will be too. It will also work on a cheap phone and a wide laptop screen alike, and it will be online at a link you can send your crew.
+
+The habit this level builds is consistency. Choose your colours, sizes and spacing once, give them names, and use those names everywhere. Sites that look professional are mostly sites that repeat themselves carefully.
+BY-THE-END
+- a design system of colours, type and spacing held in CSS variables
+- responsive layouts built with flexbox and grid
+- a dark theme and a light theme
+- your site live on GitHub Pages
+
+@@ day | 15 | Link a stylesheet and set the basics | phone
+LEARN
+Put all your styles in one file and link it from every page with `<link rel="stylesheet" href="css/styles.css">` inside the `head`.
+
+When two rules disagree, the more specific selector wins. An id beats a class, and a class beats an element name. When they are equally specific, the one written later wins. Some properties, like `color` and `font-family`, are inherited, so setting them on `body` changes the whole page.
+
+```css
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+```
+BUILD
+Create `css/styles.css` and link it from all nine pages. Type in the base rules above. Then try an experiment on one paragraph: give it a class and an id, style `p`, `.intro` and `#welcome` with three different colours, and write a comment in your CSS explaining which one won and why.
+DONE
+- The base styles show up on every page
+- Your comment correctly explains which colour won
+- No page still has styles inside its HTML
+STRETCH
+Look up the `:where()` selector on MDN and write a comment explaining why it is useful for base styles.
+
+@@ day | 16 | A colour system | phone
+LEARN
+Store your colours in custom properties (CSS variables) on `:root`, then use them with `var()`. Change a colour in one place and it changes everywhere.
+
+```css
+:root {
+  --bg: #0f1115;
+  --surface: #181b22;
+  --text: #e9ecf1;
+  --muted: #9aa3b2;
+  --accent: #39d98a;
+  --danger: #ff5a5f;
+  --live: #ff3d71;
+}
+
+body { background: var(--bg); color: var(--text); }
+```
+
+Text has to stand out from its background. The standard to aim for is a contrast ratio of at least 4.5 to 1 for normal text.
+BUILD
+Choose seven colours for your brand: a background, a surface for cards, text, muted text, an accent, a danger colour, and a live colour used only for things happening right now, like a tournament in progress. Check your text against your background at webaim.org/resources/contrastchecker, which works in a phone browser. Apply the colours across the whole site using variables only.
+DONE
+- Hex colour codes appear only inside `:root`
+- Body text on the background passes 4.5 to 1
+- Links look different from normal text
+STRETCH
+Add `--accent-hover`, a slightly lighter version of your accent, and use it for links and buttons when they are hovered or focused.
+
+@@ day | 17 | Type that reads well | phone
+LEARN
+Size text in `rem`, which is relative to the reader's own font setting. Use `clamp()` for headings so they grow with the screen but never become too small or too big. Keep paragraphs to around 65 characters wide, because long lines are tiring to read.
+
+```css
+h1 { font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.1; }
+h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+p  { max-width: 65ch; }
+```
+
+Google Fonts (fonts.google.com) gives you free fonts with a `link` tag to paste into your `head`. They need internet every time the page loads unless the browser has saved them.
+BUILD
+Pick one bold display font from Google Fonts for headings and keep the system font for body text. Set sizes for `h1`, `h2`, `h3`, body text and small text. Limit the width of paragraphs.
+DONE
+- Headings use your display font and body text uses the system font
+- No font size anywhere is set in `px`
+- No paragraph runs wider than about 65 characters
+STRETCH
+Download the font files, put them in a `fonts` folder and load them with `@font-face`, so your site no longer needs Google to show your headings.
+
+@@ day | 18 | Spacing with the box model | phone
+LEARN
+Every element is a box: content, then `padding` around it, then a `border`, then `margin` outside. With `box-sizing: border-box` (from day 15), `width` includes the padding and border, which is much easier to reason about.
+
+Pick a spacing scale and use nothing else:
+
+```css
+:root {
+  --space-1: .25rem;  --space-2: .5rem;  --space-3: 1rem;
+  --space-4: 1.5rem;  --space-5: 2.5rem; --space-6: 4rem;
+}
+
+section { padding-block: var(--space-6); }
+.card { padding: var(--space-4); }
+```
+BUILD
+Add a spacing scale and use it for every margin, padding and gap on the site. Give the game cards a surface background, padding and a thin border in your muted colour.
+DONE
+- Every margin and padding uses a `--space` variable
+- Sections have the same breathing room on every page
+- Nothing touches the edge of the screen on a phone
+STRETCH
+Open Eruda's Elements tab (or the laptop developer tools), inspect one card and find the diagram of its box model.
+
+@@ day | 19 | The centred container | phone
+LEARN
+Most sites keep their content in a centred column so lines never get too long on wide screens. One line does it:
+
+```css
+.container {
+  width: min(100% - 2rem, 70rem);
+  margin-inline: auto;
+}
+```
+
+`min()` picks the smaller of the two, so on a phone the content is the screen width minus 1rem each side, and on a laptop it stops growing at 70rem. `margin-inline: auto` centres it.
+BUILD
+Wrap the content of your header, each section and your footer in a `.container`. Make the footer links `display: inline-block` with some padding, so they are easier to tap.
+DONE
+- At any width, text never touches the edge of the screen
+- On a wide screen, the content sits in the middle and stops at 70rem
+- Footer links are easy to tap with a thumb
+STRETCH
+Add a narrower `.container-narrow` for news posts, around 42rem, so long articles are easier to read.
+
+@@ day | 20 | Flexbox: the header | phone
+LEARN
+Flexbox lays things out in a row or a column and handles the spacing between them.
+
+```css
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+nav ul { display: flex; gap: var(--space-3); list-style: none; margin: 0; padding: 0; }
+
+nav [aria-current="page"] { color: var(--accent); }
+```
+
+`justify-content` spaces things along the row and `align-items` lines them up across it. The last rule uses the `aria-current` you added on day 3 to style the current page's link.
+BUILD
+Lay out the header with the site name on the left and the navigation on the right, wrapping underneath on narrow screens. Remove the underlines from nav links, give them padding, and make the current page's link stand out.
+DONE
+- On a wide screen, the header fits on one line
+- On a phone, it wraps neatly without anything overlapping
+- Each nav link is at least about 44 pixels tall, so it is easy to tap
+STRETCH
+Make a logo from your site name using only CSS: a bold font, a letter-spacing tweak and a small block of accent colour.
+
+@@ day | 21 | Flexbox: cards that line up | phone
+LEARN
+Cards in a row look untidy when their buttons sit at different heights. Make each card a column and push the button to the bottom:
+
+```css
+.cards { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+.card  { flex: 1 1 16rem; display: flex; flex-direction: column; }
+.card .btn { margin-top: auto; }
+```
+
+`flex: 1 1 16rem` means grow and shrink as needed, starting from 16rem wide. `margin-top: auto` takes up all the spare space above the button.
+BUILD
+Make the "Games we play" cards on your homepage a wrapping row. Inside each card, stack the image, the title, the text and a "See tournaments" link, with the link always at the bottom even when one card has more text than the others.
+DONE
+- Cards in the same row are the same height
+- The links line up along the bottom of the row
+- On a phone, each card takes the full width
+STRETCH
+Add a `.card--featured` variant that is twice as wide as the others on large screens.
+
+@@ day | 22 | Grid: the game library | phone
+LEARN
+Grid lays things out in rows and columns at the same time. This one line makes a responsive gallery with no media queries at all:
+
+```css
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: var(--space-4);
+}
+```
+
+It says: fit in as many columns as you can, each at least 14rem wide, and share out any spare space.
+BUILD
+Turn the cards on `games.html` into a grid that shows one column on a phone, two or three on a tablet and four on a laptop, without writing a media query.
+DONE
+- Rotating your phone or resizing the window changes the number of columns
+- Nothing scrolls sideways at any width
+- Cards keep the styles from days 18 and 21
+STRETCH
+Add six more games so you have twelve, and check the grid still looks right.
+
+@@ day | 23 | Grid: the homepage layout | phone
+LEARN
+`grid-template-areas` lets you draw the layout with words. Change the drawing in a media query and the whole page rearranges.
+
+```css
+.home {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-areas: "hero" "games" "next" "news";
+}
+
+@media (min-width: 60rem) {
+  .home {
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+      "hero  hero"
+      "games next"
+      "news  next";
+  }
+}
+
+.hero { grid-area: hero; }
+.next-tournament { grid-area: next; }
+```
+BUILD
+Lay out your homepage with grid areas. On a phone everything stacks in a sensible order. On a wide screen, the next tournament box becomes a sidebar next to the games and the news.
+DONE
+- The phone order makes sense read from top to bottom
+- On a wide screen, the sidebar sits on the right
+- Nothing overlaps at any width
+STUCK
+To see the wide layout on a phone, turn it sideways or switch your browser to "Desktop site".
+STRETCH
+Make the sidebar stay on screen while you scroll, with `position: sticky; top: var(--space-4)`.
+
+@@ day | 24 | A leaderboard people want to read | phone
+LEARN
+Tables need a few extra rules to read well. Numbers should line up on the right, and `tabular-nums` makes every digit the same width so columns do not wobble.
+
+```css
+table { border-collapse: collapse; width: 100%; }
+td, th { padding: var(--space-2) var(--space-3); text-align: left; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+tbody tr:nth-child(even) { background: var(--surface); }
+tbody tr:nth-child(1) { background: rgb(255 200 0 / .15); }
+
+.table-wrap { overflow-x: auto; }
+```
+
+A wide table on a phone should scroll sideways inside its own box, not make the whole page scroll.
+BUILD
+Style your leaderboard: striped rows, numbers aligned right with tabular figures, and the top three rows tinted gold, silver and bronze. Wrap the table in a `.table-wrap` so it scrolls on its own on a phone.
+DONE
+- The number columns line up
+- The top three rows stand out
+- On a phone, the page itself never scrolls sideways
+STRETCH
+Keep the heading row visible while the table scrolls, using `position: sticky` on the `th` elements.
+
+@@ day | 25 | Forms that feel good | phone
+LEARN
+Browsers give form fields a plain look you can replace.
+
+```css
+input, select, textarea {
+  font: inherit;
+  font-size: 1rem;
+  width: 100%;
+  padding: .7rem .8rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--muted);
+  border-radius: .4rem;
+}
+
+input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+input:user-invalid  { border-color: var(--danger); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); width: auto; }
+```
+
+`:user-invalid` only turns red after the person has typed something wrong, not the moment the page loads. Keep inputs at 16 pixels or bigger, because iPhones zoom into any field with smaller text.
+BUILD
+Style the join form. Labels go above their inputs, inputs fill the width on a phone, and short fields sit side by side on wide screens. Focus must always be visible, errors should only show after someone has typed, and the submit button should be the most obvious thing on the page.
+DONE
+- You can always see which field has focus
+- A field only turns red after you type something wrong in it
+- Tapping a field on a phone does not zoom the page
+STRETCH
+Style each fieldset as a clear group with its legend as a small heading.
+
+@@ day | 26 | Positioning: sticky, absolute and fixed | phone
+LEARN
+`position: sticky` keeps something on screen as you scroll past it. `position: absolute` places something relative to the nearest parent that has a position of its own. `position: fixed` pins something to the screen.
+
+```css
+.site-header { position: sticky; top: 0; z-index: 10; background: var(--bg); }
+
+.tournament-card { position: relative; }
+.badge-live {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+}
+```
+
+If an absolutely positioned badge flies off to the corner of the page, its parent is missing `position: relative`.
+BUILD
+Make your header sticky. Add a "LIVE" badge in the top corner of any tournament card with the class `is-live`. Add a fixed "Back to top" link in the bottom corner of long pages, pointing at an element with `id="top"`.
+DONE
+- The header stays visible while you scroll
+- Each badge sits in the corner of its own card
+- The back to top link does not cover any text on a phone
+STRETCH
+Show the back to top link only on narrow screens, where scrolling back up takes longest.
+
+@@ day | 27 | Hover, focus and small details | phone
+LEARN
+`::before` and `::after` add decoration without adding HTML. They need a `content` property, even an empty one.
+
+```css
+nav a { position: relative; }
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -.2rem;
+  width: 0; height: 2px;
+  background: var(--accent);
+  transition: width .2s;
+}
+nav a:hover::after,
+nav a:focus-visible::after { width: 100%; }
+```
+
+Phones have no hover, and keyboard users do not hover either. Anything that appears on hover should also appear on `:focus-visible`, and nothing important should only appear on hover.
+BUILD
+Add the animated underline to your nav links. On the leaderboard, put a small coloured circle with the rank number before each of the top three gamer tags using `::before`.
+DONE
+- The underline appears on hover and on keyboard focus
+- The rank circles come from CSS, not from extra HTML
+- The page still makes sense with every decoration removed
+STRETCH
+Style `::selection` so highlighted text uses your accent colour.
+
+@@ day | 28 | Mobile first, then bigger screens | laptop
+LEARN
+Write your base styles for phones, then add `min-width` media queries for bigger screens. Phones then download simple styles, and each breakpoint only adds what the bigger screen needs.
+
+```css
+.stats { display: grid; gap: var(--space-3); }
+
+@media (min-width: 40rem) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 64rem) {
+  .stats { grid-template-columns: repeat(4, 1fr); }
+}
+```
+
+Use the same two or three breakpoints on every page, so the whole site changes shape at the same widths.
+DEVICE
+A phone can only show you phone widths. The laptop's device toolbar (Ctrl+Shift+M in the developer tools) shows every width in seconds. On a phone, turning sideways and "Desktop site" mode give you a rough idea.
+BUILD
+Go through every page. Rewrite any `max-width` media queries as `min-width` ones at 40rem and 64rem. Then check every page at 320, 768 and 1440 pixels wide and fix whatever breaks.
+DONE
+- Nothing scrolls sideways at 320 pixels wide
+- Nothing looks stretched at 1440 pixels
+- Every page changes layout at the same breakpoints
+STRETCH
+Add a print stylesheet for the tournament rules, so people can print them without the navigation and dark background.
+
+@@ day | 29 | Images in CSS | phone
+LEARN
+`object-fit: cover` crops an image to fill its box without squashing it. `aspect-ratio` gives every image the same shape. For text on top of a photo, darken the photo with a gradient so the text stays readable.
+
+```css
+.card img { aspect-ratio: 16 / 9; object-fit: cover; width: 100%; }
+
+.hero {
+  background:
+    linear-gradient(to right, rgb(0 0 0 / .85), rgb(0 0 0 / .2)),
+    url("../images/hero.jpg") center / cover;
+}
+```
+
+Notice the `..` in the image path. The path is relative to the CSS file, not the HTML page.
+BUILD
+Give your homepage hero a background image with a dark gradient over it. Make every game card's image the same 16 by 9 shape, however big or small the original is.
+DONE
+- The hero text is easy to read over the busiest part of the image
+- Every card image is the same shape and nothing is squashed
+- The hero image loads (check the `..` if it does not)
+STRETCH
+Use a media query to load a smaller hero image on phones, to save your visitors' data.
+
+@@ day | 30 | Motion with transitions | phone
+LEARN
+A `transition` animates the change from one style to another. Keep it short, under about 300 milliseconds, so the site feels quick. Some people get dizzy or sick from movement on screen and ask their phone to reduce it, so respect that setting.
+
+```css
+.card { transition: transform .2s ease, box-shadow .2s ease; }
+.card:hover, .card:focus-within { transform: translateY(-4px); }
+.btn:active { transform: scale(.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+```
+BUILD
+Make cards lift slightly on hover and when something inside them has focus. Make buttons shrink a little when pressed. Fade link colours instead of snapping them. Wrap all of it in a reduced-motion rule.
+DONE
+- Every animation lasts less than 300 milliseconds
+- Turning on reduced motion stops all of it (Android: Remove animations; iPhone: Reduce Motion, both in Accessibility settings)
+- Nothing moves on its own when the page loads
+STRETCH
+Give the main button a soft glow in your accent colour using `box-shadow` when it is hovered or focused.
+
+@@ day | 31 | Keyframe animations | phone
+LEARN
+`@keyframes` describes an animation step by step, and `animation` plays it.
+
+```css
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .35; }
+}
+
+.live-dot {
+  width: .6rem; height: .6rem; border-radius: 50%;
+  background: var(--live);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+```
+BUILD
+Add a pulsing dot inside the LIVE badge from day 26. Then build a skeleton card: a grey placeholder shaped like a game card, with a light band that sweeps across it while content loads. Keep it in a page called `skeleton.html` for now. You will use it in Level 3 while data loads.
+DONE
+- The dot pulses smoothly and slowly
+- The skeleton is the same shape as a real card
+- Both stop when reduced motion is on
+STRETCH
+Build a spinning loading ring from a single element with a coloured top border.
+
+@@ boss | 2 | 32-37 | Lobby gets its look | phone
+TEXT
+Six days to make every page consistent, responsive and themed, and to put the site online by the end of the week. Send your crew the link on day 37.
+MUST
+- one design system of colour, type and spacing variables, used everywhere
+- reusable components with consistent class names, at least `.btn`, `.card`, `.badge`, `.container` and `.section-title`
+- every page working from 320 pixels wide to 1440 pixels wide
+- a dark theme by default and a light theme using `prefers-color-scheme`
+- the site live on GitHub Pages at a link you can send to people
+NICE
+- a style guide page, `styleguide.html`, showing every component
+- a styled 404 page that matches the rest of the site
+PLAN
+32 | Find repeated styles and turn them into components. Write a comment at the top of `styles.css` listing every component and what it is for.
+33 | Light theme: redefine your colour variables inside `@media (prefers-color-scheme: light)`. Check the contrast again in both themes.
+34 | Style the tournaments, news, about and 404 pages using only your existing components. If you need a new one, add it to the list first.
+35 | Responsive check of every page at 320, 375, 768, 1024 and 1440 pixels wide.
+36 | Build the style guide page, or finish anything left on the must-have list.
+37 | Put the site online (below) and send the link to three people in your group. Get one piece of feedback from each of them.
+LEARN
+### Putting your site online from a phone
+
+1. Make a free account at github.com in your phone browser.
+2. Create a new repository called `lobby` and set it to Public.
+3. Upload your files with "Add file" then "Upload files". If you cannot see the button, switch your browser to "Desktop site".
+4. Phone browsers usually cannot upload a whole folder at once. Upload the top-level files first. For each folder, create it by adding a new file with the folder in its name, such as `css/styles.css`, then open the folder and upload the rest of its files into it.
+5. Go to Settings, then Pages. Under Branch, choose `main` and `/ (root)`, then Save.
+6. After a minute or two, your site is at `https://your-username.github.io/lobby/`.
+
+On a laptop, use Git instead (see Setting up on a laptop). It keeps the folders for you and is much quicker.
+DONE
+- the live link works on mobile data, not just on your wifi
+- every page looks finished in both themes
+- three people have seen it and you have written down what they said
+STUCK
+If GitHub Pages shows a 404, check that your homepage is named `index.html` in lowercase and sits at the top of the repository, not inside a folder.

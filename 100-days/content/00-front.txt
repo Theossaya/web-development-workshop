@@ -1,0 +1,150 @@
+@@ page | How this guide works
+TEXT
+This guide is for someone who has already written a bit of HTML, has seen some CSS, and maybe copied a few lines of JavaScript without fully understanding them. You do not need to be good yet. You just need to have started.
+
+For 100 days you build one website: **Lobby**, a home for a gaming community. It has tournaments people can register for, a leaderboard worked out from real match results, player and clan profiles, a game library you can search and filter, and a match night scoreboard you can run on one phone while everyone plays. Lobby is a placeholder name. Call yours whatever your crew is called.
+
+Every day has the same parts:
+
+- **Learn** is a short explanation with an example. Read it, then type the example yourself.
+- **Your task** is the day's assignment. It always adds something real to your site.
+- **Done when** is a checklist. The day is finished when every box is true, not when you are tired of it.
+- **If you are stuck** gives one hint, on the days where people usually get stuck.
+- **Push further** is optional, for days when you have energy left.
+
+Most days take 45 to 90 minutes. Some take less. A few will take longer, and that is fine.
+
+### Boss weeks
+
+Seven times in the 100 days, the daily tasks stop and a boss week starts. A boss week is one bigger project spread over four to seven days, with a plan for each day. From day 73 to day 100 it is boss weeks only, because the features you are building by then are too big to finish in an evening.
+
+Every boss week has a **Must have** list and a **Nice to have** list. Finish every must-have item before you touch a nice-to-have. The must-have list is designed to be doable. If you finish it and nothing else, you have passed the week.
+
+### If you fall behind
+
+Take two days over one task if you need to. Skip a day's reading if you already know it. The one thing not to skip is the task itself, because every day builds on the site you had yesterday.
+
+If you miss a whole week, do not try to catch up by rushing. Carry on from where you stopped. The dates on the tracker at the back are yours to move.
+
+### Looking things up
+
+Nobody memorises all of this. When you need the details of an HTML element, a CSS property or a JavaScript method, look it up on **MDN** (developer.mozilla.org). It is free, accurate and works well on a phone.
+
+When something breaks, read the error message before you search for anything. It usually tells you the problem and the line number.
+
+AI chat tools are good at explaining code you do not understand. Use them for that. Do not ask one to do your task for you. If you cannot explain a line of your own site, you have not learned it yet.
+
+### Keep a backup
+
+Once a week, copy your whole project folder somewhere safe: another folder, Google Drive, or GitHub from day 37 onwards. Phones get lost, stolen and reset.
+
+@@ page | Setting up on a phone | flow
+TEXT
+You can do almost all of this guide on a phone. What you need is a code editor app that can hold a folder of files and show you a preview of your site.
+
+### Android
+
+Install **Acode** from the Play Store. It is free, it opens a real folder on your phone, and its run button shows your site in a preview that works like a small web server. **Spck Editor** is a good alternative with a similar setup.
+
+1. Make a folder called `lobby` in your phone's Documents folder.
+2. In Acode, open that folder.
+3. Create a file called `index.html`.
+4. Use the run or preview button to see your page.
+
+### iPhone
+
+Look for an editor that can open a folder of files and preview HTML. **Textastic** (paid) is a long-standing option, and **Koder** is another. App features and prices change, so check the current App Store listing for a preview feature before you pay. If you cannot find one that suits you, you can run the whole project in **Replit** from your phone browser.
+
+### A console on your phone
+
+Phone browsers do not show you the console, which is where JavaScript errors and your `console.log` messages appear. You will need one from day 38. Add these two lines just before your own script while you are building, and a small console button appears on your page:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+```
+
+It needs internet to load. Take it out before you launch.
+
+### Make typing easier
+
+Code is full of brackets and symbols. Two things help a lot:
+
+- Turn your phone sideways when you edit. You get a wider line and a bigger keyboard.
+- A cheap Bluetooth keyboard makes a bigger difference than any app. If you are going to do all 100 days on a phone, it is worth buying one.
+
+### Data and internet
+
+Almost everything works offline. You need internet for the days that load fonts from Google (day 17), embed YouTube videos (day 10), use Eruda, talk to GitHub (days 37 and 67) and test on your live site. Everything else can be done with your data switched off.
+
+### What the day labels mean
+
+Each day is labelled with what you need.
+
+- **Phone** means it works in your phone editor.
+- **Phone + server** means it works on a phone, but only through your editor's preview or on your live GitHub Pages site. From day 64 your site loads data files with `fetch`, and browsers refuse to do that for a file opened straight from storage. Opening the file directly will look broken even when your code is right.
+- **Laptop recommended** means it is possible on a phone, but much easier on a laptop. The next page lists those days.
+
+@@ page | Setting up on a laptop | flow
+TEXT
+A laptop with 4 GB of memory is enough for everything in this guide. It does not need to be new.
+
+1. Install **Google Chrome** or **Microsoft Edge**. Their developer tools are what this guide describes.
+2. Install **Visual Studio Code** from code.visualstudio.com. It is free.
+3. In VS Code, open the Extensions panel and install **Live Server**. It serves your folder so pages reload when you save, and it makes `fetch` work.
+4. Open your `lobby` folder with File, then Open Folder. Right-click `index.html` and choose Open with Live Server.
+5. Press F12 in the browser to open the developer tools. The Console tab shows errors. The Elements tab shows your HTML and the CSS applied to it. Ctrl+Shift+M switches on the device toolbar, which shows your site at phone and tablet widths.
+
+### Git and GitHub
+
+From day 37 your site lives on GitHub Pages. On a phone you upload files through the GitHub website. On a laptop it is quicker to use Git.
+
+1. Install Git from git-scm.com, and make a free account at github.com.
+2. Tell Git who you are, once:
+
+```terminal
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+3. In your project folder, run `git init` once. After that, each time you finish a day:
+
+```terminal
+git add .
+git commit -m "Day 23: homepage grid layout"
+git push
+```
+
+A commit message per day also gives you a diary of your 100 days.
+
+### Moving from phone to laptop
+
+Your project is only a folder of files, so moving is easy. Zip the folder on your phone and send it to your laptop, or once you are on GitHub, download it from there. There is nothing to install and nothing to convert.
+
+@@ page | When you need a laptop | flow
+TEXT
+Nothing in this guide is impossible on a phone. These are the days where a laptop saves you a lot of time, usually because the job needs a real keyboard, desktop-width screens, or the full developer tools. Each of those days also says what to do if you only have a phone.
+
+{{LAPTOP_TABLE}}
+
+The reasons come down to four things. Checking that someone can use your site without a mouse means pressing Tab through it, which needs a keyboard, though a Bluetooth one connected to your phone works too. A phone only shows phone widths, while a laptop's device toolbar shows every size in seconds. Pausing JavaScript line by line to watch what it does needs desktop developer tools. And boss weeks 5 and 7 involve a lot of code across several files at once. You can do them on a phone; you will just be slower and more frustrated.
+
+@@ page | What you are building | flow
+TEXT
+By day 100, Lobby has these pages. You start them in the first two weeks and keep improving them until launch.
+
+- **Home.** What the community is, a countdown to the next tournament, featured games, the clip of the week and the latest news.
+- **Games.** A library of every game your crew plays, with search, filters, sorting and favourites, loaded from a data file.
+- **Game pages.** One page per game, showing its details, its upcoming tournaments and the players who main it.
+- **Tournaments.** Upcoming, live and finished tournaments, with registration and a knockout bracket that runs from the first round to a champion.
+- **Match night.** A live scoreboard for an evening of games that you run on one phone and share to your group chat at the end.
+- **Leaderboard.** Worked out from a list of match results, sortable by any column, filterable by game.
+- **Players and clans.** A profile for every player with their form and match history, and a page for every clan.
+- **Join.** A sign-up form with proper validation.
+- **News, About and a 404 page.**
+
+It uses only HTML, CSS and JavaScript, and the data lives in JSON files inside your project.
+
+### What it does not have
+
+Lobby has no server. When someone registers for a tournament on their phone, that registration is saved in their browser, on their phone only. Nobody else sees it. Real accounts, logins and a chat that everyone shares need a server and a database. That is the next thing to learn after this guide, and building Lobby first means you will know exactly why you need one.
