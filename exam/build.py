@@ -58,6 +58,9 @@ th { font-weight: bold; border-bottom: 1px solid #111; }
 td:last-child, th:last-child { padding-right: 0; }
 .overview td:first-child { width: 14mm; }
 .overview td:nth-child(3) { width: 14mm; }
+.overview td:nth-child(2) { width: 62mm; }
+.overview td:nth-child(4) { white-space: nowrap; }
+.overview .blank { width: 30mm; }
 .marking { break-inside: avoid; margin-top: 3mm; }
 .marking td:last-child, .marking th:last-child { width: 38mm; text-align: right; }
 
@@ -118,7 +121,7 @@ PAGE = """<!doctype html>
 """
 
 DOCS = [
-    ("exam.html", "exam.pdf", "Final exam", "Web Development From Zero: final exam"),
+    ("exam.html", "exam.pdf", "Final exam", ""),
     ("marking-guide.html", "marking-guide.pdf", "Final exam marking guide", "Final exam: marking guide (instructor only)"),
 ]
 
