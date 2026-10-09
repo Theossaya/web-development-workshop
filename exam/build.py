@@ -88,7 +88,8 @@ h3 { display: flex; justify-content: space-between; align-items: baseline; }
 h3 .marks { text-transform: none; letter-spacing: 0; }
 h3.part-two { margin-top: 8mm; }
 h3.page-break { break-before: page; margin-top: 0; }
-.key { break-inside: auto; }
+.key { break-inside: auto; font-size: 9.2pt; }
+.key td { padding-top: 1mm; padding-bottom: 1mm; }
 .key tr { break-inside: avoid; }
 .key td:nth-child(1) { width: 9mm; }
 .key td:nth-child(2) { width: 16mm; font-weight: bold; }

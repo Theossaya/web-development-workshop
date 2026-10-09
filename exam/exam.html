@@ -66,12 +66,12 @@
 </div>
 
 <div class="q">
-  <p>You want a photo with a caption under it that belongs to the photo. Which is the best choice?</p>
+  <p>You are listing the steps of a recipe, and they must be followed in order. Which element should hold the steps?</p>
   <ol class="opts">
-    <li>an <code>&lt;img&gt;</code> followed by a <code>&lt;p&gt;</code></li>
-    <li><code>&lt;img caption="..."&gt;</code></li>
-    <li>a <code>&lt;section&gt;</code> holding an <code>&lt;img&gt;</code> and an <code>&lt;h6&gt;</code></li>
-    <li>a <code>&lt;figure&gt;</code> holding an <code>&lt;img&gt;</code> and a <code>&lt;figcaption&gt;</code></li>
+    <li><code>&lt;ul&gt;</code>, with an <code>&lt;li&gt;</code> for each step</li>
+    <li>one <code>&lt;p&gt;</code>, with the steps separated by commas</li>
+    <li>an <code>&lt;li&gt;</code> for each step, with nothing around them</li>
+    <li><code>&lt;ol&gt;</code>, with an <code>&lt;li&gt;</code> for each step</li>
   </ol>
 </div>
 
@@ -207,13 +207,12 @@
 </div>
 
 <div class="q">
-  <p>The root font size is 16px and the browser window is 1400px wide. What size is the <code>h1</code>?</p>
-<pre>h1 { font-size: clamp(2rem, 6vw, 4rem); }</pre>
-  <ol class="opts four">
-    <li>32px</li>
-    <li>64px</li>
-    <li>84px</li>
-    <li>96px</li>
+  <p>You want a coloured shape behind your heading to look soft and out of focus, like a glow. Which line does that?</p>
+  <ol class="opts two">
+    <li><code>opacity: 0.5;</code></li>
+    <li><code>filter: blur(40px);</code></li>
+    <li><code>border-radius: 50%;</code></li>
+    <li><code>transform: scale(2);</code></li>
   </ol>
 </div>
 
@@ -463,12 +462,11 @@ document.querySelector("#go").addEventListener("click", function () {
 
 <h4>Part 1: HTML <span class="marks">14 marks</span></h4>
 
-<p>The page needs a correct skeleton: doctype, <code>lang</code>, <code>charset</code>, the viewport tag and a real title. Inside the body you need:</p>
+<p>The page needs a correct skeleton: doctype, <code>lang</code>, <code>charset</code> and a real title. Inside the body you need:</p>
 <ul>
-  <li>a <code>&lt;header&gt;</code> with the event's name and a <code>&lt;nav&gt;</code> whose links jump to at least three sections on the page. Every link must land on its section.</li>
+  <li>a <code>&lt;header&gt;</code> with the event's name and a <code>&lt;nav&gt;</code> holding at least three links. Each link jumps down to a different section of the page, for example one to About, one to Schedule and one to Tickets.</li>
   <li>a <code>&lt;main&gt;</code> with at least four sections: About, Schedule, Tickets, and one more of your choice (FAQ, Speakers, Line-up or Venue).</li>
   <li>a schedule written as an ordered list with at least four items, each with a time.</li>
-  <li>at least one image inside a <code>&lt;figure&gt;</code>, with real <code>alt</code> text and a <code>&lt;figcaption&gt;</code>.</li>
   <li>a <code>&lt;footer&gt;</code> with your name and the event date.</li>
   <li>exactly one <code>&lt;h1&gt;</code>, and no skipped heading levels.</li>
 </ul>
@@ -479,7 +477,7 @@ document.querySelector("#go").addEventListener("click", function () {
   <tr><td>Skeleton and head are complete and correct</td><td>2</td></tr>
   <tr><td>Header, nav, main, sections and footer used for the right jobs</td><td>3</td></tr>
   <tr><td>Every nav link lands on its section</td><td>2</td></tr>
-  <tr><td>Ordered schedule list, and a figure with real alt text and a caption</td><td>2</td></tr>
+  <tr><td>Schedule as an ordered list, with a time on every item</td><td>2</td></tr>
   <tr><td>Booking panel complete, with inputs labelled and buttons used for actions</td><td>3</td></tr>
   <tr><td>One h1, sensible heading order, every tag closed and nested correctly</td><td>2</td></tr>
 </table>
@@ -492,7 +490,7 @@ document.querySelector("#go").addEventListener("click", function () {
   <li>Use Flexbox in three places: the header, with the event name on one side and the nav on the other; the nav links, in a row; and the three ticket types, side by side.</li>
   <li>Style each ticket type as a card with a border or background, and make the buttons look like buttons someone would want to press.</li>
   <li>Buttons and links change in some visible way on hover, and show a clear outline when you reach them with the keyboard (<code>:focus</code>).</li>
-  <li>Use at least one technique from the CSS techniques session somewhere it makes sense: <code>clamp()</code> for the main heading, <code>transform</code> with <code>transform-origin</code>, a <code>mask-image</code> fade, a <code>filter: blur()</code> glow, or <code>overflow: hidden</code> to crop something on purpose.</li>
+  <li>Use at least one technique from the CSS techniques session somewhere it makes sense: <code>transform</code> with <code>transform-origin</code>, a <code>mask-image</code> fade, a <code>filter: blur()</code> glow, or <code>overflow: hidden</code> to crop something on purpose.</li>
 </ul>
 
 <table class="marking">
