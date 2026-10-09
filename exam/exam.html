@@ -11,214 +11,242 @@
 
 <table class="overview">
   <tr><th>Section</th><th>What it is</th><th>Marks</th><th>Conditions</th></tr>
-  <tr><td>A</td><td>Theory, 30 questions</td><td>30</td><td>45 minutes, on paper, no notes or devices</td></tr>
+  <tr><td>A</td><td>24 objective questions and 3 theory questions</td><td>30</td><td>40 minutes, on paper, no notes or devices</td></tr>
   <tr><td>B</td><td>Practical project</td><td>70</td><td>Notes and MDN allowed. Deadline: <span class="blank"></span></td></tr>
 </table>
 
-<p>Read each question to the end before you answer. Most of them show you some code and ask what happens. Work it out in your head the way the browser would, one line at a time. The questions are not trying to trick you, but they do expect you to look carefully.</p>
+<p>Read each question to the end before you answer. Many of them show you some code and ask what happens. Work it out in your head the way the browser would, one line at a time. The questions are not trying to trick you, but they do expect you to look carefully.</p>
 
-<h2>Section A: Theory <span class="marks">30 marks</span></h2>
+<h2>Section A: Questions <span class="marks">30 marks</span></h2>
 
-<p class="note">Answer every question in the space given. Each question is worth 1 mark. When a question has more than one part, you can earn part of the mark.</p>
+<h3>Part 1: Objective questions <span class="marks">24 marks</span></h3>
 
-<h3>HTML</h3>
+<p class="note">Each question is worth 1 mark. Circle one letter.</p>
 
-<div class="q">
-  <p>Your page <code>index.html</code> sits in the main project folder. The logo is saved at <code>assets/images/logo.png</code>. This tag shows a broken image, and a screen reader has nothing to say about it:</p>
-<pre><img src="images/logo.png"></pre>
-  <p>Rewrite the tag so the image loads and can be described.</p>
-  [[lines 2]]
-</div>
+<h4>HTML</h4>
 
 <div class="q">
-  <p>A shop page has two things you can click. "See all products" opens <code>products.html</code>. "Add to cart" changes a number on the same page. Which element should each one be, and why?</p>
-  [[lines 3]]
-</div>
-
-<div class="q">
-  <p>The headings on a page come in this order. What is wrong, and why does it matter to someone using a screen reader?</p>
-<pre><h1>Our menu</h1>
-<h3>Rice dishes</h3>
-<h2>Soups</h2></pre>
-  [[lines 3]]
-</div>
-
-<div class="q">
-  <p>Clicking this link does nothing. Explain why, and fix it.</p>
-<pre><a href="#prices">See prices</a>
-
-<section class="prices">
-  <h2>Prices</h2>
-</section></pre>
-  [[lines 3]]
-</div>
-
-<div class="q">
-  <p>Your media queries are correct, but on a phone the page shows up tiny, like a desktop page zoomed out. Which line is missing from the <code>&lt;head&gt;</code>?</p>
+  <p>Your page <code>index.html</code> sits in the main project folder. The logo is saved at <code>assets/images/logo.png</code>. Which tag shows the logo and gives a screen reader something to say about it?</p>
   <ol class="opts">
-    <li><code>&lt;meta charset="UTF-8"&gt;</code></li>
-    <li><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></li>
-    <li><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></li>
-    <li><code>&lt;html lang="en"&gt;</code></li>
+    <li><code>&lt;img src="images/logo.png" alt="The shop's logo"&gt;</code></li>
+    <li><code>&lt;img src="assets/images/logo.png"&gt;</code></li>
+    <li><code>&lt;img src="assets/images/logo.png" alt="The shop's logo"&gt;</code></li>
+    <li><code>&lt;img href="assets/images/logo.png" alt="The shop's logo"&gt;</code></li>
   </ol>
 </div>
 
 <div class="q">
-  <p>A classmate built a whole page out of <code>&lt;div&gt;</code> elements, and it looks perfect in the browser. Give two reasons to use <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> and <code>&lt;footer&gt;</code> instead.</p>
-  [[lines 3]]
-</div>
-
-<div class="q">
-  <p>Name the best element, or pair of elements, for each of these.</p>
-  <ol class="opts">
-    <li>A customer's review, quoted word for word on your page</li>
-    <li>A photo with a caption under it</li>
-    <li>The steps of a recipe, which must be done in order</li>
+  <p>An "Add to cart" control changes a number on the same page. It does not take you anywhere. Which element should it be?</p>
+  <ol class="opts two">
+    <li><code>&lt;button&gt;</code></li>
+    <li><code>&lt;a href="#"&gt;</code></li>
+    <li>a <code>&lt;div&gt;</code> with a click event</li>
+    <li><code>&lt;span class="btn"&gt;</code></li>
   </ol>
-  [[lines 3]]
 </div>
 
 <div class="q">
-  <p>This list has two mistakes. Find both.</p>
-<pre><ul>
-  <li>Jollof rice</li>
-  <p>Fried rice</p>
-  <li>Ofada rice <strong>(new)</li></strong>
-</ul></pre>
-  [[lines 3]]
+  <p>Which of these is nested correctly?</p>
+  <ol class="opts">
+    <li><code>&lt;p&gt;Price: &lt;strong&gt;₦2,500&lt;/p&gt;&lt;/strong&gt;</code></li>
+    <li><code>&lt;ul&gt;&lt;p&gt;Jollof rice&lt;/p&gt;&lt;/ul&gt;</code></li>
+    <li><code>&lt;li&gt;&lt;ul&gt;Jollof rice&lt;/ul&gt;&lt;/li&gt;</code></li>
+    <li><code>&lt;ul&gt;&lt;li&gt;Jollof rice &lt;strong&gt;(new)&lt;/strong&gt;&lt;/li&gt;&lt;/ul&gt;</code></li>
+  </ol>
 </div>
 
-<h3>CSS</h3>
+<div class="q">
+  <p>The browser tab for your page says "Document". What do you change to fix it?</p>
+  <ol class="opts two">
+    <li>the <code>&lt;h1&gt;</code></li>
+    <li>the <code>&lt;title&gt;</code> inside <code>&lt;head&gt;</code></li>
+    <li>the name of the file</li>
+    <li>the <code>lang</code> attribute on <code>&lt;html&gt;</code></li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>You want a photo with a caption under it that belongs to the photo. Which is the best choice?</p>
+  <ol class="opts">
+    <li>an <code>&lt;img&gt;</code> followed by a <code>&lt;p&gt;</code></li>
+    <li><code>&lt;img caption="..."&gt;</code></li>
+    <li>a <code>&lt;section&gt;</code> holding an <code>&lt;img&gt;</code> and an <code>&lt;h6&gt;</code></li>
+    <li>a <code>&lt;figure&gt;</code> holding an <code>&lt;img&gt;</code> and a <code>&lt;figcaption&gt;</code></li>
+  </ol>
+</div>
+
+<h4>CSS</h4>
 
 <div class="q">
   <p><code>index.html</code> is in the main project folder and the stylesheet is at <code>css/styles.css</code>. Which line links it correctly?</p>
   <ol class="opts">
-    <li><code>&lt;link rel="stylesheet" href="/styles.css"&gt;</code></li>
     <li><code>&lt;link rel="stylesheet" href="css/styles.css"&gt;</code></li>
+    <li><code>&lt;link rel="stylesheet" href="/styles.css"&gt;</code></li>
     <li><code>&lt;style src="css/styles.css"&gt;&lt;/style&gt;</code></li>
     <li><code>&lt;script src="css/styles.css"&gt;&lt;/script&gt;</code></li>
   </ol>
 </div>
 
 <div class="q">
-  <p>Look at these rules and this paragraph.</p>
+  <p>What colour is the text?</p>
 <pre>p      { color: black; }
 .note  { color: green; }
 #intro { color: red; }
 .note  { color: blue; }
 
 <p id="intro" class="note">Doors open at 4pm.</p></pre>
-  <p>(a) What colour is the text? (b) If you delete the <code>#intro</code> rule, what colour is it then, and why that one?</p>
-  [[lines 3]]
+  <ol class="opts four">
+    <li>black</li>
+    <li>green</li>
+    <li>red</li>
+    <li>blue</li>
+  </ol>
 </div>
 
 <div class="q">
+  <p>What colour is the text?</p>
+<pre>p.price { color: green; }
+.price  { color: blue; }
+
+<p class="price">₦2,500</p></pre>
+  <ol class="opts two">
+    <li>green, because <code>p.price</code> is more specific</li>
+    <li>blue, because it comes last</li>
+    <li>black, because the two rules cancel out</li>
+    <li>it depends on the browser</li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>With the default <code>box-sizing</code>, how wide is this card from the outside of its left border to the outside of its right border?</p>
 <pre>.card {
   width: 300px;
   padding: 20px;
   border: 5px solid black;
   margin: 10px;
 }</pre>
-  <p>(a) With the default <code>box-sizing</code>, how wide is the card from the outside of its left border to the outside of its right border? (b) How wide is it if you add <code>box-sizing: border-box</code>?</p>
-  [[lines 2]]
-</div>
-
-<div class="q">
-  <p>Three cards sit on top of each other. You want them side by side, so you add <code>display: flex</code> to <code>.card</code>. Nothing changes. What is wrong?</p>
-<pre><div class="cards">
-  <div class="card">...</div>
-  <div class="card">...</div>
-  <div class="card">...</div>
-</div></pre>
-  [[lines 2]]
-</div>
-
-<div class="q">
-  <p>On a phone 400px wide, are these cards in a row or in a column? Explain.</p>
-<pre>@media (max-width: 600px) {
-  .cards { flex-direction: column; }
-}
-
-.cards { display: flex; flex-direction: row; }</pre>
-  [[lines 3]]
-</div>
-
-<div class="q">
-  <p>An image with <code>transform: rotate(10deg)</code> turns around its centre. You want it to swing from the middle of its bottom edge instead, like a card fanned out in your hand. Which line do you add?</p>
-  <ol class="opts">
-    <li><code>rotate-from: bottom;</code></li>
-    <li><code>transform-origin: bottom center;</code></li>
-    <li><code>transform: rotate(10deg) bottom;</code></li>
-    <li><code>position: bottom center;</code></li>
+  <ol class="opts four">
+    <li>300px</li>
+    <li>340px</li>
+    <li>350px</li>
+    <li>370px</li>
   </ol>
 </div>
 
 <div class="q">
-  <p>A big decorative circle inside a section pokes out past the section's left and right edges, and now the whole page scrolls sideways on a phone. Which rule, on which element, cuts off the parts that stick out?</p>
-  [[lines 2]]
+  <p>What does the selector <code>nav a:hover</code> pick out?</p>
+  <ol class="opts">
+    <li>every nav, and every link, while the pointer is over them</li>
+    <li>any link inside a nav, while the pointer is over that link</li>
+    <li>the nav itself, when any link inside it is hovered</li>
+    <li>only the first link in the nav</li>
+  </ol>
 </div>
 
 <div class="q">
-  <p>The root font size is 16px.</p>
+  <p>An image with <code>transform: rotate(10deg)</code> turns around its centre. You want it to swing from the middle of its bottom edge instead, like a card fanned out in your hand. Which line do you add?</p>
+  <ol class="opts two">
+    <li><code>rotate-from: bottom;</code></li>
+    <li><code>transform: rotate(10deg) bottom;</code></li>
+    <li><code>position: bottom center;</code></li>
+    <li><code>transform-origin: bottom center;</code></li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>A big decorative circle inside a section sticks out past the section's edges. Which rule, on the section, hides the parts that stick out?</p>
+  <ol class="opts four">
+    <li><code>overflow: hidden;</code></li>
+    <li><code>display: none;</code></li>
+    <li><code>z-index: -1;</code></li>
+    <li><code>visibility: hidden;</code></li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>The root font size is 16px and the browser window is 1400px wide. What size is the <code>h1</code>?</p>
 <pre>h1 { font-size: clamp(2rem, 6vw, 4rem); }</pre>
-  <p>What size, in pixels, is the <code>h1</code> when the browser window is (a) 400px wide, (b) 1000px wide, (c) 1400px wide?</p>
-  [[lines 2]]
+  <ol class="opts four">
+    <li>32px</li>
+    <li>64px</li>
+    <li>84px</li>
+    <li>96px</li>
+  </ol>
 </div>
 
 <div class="q">
-  <p>Describe what you see when this rule is applied to a photo.</p>
-<pre>img {
-  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-}</pre>
-  [[lines 3]]
+  <p>In the DevTools Styles panel, the <code>color</code> line in one of your rules has a line drawn through it. What is DevTools telling you?</p>
+  <ol class="opts two">
+    <li>the browser does not support colour</li>
+    <li>the stylesheet failed to load</li>
+    <li>another rule is overriding it</li>
+    <li>the element is hidden</li>
+  </ol>
 </div>
 
-<div class="q">
-  <p>In the DevTools Styles panel, the <code>color</code> line in one of your rules has a line drawn through it. What is DevTools telling you, and what is a likely cause?</p>
-  [[lines 3]]
-</div>
-
-<h3>JavaScript</h3>
+<h4>JavaScript</h4>
 
 <div class="q">
   <p>What does this print?</p>
-<pre>console.log("5" + 3, "5" - 3, typeof ("5" * "2"));</pre>
-  [[lines 1]]
+<pre>console.log("5" + 3, "5" - 3);</pre>
+  <ol class="opts four">
+    <li><code>8 2</code></li>
+    <li><code>53 53</code></li>
+    <li><code>8 8</code></li>
+    <li><code>53 2</code></li>
+  </ol>
 </div>
 
 <div class="q">
-  <p>What happens when this runs, and how do you fix it?</p>
+  <p>What happens when this runs?</p>
 <pre>const score = 10;
 score = score + 5;</pre>
-  [[lines 2]]
+  <ol class="opts two">
+    <li>an error: assignment to constant variable</li>
+    <li><code>score</code> becomes 15</li>
+    <li><code>score</code> stays 10, with no error</li>
+    <li><code>score</code> becomes "105"</li>
+  </ol>
 </div>
 
 <div class="q">
-  <p>Using these variables, write one <code>console.log</code> with a template literal that prints exactly <code>Tobi ordered 3 items for 4500 naira.</code> The 4500 must be worked out by your code, not typed in.</p>
-<pre>const name = "Tobi";
-const items = 3;
-const price = 1500;</pre>
-  [[lines 2]]
+  <p>With <code>const name = "Tobi";</code> and <code>const items = 3;</code>, which line prints <code>Tobi ordered 3 items</code>?</p>
+  <ol class="opts">
+    <li><code>console.log("${name} ordered ${items} items");</code></li>
+    <li><code>console.log(`$name ordered $items items`);</code></li>
+    <li><code>console.log(`${name} ordered ${items} items`);</code></li>
+    <li><code>console.log(`{name} ordered {items} items`);</code></li>
+  </ol>
 </div>
 
 <div class="q">
-  <p>Which two lines appear in the console, in order? Explain the second one.</p>
+  <p>What appears in the console, in order?</p>
 <pre>function double(n) {
   console.log(n * 2);
 }
 
 const result = double(4);
 console.log(result);</pre>
-  [[lines 3]]
+  <ol class="opts four">
+    <li>8, then 8</li>
+    <li>8, then undefined</li>
+    <li>undefined, then 8</li>
+    <li>only 8</li>
+  </ol>
 </div>
 
 <div class="q">
-  <p>Write true or false for each: (a) <code>0 == ""</code> (b) <code>0 === ""</code> (c) <code>"7" === 7</code>. Then say which of <code>==</code> and <code>===</code> you should normally use, and why.</p>
-  [[lines 3]]
+  <p>Which of these is <code>true</code>?</p>
+  <ol class="opts four">
+    <li><code>"7" === 7</code></li>
+    <li><code>0 === ""</code></li>
+    <li><code>7 === "7"</code></li>
+    <li><code>"7" == 7</code></li>
+  </ol>
 </div>
 
 <div class="q">
-  <p>What does each call return?</p>
+  <p>What does <code>canEnter(20, false)</code> return?</p>
 <pre>function canEnter(age, hasTicket) {
   if (age >= 18 && hasTicket) {
     return "Welcome";
@@ -228,8 +256,12 @@ console.log(result);</pre>
   }
   return "Sorry";
 }</pre>
-  <p>(a) <code>canEnter(18, true)</code> (b) <code>canEnter(20, false)</code> (c) <code>canEnter(15, false)</code></p>
-  [[lines 2]]
+  <ol class="opts four">
+    <li>"Welcome"</li>
+    <li>"Almost"</li>
+    <li>"Sorry"</li>
+    <li>undefined</li>
+  </ol>
 </div>
 
 <div class="q">
@@ -244,38 +276,43 @@ for (let i = 0; i < prices.length; i++) {
 }
 
 console.log(total);</pre>
-  [[lines 1]]
+  <ol class="opts four">
+    <li>3700</li>
+    <li>5000</li>
+    <li>2500</li>
+    <li>1200</li>
+  </ol>
 </div>
 
 <div class="q">
-  <p>This prints three numbers, then stops with an error. Why, and what is the fix?</p>
+  <p>This prints three numbers, then stops with an error. Why?</p>
 <pre>const names = ["Ada", "Bayo", "Chi"];
 
 for (let i = 0; i <= names.length; i++) {
   console.log(names[i].length);
 }</pre>
-  [[lines 3]]
+  <ol class="opts">
+    <li><code>names</code> is a <code>const</code>, so the loop cannot read it</li>
+    <li><code>.length</code> does not work on strings</li>
+    <li><code>&lt;=</code> makes the loop run once too often, and <code>names[3]</code> is undefined</li>
+    <li><code>i</code> should start at 1</li>
+  </ol>
 </div>
 
 <div class="q">
-  <p>Write a loop that logs the name of every student who scored 50 or more. It should print Ada, then Zainab.</p>
-<pre>const students = [
-  { name: "Ada", score: 72 },
-  { name: "Emeka", score: 45 },
-  { name: "Zainab", score: 88 }
-];</pre>
-  [[lines 5]]
-</div>
-
-<div class="q">
-  <p>The console shows <code>Uncaught TypeError: Cannot read properties of null (reading 'addEventListener')</code>. What is causing it here, and how do you fix it?</p>
+  <p>The console shows <code>Cannot read properties of null (reading 'addEventListener')</code>. What is the cause?</p>
 <pre><button class="buy-btn">Buy now</button>
 
 const button = document.querySelector("#buy-btn");
 button.addEventListener("click", function () {
   // ...
 });</pre>
-  [[lines 3]]
+  <ol class="opts">
+    <li><code>addEventListener</code> is spelled wrong</li>
+    <li>the function needs a name</li>
+    <li>buttons cannot listen for clicks</li>
+    <li><code>#buy-btn</code> looks for an id, but the button only has a class</li>
+  </ol>
 </div>
 
 <div class="q">
@@ -285,11 +322,40 @@ button.addEventListener("click", function () {
 
 // script.js
 message.classList.add(".error");</pre>
-  [[lines 2]]
+  <ol class="opts">
+    <li><code>classList.add</code> only works on buttons</li>
+    <li>it adds a class literally called ".error", which the <code>.error</code> rule does not match</li>
+    <li>the CSS rule needs <code>!important</code></li>
+    <li><code>message</code> must be declared with <code>let</code></li>
+  </ol>
+</div>
+
+<h3 class="part-two">Part 2: Theory <span class="marks">6 marks</span></h3>
+
+<p class="note">Each question is worth 2 marks. Write your answer in the space given.</p>
+
+<div class="q">
+  <p>Write the CSS that puts these three cards side by side in a row with 20px of space between them. Each card should also have 16px of space between its text and its edge, and a 1px solid grey border.</p>
+<pre><div class="cards">
+  <div class="card">...</div>
+  <div class="card">...</div>
+  <div class="card">...</div>
+</div></pre>
+  [[lines 6]]
 </div>
 
 <div class="q">
-  <p>Whatever the user types, clicking Go always shows "Type your name first". Explain the bug and fix it.</p>
+  <p>Write a loop that logs the name of every student who scored 50 or more. It should print Ada, then Zainab.</p>
+<pre>const students = [
+  { name: "Ada", score: 72 },
+  { name: "Emeka", score: 45 },
+  { name: "Zainab", score: 88 }
+];</pre>
+  [[lines 6]]
+</div>
+
+<div class="q">
+  <p>Whatever the user types, clicking Go always shows "Type your name first". Explain the bug and show the fix.</p>
 <pre><input id="name">
 <button id="go">Go</button>
 <p id="msg"></p>
@@ -305,7 +371,7 @@ document.querySelector("#go").addEventListener("click", function () {
     msg.textContent = `Welcome, ${typed}`;
   }
 });</pre>
-  [[lines 4]]
+  [[lines 5]]
 </div>
 
 <h2 class="new-page">Section B: Practical project <span class="marks">70 marks</span></h2>
@@ -352,8 +418,8 @@ document.querySelector("#go").addEventListener("click", function () {
 <p>All styling goes in <code>styles.css</code>. Do not use <code>style=""</code> attributes. Pick a small set of colours and one or two fonts and stick to them. Text must be easy to read against its background.</p>
 <ul>
   <li>Give the ticket types and other content blocks proper spacing with padding and margin, and set <code>box-sizing: border-box</code> on everything.</li>
-  <li>Use Flexbox for the nav links and for the three ticket types, which sit side by side on a laptop.</li>
-  <li>At 600px wide or less, the ticket types stack on top of each other. At 360px wide, nothing on the page makes it scroll sideways.</li>
+  <li>Use Flexbox in three places: the header, with the event name on one side and the nav on the other; the nav links, in a row; and the three ticket types, side by side.</li>
+  <li>Style each ticket type as a card with a border or background, and make the buttons look like buttons someone would want to press.</li>
   <li>Buttons and links change in some visible way on hover, and show a clear outline when you reach them with the keyboard (<code>:focus</code>).</li>
   <li>Use at least one technique from the CSS techniques session somewhere it makes sense: <code>clamp()</code> for the main heading, <code>transform</code> with <code>transform-origin</code>, a <code>mask-image</code> fade, a <code>filter: blur()</code> glow, or <code>overflow: hidden</code> to crop something on purpose.</li>
 </ul>
@@ -363,8 +429,8 @@ document.querySelector("#go").addEventListener("click", function () {
   <tr><td>One linked stylesheet, no inline styles</td><td>1</td></tr>
   <tr><td>Consistent colours and fonts, readable contrast</td><td>2</td></tr>
   <tr><td>Spacing with padding and margin, border-box set</td><td>3</td></tr>
-  <tr><td>Flexbox for the nav and the ticket types</td><td>4</td></tr>
-  <tr><td>Stacks at 600px, no sideways scrolling at 360px</td><td>4</td></tr>
+  <tr><td>Flexbox for the header, the nav and the ticket types</td><td>5</td></tr>
+  <tr><td>Ticket cards and buttons styled clearly</td><td>3</td></tr>
   <tr><td>Hover and focus styles</td><td>1</td></tr>
   <tr><td>A technique from the CSS techniques session, used with a reason</td><td>3</td></tr>
 </table>
@@ -438,7 +504,6 @@ document.querySelector("#go").addEventListener("click", function () {
   <li>With the starting prices, 2 Regular and 3 Student shows ₦10,500 before the discount and ₦9,450 after it.</li>
   <li>Book with nothing chosen, with no name and with a short phone number, and you get the right message each time.</li>
   <li>Clear puts everything back to the start.</li>
-  <li>At 360px wide, nothing scrolls sideways.</li>
   <li>notes.txt answers all three questions.</li>
 </ul>
 <p>Zip the <code>event</code> folder, name the zip with your full name, for example <code>ada-okafor-exam.zip</code>, and submit it before the deadline.</p>

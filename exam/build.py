@@ -81,6 +81,16 @@ pre.tree, pre.sample { border-left-color: #ccc; }
 ol.opts { list-style: none; padding: 0; margin: 1mm 0 0; counter-reset: opt; }
 ol.opts li { counter-increment: opt; padding-left: 7mm; position: relative; margin-bottom: 1mm; }
 ol.opts li::before { content: "(" counter(opt, lower-alpha) ")"; position: absolute; left: 0; }
+ol.opts.two { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; }
+ol.opts.four { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 6mm; }
+
+h3 { display: flex; justify-content: space-between; align-items: baseline; }
+h3 .marks { text-transform: none; letter-spacing: 0; }
+h3.part-two { margin-top: 8mm; }
+.key { break-inside: auto; }
+.key tr { break-inside: avoid; }
+.key td:nth-child(1) { width: 9mm; }
+.key td:nth-child(2) { width: 16mm; font-weight: bold; }
 
 ul, ol { margin: 0 0 3mm; padding-left: 6mm; }
 li { margin-bottom: 1.2mm; }
