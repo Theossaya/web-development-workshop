@@ -1,0 +1,173 @@
+<!-- Source for marking-guide.pdf. Same conventions as exam.html. -->
+<header class="paper-head">
+  <p class="course">Web Development From Zero</p>
+  <h1>Final exam: marking guide</h1>
+  <p class="for">For the instructor. Do not hand this out.</p>
+</header>
+
+<h2>Section A: answers <span class="marks">30 marks</span></h2>
+
+<p class="note">One mark per question. Where a question has two or three parts, split the mark between them and round the section total to the nearest whole mark. Accept any wording that shows the student understands the point. The notes say what to accept and what not to.</p>
+
+<h3>HTML</h3>
+
+<div class="q a">
+<pre><img src="assets/images/logo.png" alt="The shop's logo"></pre>
+  <p>Half for the path, half for alt text that describes the image. <code>alt="image"</code> or <code>alt="logo.png"</code> does not get the alt half.</p>
+</div>
+
+<div class="q a">
+  <p>"See all products" is a link (<code>&lt;a href="products.html"&gt;</code>) because it takes you somewhere. "Add to cart" is a <code>&lt;button&gt;</code> because it does something on the page. The reason is needed for the full mark.</p>
+</div>
+
+<div class="q a">
+  <p>The headings skip from h1 to h3, and h3 comes before the h2 it should sit under. Screen reader users move around a page by its headings, so the outline they hear is wrong or confusing. Fix: Rice dishes and Soups should both be h2. Half for spotting the problem, half for why it matters.</p>
+</div>
+
+<div class="q a">
+  <p><code>#prices</code> looks for an element with <code>id="prices"</code>, and the section only has a class. Fix: <code>&lt;section id="prices"&gt;</code>. Changing the link to <code>.prices</code> is wrong.</p>
+</div>
+
+<div class="q a"><p>(b), the viewport meta tag.</p></div>
+
+<div class="q a">
+  <p>Any two of: screen readers and other assistive tools use them to describe and jump around the page; search engines understand the page better; other developers, and you later, can read the structure without decoding a wall of divs; they give clear hooks for CSS. "It looks better" is not a reason, since they look the same.</p>
+</div>
+
+<div class="q a">
+  <p>(a) <code>&lt;blockquote&gt;</code> (b) <code>&lt;figure&gt;</code> with <code>&lt;figcaption&gt;</code> (c) <code>&lt;ol&gt;</code> with <code>&lt;li&gt;</code>. One third each.</p>
+</div>
+
+<div class="q a">
+  <p>A <code>&lt;p&gt;</code> cannot sit directly inside a <code>&lt;ul&gt;</code>; only <code>&lt;li&gt;</code> can, so Fried rice should be an <code>&lt;li&gt;</code>. And <code>&lt;strong&gt;</code> is closed after <code>&lt;/li&gt;</code>, so the tags overlap; it should be <code>&lt;strong&gt;(new)&lt;/strong&gt;&lt;/li&gt;</code>. Half each.</p>
+</div>
+
+<h3>CSS</h3>
+
+<div class="q a"><p>(b). (a) starts at the root of the site, not the folder the page is in, and <code>&lt;style&gt;</code> and <code>&lt;script&gt;</code> cannot load a stylesheet.</p></div>
+
+<div class="q a">
+  <p>(a) Red. An id beats a class. (b) Blue. Both <code>.note</code> rules are equally specific, so the one that comes later wins. Half each; (b) needs the reason.</p>
+</div>
+
+<div class="q a">
+  <p>(a) 350px: 300 + 20 + 20 of padding + 5 + 5 of border. Margin is outside the border, so it does not count. (b) 300px. Half each.</p>
+</div>
+
+<div class="q a">
+  <p><code>display: flex</code> goes on the parent, <code>.cards</code>, not on the children. Flex arranges an element's children.</p>
+</div>
+
+<div class="q a">
+  <p>A row. A media query adds no extra weight. Both rules use <code>.cards</code>, so the one lower in the file wins, and it sets <code>row</code> at every width. Fix: put the media query after the main rule. A student who says "column" gets nothing.</p>
+</div>
+
+<div class="q a"><p>(b) <code>transform-origin: bottom center;</code></p></div>
+
+<div class="q a">
+  <p><code>overflow: hidden</code> on the section, the circle's container. Putting it on the circle itself, or on the body, does not get the mark.</p>
+</div>
+
+<div class="q a">
+  <p>2rem is 32px and 4rem is 64px. (a) 6vw is 24px, below the minimum, so 32px. (b) 6vw is 60px, so 60px. (c) 6vw is 84px, above the maximum, so 64px. One third each.</p>
+</div>
+
+<div class="q a">
+  <p>The top 60% of the photo shows normally. From there it fades out until it is fully see-through at the bottom edge, so whatever is behind it shows through. "It fades towards the bottom" is enough for the mark if the student is clear that the top part is untouched.</p>
+</div>
+
+<div class="q a">
+  <p>That declaration is not being applied because another rule overrides it. Likely causes: a more specific selector, or a rule with the same specificity that comes later. Also accept: the value is invalid or misspelled (DevTools usually adds a warning icon for that).</p>
+</div>
+
+<h3>JavaScript</h3>
+
+<div class="q a"><p><code>53 2 number</code>. "5" + 3 joins text; minus and times turn the strings into numbers. All three are needed.</p></div>
+
+<div class="q a">
+  <p>It throws <code>TypeError: Assignment to constant variable.</code> A <code>const</code> cannot be given a new value. Fix: declare it with <code>let</code>.</p>
+</div>
+
+<div class="q a">
+<pre>console.log(`${name} ordered ${items} items for ${items * price} naira.`);</pre>
+  <p>Must use backticks and work out the 4500 inside <code>${}</code>. Typing 4500 in directly gets half.</p>
+</div>
+
+<div class="q a">
+  <p><code>8</code>, then <code>undefined</code>. The function prints the answer but does not return it, so <code>result</code> gets <code>undefined</code>. Half for the two lines, half for the explanation.</p>
+</div>
+
+<div class="q a">
+  <p>(a) true (b) false (c) false. Use <code>===</code>, because <code>==</code> changes the types before comparing and gives surprises like (a). <code>===</code> checks the value and the type.</p>
+</div>
+
+<div class="q a"><p>(a) "Welcome" (b) "Almost" (c) "Sorry". One third each. A common slip is (a) "Almost" from reading <code>&gt;=</code> as <code>&gt;</code>.</p></div>
+
+<div class="q a"><p><code>3700</code> (1200 + 2500; 800 and 500 are under 1000).</p></div>
+
+<div class="q a">
+  <p><code>i &lt;= names.length</code> runs one time too many. On the last pass <code>i</code> is 3, <code>names[3]</code> is <code>undefined</code>, and reading <code>.length</code> of undefined throws. Fix: <code>i &lt; names.length</code>.</p>
+</div>
+
+<div class="q a">
+<pre>for (const student of students) {
+  if (student.score >= 50) {
+    console.log(student.name);
+  }
+}</pre>
+  <p>Also accept a counting loop with <code>students[i].score</code>, or <code>forEach</code>. It must use <code>&gt;=</code>, and log the name, not the whole object. Half if it logs the whole object.</p>
+</div>
+
+<div class="q a">
+  <p>The selector asks for an id, <code>#buy-btn</code>, but the button only has a class. <code>querySelector</code> finds nothing and returns <code>null</code>. Fix: use <code>".buy-btn"</code>, or give the button <code>id="buy-btn"</code>.</p>
+</div>
+
+<div class="q a">
+  <p>The dot belongs in the CSS selector, not the class name. This adds a class literally called ".error", which <code>.error</code> in the CSS does not match. Fix: <code>classList.add("error")</code>.</p>
+</div>
+
+<div class="q a">
+  <p><code>input.value</code> is read once, when the page loads and the box is still empty, so <code>typed</code> is always <code>""</code>. Fix: read the value inside the click function, for example <code>const typed = input.value;</code> as its first line. Half for the cause, half for the fix.</p>
+</div>
+
+<h2 class="new-page">Section B: marking the practical <span class="marks">70 marks</span></h2>
+
+<p>Mark each line in the tables on the exam paper. Give part marks freely; a feature that mostly works should get most of its marks. These quick tests cover nearly everything. Open the page with the console showing.</p>
+
+<h4>Testing the booking panel</h4>
+<ol>
+  <li>Press plus on Regular twice and on Student three times. With the starting prices the page should show 10500 before the discount, 9450 after it, and "Group discount applied".</li>
+  <li>Press minus on Student until it stops. It must stop at 0, and the discount must disappear once the order drops under 5 tickets.</li>
+  <li>Add tickets until the order has 10, then press plus again. The count stays at 10 and the limit message appears. Check this across different ticket types, not just one: 4 Regular, 4 VIP and 2 Student, then one more of any type.</li>
+  <li>Press Clear, then Book. Expect "Pick at least one ticket."</li>
+  <li>Add one ticket, type a one-letter name and Book. Expect "Enter your name." Then type a proper name with a 10-digit phone number. Expect "Enter an 11-digit phone number." Then fix the number. Expect the success message with the right count and total, and check that the red error style is gone.</li>
+  <li>Change one price in the array in <code>script.js</code> and reload. If the total does not change, the total is not coming from the array, so the data line gets 0 and the function line loses at least half.</li>
+</ol>
+
+<h4>Testing the rest</h4>
+<ul>
+  <li>Click every nav link.</li>
+  <li>Use the device toolbar at 360px and 600px, or check on a phone. Scroll sideways at 360px; if the page moves, the responsive line loses at least 2.</li>
+  <li>Press Tab through the page. Links and buttons need a visible focus style.</li>
+  <li>Search the HTML for <code>style="</code>. Any match costs the inline-styles mark.</li>
+  <li>Read the total function. It must loop over the array and <code>return</code> a number. A function that only sets text on the page and returns nothing gets at most 3 of the 6.</li>
+  <li>Check that the Book handler reads <code>.value</code> inside the click function. Reading it once at the top of the file is the bug from question 30 and costs 2 marks.</li>
+</ul>
+
+<h4>Common deductions</h4>
+<table class="marking">
+  <tr><th>What you see</th><th>Suggested deduction</th></tr>
+  <tr><td>Prices hard-coded into the total, for example <code>count1 * 3000</code></td><td>Data line 0; total function at most 3 of 6</td></tr>
+  <tr><td>Limit of 10 checked per ticket type instead of for the whole order</td><td>Minus 3 from plus and minus</td></tr>
+  <tr><td>Discount worked out but only the new price shown</td><td>Minus 1</td></tr>
+  <tr><td>All three Book problems shown at once instead of the first one</td><td>Minus 2</td></tr>
+  <tr><td><code>.style.color</code> used instead of the error and success classes</td><td>Minus 2</td></tr>
+  <tr><td>Divs or spans used as buttons</td><td>Minus 1 from the booking panel line</td></tr>
+  <tr><td>Red errors in the console during normal use</td><td>Quality line 0</td></tr>
+</table>
+
+<h4>notes.txt</h4>
+<p>Two marks per answer. Give 2 when the answer is specific to the student's own code, 1 when it is correct but general enough to have been written without seeing the project, and 0 when it is missing or wrong. For question 2 the student should mention the loop, adding each price times its count, and returning the result. For question 3 they should describe each property in the technique they used, as it behaves on their page.</p>
+
+<h4>When you ask a student to explain</h4>
+<p>Pick two or three lines from their <code>script.js</code>, usually the total function and the Book handler, and ask what each one does and what would happen if it were removed. A student who wrote the code can answer quickly even if they are nervous. If they cannot explain a part at all, take away the marks for that part.</p>

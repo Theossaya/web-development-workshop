@@ -1,0 +1,444 @@
+<!-- Source for exam.pdf. Code inside <pre> is written raw; build.py escapes it.
+     [[lines N]] becomes N ruled answer lines. Questions number themselves. -->
+<header class="paper-head">
+  <p class="course">Web Development From Zero</p>
+  <h1>Final exam: HTML, CSS and JavaScript</h1>
+  <div class="who">
+    <span>Name <i></i></span>
+    <span>Date <i></i></span>
+  </div>
+</header>
+
+<table class="overview">
+  <tr><th>Section</th><th>What it is</th><th>Marks</th><th>Conditions</th></tr>
+  <tr><td>A</td><td>Theory, 30 questions</td><td>30</td><td>45 minutes, on paper, no notes or devices</td></tr>
+  <tr><td>B</td><td>Practical project</td><td>70</td><td>Notes and MDN allowed. Deadline: <span class="blank"></span></td></tr>
+</table>
+
+<p>Read each question to the end before you answer. Most of them show you some code and ask what happens. Work it out in your head the way the browser would, one line at a time. The questions are not trying to trick you, but they do expect you to look carefully.</p>
+
+<h2>Section A: Theory <span class="marks">30 marks</span></h2>
+
+<p class="note">Answer every question in the space given. Each question is worth 1 mark. When a question has more than one part, you can earn part of the mark.</p>
+
+<h3>HTML</h3>
+
+<div class="q">
+  <p>Your page <code>index.html</code> sits in the main project folder. The logo is saved at <code>assets/images/logo.png</code>. This tag shows a broken image, and a screen reader has nothing to say about it:</p>
+<pre><img src="images/logo.png"></pre>
+  <p>Rewrite the tag so the image loads and can be described.</p>
+  [[lines 2]]
+</div>
+
+<div class="q">
+  <p>A shop page has two things you can click. "See all products" opens <code>products.html</code>. "Add to cart" changes a number on the same page. Which element should each one be, and why?</p>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>The headings on a page come in this order. What is wrong, and why does it matter to someone using a screen reader?</p>
+<pre><h1>Our menu</h1>
+<h3>Rice dishes</h3>
+<h2>Soups</h2></pre>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>Clicking this link does nothing. Explain why, and fix it.</p>
+<pre><a href="#prices">See prices</a>
+
+<section class="prices">
+  <h2>Prices</h2>
+</section></pre>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>Your media queries are correct, but on a phone the page shows up tiny, like a desktop page zoomed out. Which line is missing from the <code>&lt;head&gt;</code>?</p>
+  <ol class="opts">
+    <li><code>&lt;meta charset="UTF-8"&gt;</code></li>
+    <li><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></li>
+    <li><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></li>
+    <li><code>&lt;html lang="en"&gt;</code></li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>A classmate built a whole page out of <code>&lt;div&gt;</code> elements, and it looks perfect in the browser. Give two reasons to use <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> and <code>&lt;footer&gt;</code> instead.</p>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>Name the best element, or pair of elements, for each of these.</p>
+  <ol class="opts">
+    <li>A customer's review, quoted word for word on your page</li>
+    <li>A photo with a caption under it</li>
+    <li>The steps of a recipe, which must be done in order</li>
+  </ol>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>This list has two mistakes. Find both.</p>
+<pre><ul>
+  <li>Jollof rice</li>
+  <p>Fried rice</p>
+  <li>Ofada rice <strong>(new)</li></strong>
+</ul></pre>
+  [[lines 3]]
+</div>
+
+<h3>CSS</h3>
+
+<div class="q">
+  <p><code>index.html</code> is in the main project folder and the stylesheet is at <code>css/styles.css</code>. Which line links it correctly?</p>
+  <ol class="opts">
+    <li><code>&lt;link rel="stylesheet" href="/styles.css"&gt;</code></li>
+    <li><code>&lt;link rel="stylesheet" href="css/styles.css"&gt;</code></li>
+    <li><code>&lt;style src="css/styles.css"&gt;&lt;/style&gt;</code></li>
+    <li><code>&lt;script src="css/styles.css"&gt;&lt;/script&gt;</code></li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>Look at these rules and this paragraph.</p>
+<pre>p      { color: black; }
+.note  { color: green; }
+#intro { color: red; }
+.note  { color: blue; }
+
+<p id="intro" class="note">Doors open at 4pm.</p></pre>
+  <p>(a) What colour is the text? (b) If you delete the <code>#intro</code> rule, what colour is it then, and why that one?</p>
+  [[lines 3]]
+</div>
+
+<div class="q">
+<pre>.card {
+  width: 300px;
+  padding: 20px;
+  border: 5px solid black;
+  margin: 10px;
+}</pre>
+  <p>(a) With the default <code>box-sizing</code>, how wide is the card from the outside of its left border to the outside of its right border? (b) How wide is it if you add <code>box-sizing: border-box</code>?</p>
+  [[lines 2]]
+</div>
+
+<div class="q">
+  <p>Three cards sit on top of each other. You want them side by side, so you add <code>display: flex</code> to <code>.card</code>. Nothing changes. What is wrong?</p>
+<pre><div class="cards">
+  <div class="card">...</div>
+  <div class="card">...</div>
+  <div class="card">...</div>
+</div></pre>
+  [[lines 2]]
+</div>
+
+<div class="q">
+  <p>On a phone 400px wide, are these cards in a row or in a column? Explain.</p>
+<pre>@media (max-width: 600px) {
+  .cards { flex-direction: column; }
+}
+
+.cards { display: flex; flex-direction: row; }</pre>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>An image with <code>transform: rotate(10deg)</code> turns around its centre. You want it to swing from the middle of its bottom edge instead, like a card fanned out in your hand. Which line do you add?</p>
+  <ol class="opts">
+    <li><code>rotate-from: bottom;</code></li>
+    <li><code>transform-origin: bottom center;</code></li>
+    <li><code>transform: rotate(10deg) bottom;</code></li>
+    <li><code>position: bottom center;</code></li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>A big decorative circle inside a section pokes out past the section's left and right edges, and now the whole page scrolls sideways on a phone. Which rule, on which element, cuts off the parts that stick out?</p>
+  [[lines 2]]
+</div>
+
+<div class="q">
+  <p>The root font size is 16px.</p>
+<pre>h1 { font-size: clamp(2rem, 6vw, 4rem); }</pre>
+  <p>What size, in pixels, is the <code>h1</code> when the browser window is (a) 400px wide, (b) 1000px wide, (c) 1400px wide?</p>
+  [[lines 2]]
+</div>
+
+<div class="q">
+  <p>Describe what you see when this rule is applied to a photo.</p>
+<pre>img {
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}</pre>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>In the DevTools Styles panel, the <code>color</code> line in one of your rules has a line drawn through it. What is DevTools telling you, and what is a likely cause?</p>
+  [[lines 3]]
+</div>
+
+<h3>JavaScript</h3>
+
+<div class="q">
+  <p>What does this print?</p>
+<pre>console.log("5" + 3, "5" - 3, typeof ("5" * "2"));</pre>
+  [[lines 1]]
+</div>
+
+<div class="q">
+  <p>What happens when this runs, and how do you fix it?</p>
+<pre>const score = 10;
+score = score + 5;</pre>
+  [[lines 2]]
+</div>
+
+<div class="q">
+  <p>Using these variables, write one <code>console.log</code> with a template literal that prints exactly <code>Tobi ordered 3 items for 4500 naira.</code> The 4500 must be worked out by your code, not typed in.</p>
+<pre>const name = "Tobi";
+const items = 3;
+const price = 1500;</pre>
+  [[lines 2]]
+</div>
+
+<div class="q">
+  <p>Which two lines appear in the console, in order? Explain the second one.</p>
+<pre>function double(n) {
+  console.log(n * 2);
+}
+
+const result = double(4);
+console.log(result);</pre>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>Write true or false for each: (a) <code>0 == ""</code> (b) <code>0 === ""</code> (c) <code>"7" === 7</code>. Then say which of <code>==</code> and <code>===</code> you should normally use, and why.</p>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>What does each call return?</p>
+<pre>function canEnter(age, hasTicket) {
+  if (age >= 18 && hasTicket) {
+    return "Welcome";
+  }
+  if (age >= 18 || hasTicket) {
+    return "Almost";
+  }
+  return "Sorry";
+}</pre>
+  <p>(a) <code>canEnter(18, true)</code> (b) <code>canEnter(20, false)</code> (c) <code>canEnter(15, false)</code></p>
+  [[lines 2]]
+</div>
+
+<div class="q">
+  <p>What does this print?</p>
+<pre>const prices = [1200, 800, 2500, 500];
+let total = 0;
+
+for (let i = 0; i < prices.length; i++) {
+  if (prices[i] >= 1000) {
+    total = total + prices[i];
+  }
+}
+
+console.log(total);</pre>
+  [[lines 1]]
+</div>
+
+<div class="q">
+  <p>This prints three numbers, then stops with an error. Why, and what is the fix?</p>
+<pre>const names = ["Ada", "Bayo", "Chi"];
+
+for (let i = 0; i <= names.length; i++) {
+  console.log(names[i].length);
+}</pre>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>Write a loop that logs the name of every student who scored 50 or more. It should print Ada, then Zainab.</p>
+<pre>const students = [
+  { name: "Ada", score: 72 },
+  { name: "Emeka", score: 45 },
+  { name: "Zainab", score: 88 }
+];</pre>
+  [[lines 5]]
+</div>
+
+<div class="q">
+  <p>The console shows <code>Uncaught TypeError: Cannot read properties of null (reading 'addEventListener')</code>. What is causing it here, and how do you fix it?</p>
+<pre><button class="buy-btn">Buy now</button>
+
+const button = document.querySelector("#buy-btn");
+button.addEventListener("click", function () {
+  // ...
+});</pre>
+  [[lines 3]]
+</div>
+
+<div class="q">
+  <p>This runs with no errors, but the message never turns red. Why?</p>
+<pre>/* styles.css */
+.error { color: red; }
+
+// script.js
+message.classList.add(".error");</pre>
+  [[lines 2]]
+</div>
+
+<div class="q">
+  <p>Whatever the user types, clicking Go always shows "Type your name first". Explain the bug and fix it.</p>
+<pre><input id="name">
+<button id="go">Go</button>
+<p id="msg"></p>
+
+const input = document.querySelector("#name");
+const msg = document.querySelector("#msg");
+const typed = input.value;
+
+document.querySelector("#go").addEventListener("click", function () {
+  if (typed === "") {
+    msg.textContent = "Type your name first";
+  } else {
+    msg.textContent = `Welcome, ${typed}`;
+  }
+});</pre>
+  [[lines 4]]
+</div>
+
+<h2 class="new-page">Section B: Practical project <span class="marks">70 marks</span></h2>
+
+<h3 class="brief-title">A ticket page for a one-day event</h3>
+
+<p>Make up a one-day event: a tech meetup, a gaming tournament, a small concert, a football viewing party, a class reunion, anything you like. Then build a one-page website for it. The page tells people what the event is and when things happen, and it has a booking panel where they pick tickets, see the price add up, and book.</p>
+
+<p>No real payments happen and nothing is saved. Everything runs on the page, in the browser, with your own HTML, CSS and JavaScript. You can build all of it in a phone editor such as Acode or Spck, or on a laptop with VS Code.</p>
+
+<h4>Your project folder</h4>
+<pre class="tree">event/
+  index.html
+  styles.css
+  script.js
+  notes.txt
+  images/</pre>
+
+<h4>Part 1: HTML <span class="marks">14 marks</span></h4>
+
+<p>The page needs a correct skeleton: doctype, <code>lang</code>, <code>charset</code>, the viewport tag and a real title. Inside the body you need:</p>
+<ul>
+  <li>a <code>&lt;header&gt;</code> with the event's name and a <code>&lt;nav&gt;</code> whose links jump to at least three sections on the page. Every link must land on its section.</li>
+  <li>a <code>&lt;main&gt;</code> with at least four sections: About, Schedule, Tickets, and one more of your choice (FAQ, Speakers, Line-up or Venue).</li>
+  <li>a schedule written as an ordered list with at least four items, each with a time.</li>
+  <li>at least one image inside a <code>&lt;figure&gt;</code>, with real <code>alt</code> text and a <code>&lt;figcaption&gt;</code>.</li>
+  <li>a <code>&lt;footer&gt;</code> with your name and the event date.</li>
+  <li>exactly one <code>&lt;h1&gt;</code>, and no skipped heading levels.</li>
+</ul>
+<p>The Tickets section holds the booking panel. It has three ticket types. Each one shows its name, its price, a minus button, the number chosen and a plus button. Under them goes the total, a name input, a phone number input with a label for each, a Book button, a Clear button and an empty paragraph for messages. Anything that does something on the same page is a <code>&lt;button&gt;</code>. Anything that goes somewhere is a link.</p>
+
+<table class="marking">
+  <tr><th>What is checked</th><th>Marks</th></tr>
+  <tr><td>Skeleton and head are complete and correct</td><td>2</td></tr>
+  <tr><td>Header, nav, main, sections and footer used for the right jobs</td><td>3</td></tr>
+  <tr><td>Every nav link lands on its section</td><td>2</td></tr>
+  <tr><td>Ordered schedule list, and a figure with real alt text and a caption</td><td>2</td></tr>
+  <tr><td>Booking panel complete, with inputs labelled and buttons used for actions</td><td>3</td></tr>
+  <tr><td>One h1, sensible heading order, every tag closed and nested correctly</td><td>2</td></tr>
+</table>
+
+<h4>Part 2: CSS <span class="marks">18 marks</span></h4>
+
+<p>All styling goes in <code>styles.css</code>. Do not use <code>style=""</code> attributes. Pick a small set of colours and one or two fonts and stick to them. Text must be easy to read against its background.</p>
+<ul>
+  <li>Give the ticket types and other content blocks proper spacing with padding and margin, and set <code>box-sizing: border-box</code> on everything.</li>
+  <li>Use Flexbox for the nav links and for the three ticket types, which sit side by side on a laptop.</li>
+  <li>At 600px wide or less, the ticket types stack on top of each other. At 360px wide, nothing on the page makes it scroll sideways.</li>
+  <li>Buttons and links change in some visible way on hover, and show a clear outline when you reach them with the keyboard (<code>:focus</code>).</li>
+  <li>Use at least one technique from the CSS techniques session somewhere it makes sense: <code>clamp()</code> for the main heading, <code>transform</code> with <code>transform-origin</code>, a <code>mask-image</code> fade, a <code>filter: blur()</code> glow, or <code>overflow: hidden</code> to crop something on purpose.</li>
+</ul>
+
+<table class="marking">
+  <tr><th>What is checked</th><th>Marks</th></tr>
+  <tr><td>One linked stylesheet, no inline styles</td><td>1</td></tr>
+  <tr><td>Consistent colours and fonts, readable contrast</td><td>2</td></tr>
+  <tr><td>Spacing with padding and margin, border-box set</td><td>3</td></tr>
+  <tr><td>Flexbox for the nav and the ticket types</td><td>4</td></tr>
+  <tr><td>Stacks at 600px, no sideways scrolling at 360px</td><td>4</td></tr>
+  <tr><td>Hover and focus styles</td><td>1</td></tr>
+  <tr><td>A technique from the CSS techniques session, used with a reason</td><td>3</td></tr>
+</table>
+
+<h4>Part 3: JavaScript <span class="marks">28 marks</span></h4>
+
+<p>Start <code>script.js</code> with your tickets stored as an array of three objects. Change the names and prices if they do not fit your event.</p>
+<pre>const tickets = [
+  { name: "Regular", price: 3000, count: 0 },
+  { name: "VIP", price: 10000, count: 0 },
+  { name: "Student", price: 1500, count: 0 }
+];</pre>
+<p>The total must always be worked out from this array. If you change a price here, the total on the page must change with it.</p>
+
+<p>The plus button adds one ticket of that type, and the minus button takes one away. A count can never go below 0. The whole order can have at most 10 tickets. If someone presses plus when they already have 10, the count stays the same and the message paragraph says "You can book at most 10 tickets." The numbers on the page update every time.</p>
+
+<p>Write a function that loops through the array and <em>returns</em> the total price of the order. Use it to update the total on the page after every change. The total can show as plain digits, so "16500" is fine.</p>
+
+<p>When the order has 5 or more tickets, take 10% off. Show the price before the discount, the price after it, and the words "Group discount applied". For example, 2 Regular and 3 Student is 5 tickets: ₦10,500 before the discount and ₦9,450 after it.</p>
+
+<p>When the Book button is clicked, read the name and phone number at that moment and check them in this order:</p>
+<ol>
+  <li>If no tickets are chosen, show "Pick at least one ticket."</li>
+  <li>If the name is shorter than 2 characters, show "Enter your name."</li>
+  <li>If the phone number is not exactly 11 characters long, show "Enter an 11-digit phone number."</li>
+</ol>
+<p>Show only the first problem found, and give the message paragraph the class <code>error</code> so it looks like a warning. If everything passes, remove that class, add the class <code>success</code>, and use a template literal to show a message like this:</p>
+<pre class="sample">Thanks, Ada. 5 tickets booked for ₦9450. We will text 08031234567.</pre>
+
+<p>The Clear button sets every count back to 0, empties both inputs and the message, and updates the page.</p>
+
+<p>Finally, make one more part of the page respond to a click. For example, clicking an FAQ question shows or hides its answer, or clicking a speaker's name shows their short bio. Do it by adding and removing a class, and let your CSS do the hiding and showing.</p>
+
+<table class="marking">
+  <tr><th>What is checked</th><th>Marks</th></tr>
+  <tr><td>Tickets stored as an array of objects, and the total comes from it</td><td>3</td></tr>
+  <tr><td>Plus and minus work, never below 0, never above 10 in total, with the message</td><td>6</td></tr>
+  <tr><td>A function that loops and returns the total, shown after every change</td><td>6</td></tr>
+  <tr><td>Group discount from 5 tickets, both prices and the words shown</td><td>3</td></tr>
+  <tr><td>Book checks in the right order, reads the inputs on click, uses the error and success classes</td><td>6</td></tr>
+  <tr><td>Clear resets the counts, inputs, message and total</td><td>2</td></tr>
+  <tr><td>One more click interaction, done with a class</td><td>2</td></tr>
+</table>
+
+<h4>Part 4: Quality and your notes <span class="marks">10 marks</span></h4>
+
+<p>Keep your code tidy: indent it properly and give things names that say what they hold, such as <code>totalPrice</code> rather than <code>x</code>. Open the console and use every part of your page. No red errors should appear.</p>
+
+<p>In <code>notes.txt</code>, answer these three questions in your own words. A few honest sentences each is enough.</p>
+<ol>
+  <li>Describe one bug you hit while building this. What did you see, how did you find the cause, and what fixed it?</li>
+  <li>Explain, line by line, what your total function does.</li>
+  <li>Which technique from the CSS techniques session did you use? Say what each property in it does on your page.</li>
+</ol>
+
+<table class="marking">
+  <tr><th>What is checked</th><th>Marks</th></tr>
+  <tr><td>No console errors during normal use</td><td>2</td></tr>
+  <tr><td>Tidy indentation and clear names</td><td>2</td></tr>
+  <tr><td>notes.txt, 2 marks per question</td><td>6</td></tr>
+</table>
+
+<h4>Rules</h4>
+<p>You may use your class notes, the workshop slides and MDN. You may ask an AI tool to explain an error message, but not to write your code. Your instructor may ask you to explain any part of your project. Marks for a part you cannot explain can be taken away.</p>
+
+<h4>Before you submit</h4>
+<ul class="checks">
+  <li>The page opens with no errors in the console.</li>
+  <li>Every nav link lands on its section.</li>
+  <li>You can add 10 tickets but not 11, and no count goes below 0.</li>
+  <li>With the starting prices, 2 Regular and 3 Student shows ₦10,500 before the discount and ₦9,450 after it.</li>
+  <li>Book with nothing chosen, with no name and with a short phone number, and you get the right message each time.</li>
+  <li>Clear puts everything back to the start.</li>
+  <li>At 360px wide, nothing scrolls sideways.</li>
+  <li>notes.txt answers all three questions.</li>
+</ul>
+<p>Zip the <code>event</code> folder, name the zip with your full name, for example <code>ada-okafor-exam.zip</code>, and submit it before the deadline.</p>
