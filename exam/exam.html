@@ -11,7 +11,7 @@
 
 <table class="overview">
   <tr><th>Section</th><th>What it is</th><th>Marks</th><th>Conditions</th></tr>
-  <tr><td>A</td><td>24 objective questions and 3 theory questions</td><td>30</td><td>40 minutes, on paper, no notes or devices</td></tr>
+  <tr><td>A</td><td>30 objective questions and 3 theory questions</td><td>30</td><td>45 minutes, on paper, no notes or devices</td></tr>
   <tr><td>B</td><td>Practical project</td><td>70</td><td>Notes and MDN allowed. Deadline: <span class="blank"></span></td></tr>
 </table>
 
@@ -19,9 +19,9 @@
 
 <h2>Section A: Questions <span class="marks">30 marks</span></h2>
 
-<h3>Part 1: Objective questions <span class="marks">24 marks</span></h3>
+<h3>Part 1: Objective questions <span class="marks">15 marks</span></h3>
 
-<p class="note">Each question is worth 1 mark. Circle one letter.</p>
+<p class="note">Each question is worth half a mark. Circle one letter.</p>
 
 <h4>HTML</h4>
 
@@ -72,6 +72,39 @@
     <li><code>&lt;img caption="..."&gt;</code></li>
     <li>a <code>&lt;section&gt;</code> holding an <code>&lt;img&gt;</code> and an <code>&lt;h6&gt;</code></li>
     <li>a <code>&lt;figure&gt;</code> holding an <code>&lt;img&gt;</code> and a <code>&lt;figcaption&gt;</code></li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>The headings on a page come in this order. What is wrong?</p>
+<pre><h1>Our menu</h1>
+<h3>Rice dishes</h3>
+<h2>Soups</h2></pre>
+  <ol class="opts">
+    <li>a level is skipped: "Rice dishes" should be an <code>&lt;h2&gt;</code>, like "Soups"</li>
+    <li>nothing, because heading levels can be used in any order</li>
+    <li>a page needs more than one <code>&lt;h1&gt;</code></li>
+    <li>every heading level from h1 to h6 must be used once</li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>You want a link in the nav that jumps down to the Prices section on the same page. Which pair works?</p>
+  <ol class="opts">
+    <li><code>&lt;a href="#prices"&gt;</code> and <code>&lt;section class="prices"&gt;</code></li>
+    <li><code>&lt;a href="prices"&gt;</code> and <code>&lt;section id="prices"&gt;</code></li>
+    <li><code>&lt;a href="#prices"&gt;</code> and <code>&lt;section id="prices"&gt;</code></li>
+    <li><code>&lt;a href=".prices"&gt;</code> and <code>&lt;section class="prices"&gt;</code></li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>Two pages look exactly the same in the browser. One is built with <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> and <code>&lt;footer&gt;</code>. The other uses only <code>&lt;div&gt;</code>. What does the first page gain?</p>
+  <ol class="opts">
+    <li>it loads faster</li>
+    <li>it gets colours and spacing without any CSS</li>
+    <li>nothing, it is only a matter of taste</li>
+    <li>screen readers and search engines can tell what each part of the page is</li>
   </ol>
 </div>
 
@@ -130,6 +163,16 @@
     <li>340px</li>
     <li>350px</li>
     <li>370px</li>
+  </ol>
+</div>
+
+<div class="q">
+  <p>A card has a background colour, and its text sits right against the edge of that colour. Which property adds space between the text and the edge?</p>
+  <ol class="opts four">
+    <li><code>margin</code></li>
+    <li><code>padding</code></li>
+    <li><code>border</code></li>
+    <li><code>gap</code></li>
   </ol>
 </div>
 
@@ -285,6 +328,19 @@ console.log(total);</pre>
 </div>
 
 <div class="q">
+  <p>What does this print?</p>
+<pre>const team = ["Ada", "Bayo"];
+team.push("Chi");
+console.log(team.length, team[1]);</pre>
+  <ol class="opts four">
+    <li><code>2 Bayo</code></li>
+    <li><code>3 Chi</code></li>
+    <li><code>3 Bayo</code></li>
+    <li><code>3 Ada</code></li>
+  </ol>
+</div>
+
+<div class="q">
   <p>This prints three numbers, then stops with an error. Why?</p>
 <pre>const names = ["Ada", "Bayo", "Chi"];
 
@@ -330,9 +386,24 @@ message.classList.add(".error");</pre>
   </ol>
 </div>
 
-<h3 class="part-two">Part 2: Theory <span class="marks">6 marks</span></h3>
+<div class="q">
+  <p>The button is clicked three times. What does <code>label</code> show after the third click?</p>
+<pre>button.addEventListener("click", function () {
+  let count = 0;
+  count = count + 1;
+  label.textContent = count;
+});</pre>
+  <ol class="opts four">
+    <li>1</li>
+    <li>0</li>
+    <li>3</li>
+    <li>123</li>
+  </ol>
+</div>
 
-<p class="note">Each question is worth 2 marks. Write your answer in the space given.</p>
+<h3 class="part-two page-break">Part 2: Theory <span class="marks">15 marks</span></h3>
+
+<p class="note">Each question is worth 5 marks. Write your answer in the space given.</p>
 
 <div class="q">
   <p>Write the CSS that puts these three cards side by side in a row with 20px of space between them. Each card should also have 16px of space between its text and its edge, and a 1px solid grey border.</p>
@@ -341,7 +412,7 @@ message.classList.add(".error");</pre>
   <div class="card">...</div>
   <div class="card">...</div>
 </div></pre>
-  [[lines 6]]
+  [[lines 8]]
 </div>
 
 <div class="q">
@@ -351,7 +422,7 @@ message.classList.add(".error");</pre>
   { name: "Emeka", score: 45 },
   { name: "Zainab", score: 88 }
 ];</pre>
-  [[lines 6]]
+  [[lines 8]]
 </div>
 
 <div class="q">
@@ -371,7 +442,7 @@ document.querySelector("#go").addEventListener("click", function () {
     msg.textContent = `Welcome, ${typed}`;
   }
 });</pre>
-  [[lines 5]]
+  [[lines 7]]
 </div>
 
 <h2 class="new-page">Section B: Practical project <span class="marks">70 marks</span></h2>
